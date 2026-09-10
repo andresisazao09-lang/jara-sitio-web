@@ -42,7 +42,7 @@
     background:var(--bg-deep);
     border-bottom:1px solid var(--border);
   }
-  @media (max-width:760px){ .top-bar{padding:12px 4vw 11px;} }
+  @media (max-width:760px){ .top-bar{padding:12px 3vw 11px;} }
   /* ---------- cabecera ---------- */
   .top-bar-brand{display:flex;align-items:center;}
   .top-bar-logo{display:block;height:auto;width:180px;}
@@ -77,14 +77,14 @@
       text-align:center;
     }
     .top-bar-brand{grid-area:logo;justify-content:center;align-self:end;}
-    .top-bar-logo{width:min(190px,50vw);}
-    .top-bar-text{grid-area:txt;margin-top:10px;align-self:start;}
+    .top-bar-logo{width:auto;height:34px;max-width:62vw;}
+    .top-bar-text{grid-area:txt;margin-top:6px;align-self:start;}
     .top-bar-social{display:contents;}
     .top-bar-social .tb-tt{grid-area:tt;justify-self:start;align-self:center;}
     .top-bar-social .tb-ig{grid-area:ig;justify-self:end;align-self:center;}
-    .top-bar .icon-brand{width:46px;height:46px;}
+    .top-bar .icon-brand{width:44px;height:44px;}
     .top-bar-role{font-size:9.5px;letter-spacing:0.14em;}
-    .top-bar-loc{font-size:8.5px;letter-spacing:0.12em;}
+    .top-bar-loc{display:none;}  /* "Based in Venezuela" fuera en movil */
   }
 
   @media (max-width:700px){
@@ -154,6 +154,11 @@
   .btn-primary:hover{background:transparent;color:var(--text);}
   .btn-hero{padding:20px 46px;font-size:14px;}
   .hero-actions{display:flex;flex-direction:column;align-items:center;gap:14px;}
+  /* movil: mismo texto, boton mas corto (sobre todo "Cotiza tu sesion...") */
+  @media (max-width:760px){
+    .btn-hero{padding:13px 20px;font-size:14px;letter-spacing:0.05em;}
+    .hero-actions{gap:12px;}
+  }
 
   /* ---------- section shell ---------- */
   section{padding:110px 6vw;}
