@@ -57,7 +57,7 @@
   @media (min-width:761px){
     .top-bar{display:flex;align-items:stretch;justify-content:space-between;gap:16px;}
     .top-bar-brand{flex:1;justify-content:flex-start;align-items:center;}
-    .top-bar-text{align-self:center;}
+    .top-bar-text{align-self:center;text-align:center;}
     /* invertido para que Instagram quede primero, como antes */
     .top-bar-social{flex:1;display:flex;flex-direction:row-reverse;justify-content:flex-start;align-items:stretch;gap:16px;}
     /* el bloque de texto mide 39 px y es lo mas alto de la barra: los iconos
@@ -77,7 +77,7 @@
       text-align:center;
     }
     .top-bar-brand{grid-area:logo;justify-content:center;align-self:end;}
-    .top-bar-logo{width:auto;height:34px;max-width:62vw;}
+    .top-bar-logo{width:auto;height:27px;max-width:62vw;}
     .top-bar-text{grid-area:txt;margin-top:6px;align-self:start;}
     .top-bar-social{display:contents;}
     .top-bar-social .tb-tt{grid-area:tt;justify-self:start;align-self:center;}
@@ -95,7 +95,11 @@
   /* ---------- hero: photo wall + logo + single CTA ---------- */
   .hero{
     position:relative;
+    /* svh = alto VISIBLE fijo. Con 100vh, al esconderse la barra de Chrome
+       en el movil el hero cambiaba de alto y el collage se re-recortaba:
+       parecia que las fotos hacian zoom al bajar despacio. */
     min-height:100vh;
+    min-height:100svh;
     display:flex;
     align-items:center;
     justify-content:center;

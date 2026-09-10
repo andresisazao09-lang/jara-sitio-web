@@ -67,7 +67,7 @@
   @media (min-width:761px){
     .top-bar{display:flex;align-items:stretch;justify-content:space-between;gap:16px;}
     .top-bar-brand{flex:1;justify-content:flex-start;align-items:center;}
-    .top-bar-text{align-self:center;}
+    .top-bar-text{align-self:center;text-align:center;}
     /* invertido para que Instagram quede primero, como antes */
     .top-bar-social{flex:1;display:flex;flex-direction:row-reverse;justify-content:flex-start;align-items:stretch;gap:16px;}
     /* el bloque de texto mide 39 px y es lo mas alto de la barra: los iconos
@@ -87,7 +87,7 @@
       text-align:center;
     }
     .top-bar-brand{grid-area:logo;justify-content:center;align-self:end;}
-    .top-bar-logo{width:auto;height:34px;max-width:62vw;}
+    .top-bar-logo{width:auto;height:27px;max-width:62vw;}
     .top-bar-text{grid-area:txt;margin-top:6px;align-self:start;}
     .top-bar-social{display:contents;}
     .top-bar-social .tb-tt{grid-area:tt;justify-self:start;align-self:center;}
@@ -159,49 +159,29 @@
   }
   .nav-link.is-active{color:var(--text);}
   .nav-link.is-active::after{content:"";position:absolute;left:15px;right:15px;bottom:0;height:1px;background:var(--text);}
-  .nav-caret{display:inline-block;margin-left:5px;font-size:8px;vertical-align:1px;opacity:.6;transition:transform .18s ease;}
-  .nav-link.is-sub-open .nav-caret{transform:rotate(180deg);}
-
-  /* ---------- submenu de subcategorias (hover en pc, toque en movil) ---------- */
-  .nav-sub{
-    position:absolute;top:100%;left:0;z-index:50;
-    min-width:200px;max-width:calc(100vw - 16px);
-    background:var(--bg-deep);
-    border:1px solid var(--border);
-    box-shadow:0 20px 44px rgba(0,0,0,0.45);
-    padding:6px 0;
-    display:flex;flex-direction:column;
-  }
-  .nav-sub[hidden]{display:none;}
-  .nav-sub-link{
-    display:block;width:100%;background:none;border:none;font-family:inherit;cursor:pointer;
-    padding:12px 22px;text-align:left;white-space:nowrap;
-    font-size:12px;letter-spacing:0.14em;text-transform:uppercase;color:var(--text-muted);
-    transition:color .15s ease,background .15s ease;
-  }
-  .nav-sub-link.is-active{color:var(--text);}
-  @media (hover:hover){ .nav-sub-link:hover{color:var(--text);background:rgba(243,241,234,0.05);} }
-  .nav-sub-link:focus-visible{color:var(--text);background:rgba(243,241,234,0.05);}
 
   /* ---------- colección ---------- */
-  .col-section{padding:40px 5vw 24px;scroll-margin-top:calc(var(--bar-h,62px) + var(--rail-h,48px));}
+  .col-section{padding:84px 5vw 24px;scroll-margin-top:calc(var(--bar-h,62px) + var(--rail-h,48px));}
   .col-num{display:block;font-size:11px;letter-spacing:0.26em;color:var(--text-muted);margin:0 0 14px;}
   .col-title{font-size:clamp(36px,7.4vw,78px);text-transform:uppercase;margin:0;line-height:1;letter-spacing:0.01em;}
   .col-total{display:block;margin:16px 0 0;font-size:10.5px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text-muted);}
   .col-rule{width:44px;height:1px;background:var(--border-strong);margin:26px auto 0;}
 
   /* ---------- sección ---------- */
-  .series{max-width:1400px;margin:0 auto;padding-top:60px;scroll-margin-top:calc(var(--bar-h,62px) + var(--rail-h,48px) + 12px);}
-  .col-section > .series:first-of-type{padding-top:8px;}
+  .series{max-width:1400px;margin:0 auto;padding-top:60px;}
   .series-name{font-size:clamp(27px,3.6vw,42px);text-transform:uppercase;letter-spacing:0.05em;margin:0;}
   .series-sub{display:block;margin:8px 0 0;font-size:11px;letter-spacing:0.1em;color:var(--text-muted);font-style:italic;}
   .series-n{display:block;margin:10px 0 20px;font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text-muted);}
-  /* fecha en el nombre + pais con bandera debajo (Conciertos) */
-  .series-loc{display:flex;align-items:center;gap:8px;margin:11px 0 0;font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text-muted);}
-  .series-flag{font-size:16px;line-height:1;font-family:"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif;}
+  /* Bandera de Venezuela dibujada en SVG, no como emoji: los emoji de
+     bandera no se pintan en Windows, asi se ve igual en escritorio y movil. */
+  .series-flag{
+    display:inline-block;vertical-align:.02em;
+    width:.70em;height:.4667em;
+    background:url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2030%2020'%3E%3Crect%20width='30'%20height='20'%20fill='%23CF142B'/%3E%3Crect%20width='30'%20height='13.34'%20fill='%2300247D'/%3E%3Crect%20width='30'%20height='6.67'%20fill='%23FFCC00'/%3E%3Cg%20fill='%23ffffff'%3E%3Cpath%20transform='translate(18.73%208.82)'%20d='M0,-.95L.223,-.307L.904,-.294L.361,.117L.558,.769L0,.38L-.558,.769L-.361,.117L-.904,-.294L-.223,-.307Z'/%3E%3Cpath%20transform='translate(17.75%209.39)'%20d='M0,-.95L.223,-.307L.904,-.294L.361,.117L.558,.769L0,.38L-.558,.769L-.361,.117L-.904,-.294L-.223,-.307Z'/%3E%3Cpath%20transform='translate(16.68%209.78)'%20d='M0,-.95L.223,-.307L.904,-.294L.361,.117L.558,.769L0,.38L-.558,.769L-.361,.117L-.904,-.294L-.223,-.307Z'/%3E%3Cpath%20transform='translate(15.57%209.98)'%20d='M0,-.95L.223,-.307L.904,-.294L.361,.117L.558,.769L0,.38L-.558,.769L-.361,.117L-.904,-.294L-.223,-.307Z'/%3E%3Cpath%20transform='translate(14.43%209.98)'%20d='M0,-.95L.223,-.307L.904,-.294L.361,.117L.558,.769L0,.38L-.558,.769L-.361,.117L-.904,-.294L-.223,-.307Z'/%3E%3Cpath%20transform='translate(13.32%209.78)'%20d='M0,-.95L.223,-.307L.904,-.294L.361,.117L.558,.769L0,.38L-.558,.769L-.361,.117L-.904,-.294L-.223,-.307Z'/%3E%3Cpath%20transform='translate(12.25%209.39)'%20d='M0,-.95L.223,-.307L.904,-.294L.361,.117L.558,.769L0,.38L-.558,.769L-.361,.117L-.904,-.294L-.223,-.307Z'/%3E%3Cpath%20transform='translate(11.27%208.82)'%20d='M0,-.95L.223,-.307L.904,-.294L.361,.117L.558,.769L0,.38L-.558,.769L-.361,.117L-.904,-.294L-.223,-.307Z'/%3E%3C/g%3E%3C/svg%3E") center/100% 100% no-repeat;
+    border-radius:.03em;
+  }
 
   .series-name + .series-grid{margin-top:24px;}
-  .series-loc + .series-grid{margin-top:24px;}
   .series-grid{
     --cols:2;
     display:grid;
@@ -227,7 +207,9 @@
   .shot-frame{position:relative;width:100%;aspect-ratio:var(--ar);overflow:hidden;}
   .shot img{width:100%;height:100%;object-fit:cover;}
 
-  @media (hover:hover){
+  /* "and (pointer:fine)" = solo raton. En Chrome de Android el dedo apoyado
+     al bajar despacio activaba el :hover y las fotos hacian un zoom raro. */
+  @media (hover:hover) and (pointer:fine){
     .shot img{transition:transform .7s var(--ease);}
     .shot:hover img{transform:scale(1.045);}
 
@@ -292,10 +274,7 @@
     .nav-rail{top:0;margin-top:40px;}
     .nav-link{padding:15px 11px;font-size:11.5px;letter-spacing:0.1em;}
     .col-section{padding:52px 4vw 16px;scroll-margin-top:var(--rail-h,46px);}
-    .series{padding-top:38px;scroll-margin-top:calc(var(--rail-h,46px) + 10px);}
-    .col-section > .series:first-of-type{padding-top:6px;}
-    .nav-sub{left:0;right:0;min-width:0;max-width:none;}
-    .nav-sub-link{text-align:center;padding:14px 18px;}
+    .series{padding-top:38px;}
     .idx{padding:56px 4vw 16px;}
     .idx h2{margin-bottom:26px;}
     .p-cta{margin-top:44px;padding:70px 6vw 76px;}
@@ -339,8 +318,148 @@
   .idx-card-soon .idx-card-frame{background:#232320;border:1px solid var(--border);}
   .idx-card-soon .idx-card-veil{background:linear-gradient(180deg,rgba(10,10,9,0.10) 0%,rgba(10,10,9,0.75) 100%);}
   .col-empty{margin:64px 0 24px;font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:var(--text-muted);}
-</style></head>
+
+  /* ============================================================
+     MODO CLARO
+     Fondo 870 V MADERA. La cabecera y la barra de categorias se
+     quedan en el oscuro de siempre, igual que en la landing.
+     ============================================================ */
+  [data-theme="light"]{
+    --c-fondo:#E9DCC0;
+    --bg:var(--c-fondo);
+    --bg-deep:#111110;
+    --text:#2B2620;
+    --text-muted:#625A4B;
+    --border:rgba(43,38,32,0.16);
+    --border-strong:rgba(43,38,32,0.36);
+  }
+  [data-theme="light"] body{background:var(--bg);color:var(--text);}
+  [data-theme="light"] ::selection{background:#2B2620;color:#E9DCC0;}
+
+  /* cabecera y selector: siguen oscuros, su texto en claro */
+  [data-theme="light"] .top-bar,
+  [data-theme="light"] .nav-rail{border-bottom-color:rgba(243,241,234,0.14);}
+  [data-theme="light"] .top-bar-role{color:#f3f1ea;}
+  [data-theme="light"] .top-bar-loc{color:rgba(243,241,234,0.60);}
+  [data-theme="light"] .nav-link{color:rgba(243,241,234,0.58);}
+  [data-theme="light"] .nav-link.is-active,
+  [data-theme="light"] .nav-back{color:#f3f1ea;}
+  [data-theme="light"] .nav-link.is-active::after{background:#f3f1ea;}
+
+  /* la portada se funde hacia el fondo claro */
+  [data-theme="light"] .p-hero{background:var(--bg);}
+  [data-theme="light"] .p-hero-veil{
+    background:
+      radial-gradient(ellipse 620px 480px at 50% 50%, rgba(20,16,10,0.44), transparent 76%),
+      linear-gradient(180deg, rgba(20,16,10,0.30) 0%, rgba(20,16,10,0.05) 38%, transparent 58%),
+      linear-gradient(180deg, transparent 52%, var(--bg) 100%);
+  }
+  [data-theme="light"] .p-hero-title{color:#ffffff;}
+
+  /* Degradados oscuros bajo cada foto: sobre el fondo claro las fotografias
+     perderian peso, asi siguen siendo lo primero que ve el ojo. */
+  [data-theme="light"] .shot{
+    background:rgba(43,38,32,0.10);
+    box-shadow:0 18px 30px -16px rgba(36,30,20,0.62), 0 3px 8px rgba(36,30,20,0.16);
+  }
+  [data-theme="light"] .idx-card{
+    background:rgba(43,38,32,0.10);
+    box-shadow:0 22px 38px -18px rgba(36,30,20,0.66), 0 3px 10px rgba(36,30,20,0.16);
+  }
+  [data-theme="light"] .idx-card-veil{background:linear-gradient(180deg,rgba(10,10,9,0.34) 0%,rgba(10,10,9,0.04) 36%,rgba(10,10,9,0.92) 100%);}
+  /* el nombre de la coleccion va encima de la foto: sigue en claro */
+  [data-theme="light"] .idx-card-name,
+  [data-theme="light"] .idx-card-count{color:#f3f1ea;}
+  [data-theme="light"] .idx-card-soon .idx-card-frame{background:rgba(43,38,32,0.13);}
+  [data-theme="light"] .idx-card-soon .idx-card-name,
+  [data-theme="light"] .idx-card-soon .idx-card-count{color:#3a352c;}
+  [data-theme="light"] .idx-card-soon .idx-card-veil{background:none;}
+
+  [data-theme="light"] .p-cta{background:var(--bg);border-top-color:var(--border);}
+  [data-theme="light"] .p-cta .btn{color:var(--text);border-color:var(--border-strong);}
+  [data-theme="light"] .p-cta .btn-primary{background:#2B2620;color:#E9DCC0;border-color:#2B2620;}
+  [data-theme="light"] .to-top{background:var(--bg);border-color:var(--border-strong);color:var(--text);}
+
+  /* el visor sigue oscuro: la foto manda */
+  [data-theme="light"] .lb-btn{background:rgba(243,241,234,0.08);border-color:rgba(243,241,234,0.14);color:#f3f1ea;}
+  [data-theme="light"] .lb-ser,
+  [data-theme="light"] .lb-counter{color:rgba(243,241,234,0.6);}
+
+  /* ---------- eleccion de modo al entrar ---------- */
+  .theme-gate{
+    position:fixed;inset:0;z-index:1000;
+    display:none;align-items:center;justify-content:center;
+    background:#0d0d0c;padding:28px 6vw;text-align:center;
+  }
+  html.sin-tema .theme-gate{display:flex;}
+  .theme-gate.is-out{opacity:0;pointer-events:none;transition:opacity .3s ease;}
+  .theme-gate-inner{width:100%;max-width:520px;}
+  .theme-gate-kicker{margin:0 0 14px;font-size:10.5px;letter-spacing:0.3em;text-transform:uppercase;color:#8d8779;}
+  .theme-gate-q{margin:0 0 34px;font-size:clamp(21px,4.4vw,32px);line-height:1.15;letter-spacing:0.02em;text-transform:uppercase;color:#f3f1ea;}
+  .theme-gate-actions{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  .theme-opt{
+    display:flex;flex-direction:column;align-items:center;gap:14px;
+    padding:20px 16px;cursor:pointer;font-family:inherit;
+    border:1px solid rgba(243,241,234,0.22);border-radius:4px;
+    background:transparent;color:#f3f1ea;
+    font-size:11px;letter-spacing:0.18em;text-transform:uppercase;
+    transition:border-color .18s ease,background .18s ease,transform .18s ease;
+  }
+  @media (hover:hover) and (pointer:fine){
+    .theme-opt:hover{border-color:#f3f1ea;background:rgba(243,241,234,0.05);}
+  }
+  .theme-opt:active{transform:scale(.985);}
+  .theme-swatch{display:block;width:100%;height:62px;border-radius:3px;border:1px solid rgba(243,241,234,0.14);}
+  .theme-swatch-dark{background:linear-gradient(160deg,#242422 0%,#111110 100%);}
+  .theme-swatch-light{background:linear-gradient(160deg,#E9DCC0 0%,#cfbf98 100%);}
+
+  /* ---------- cambiar de modo en cualquier momento ---------- */
+  .theme-toggle{
+    position:fixed;right:16px;bottom:66px;z-index:55;
+    width:42px;height:42px;border-radius:50%;
+    border:1px solid var(--border-strong);background:rgba(17,17,16,0.92);
+    color:var(--text);cursor:pointer;
+    display:flex;align-items:center;justify-content:center;
+  }
+  [data-theme="light"] .theme-toggle{background:var(--bg);}
+  html.sin-tema .theme-toggle{display:none;}
+  .theme-toggle-ico{
+    width:17px;height:17px;border-radius:50%;
+    border:1.5px solid currentColor;
+    background:linear-gradient(90deg,currentColor 0 50%,transparent 50% 100%);
+  }
+</style>
+<script>
+  /* Se aplica el modo guardado antes de pintar, para que no haya un
+     parpadeo de color al abrir. Si aun no ha elegido, se marca la pagina
+     con "sin-tema" y se muestra la eleccion. */
+  (function(){
+    var t = null;
+    try { t = localStorage.getItem('jara-tema'); } catch(e){}
+    var r = document.documentElement;
+    if (t === 'light') r.setAttribute('data-theme','light');
+    else if (t !== 'dark') r.classList.add('sin-tema');
+  })();
+</script>
+</head>
 <body>
+
+<div class="theme-gate" id="themeGate">
+  <div class="theme-gate-inner">
+    <p class="theme-gate-kicker meta">Jara — Portafolio</p>
+    <p class="theme-gate-q">¿Cómo prefieres verlo?</p>
+    <div class="theme-gate-actions">
+      <button type="button" class="theme-opt meta" data-theme-pick="dark">
+        <span class="theme-swatch theme-swatch-dark" aria-hidden="true"></span>
+        <span>Modo oscuro</span>
+      </button>
+      <button type="button" class="theme-opt meta" data-theme-pick="light">
+        <span class="theme-swatch theme-swatch-light" aria-hidden="true"></span>
+        <span>Modo claro</span>
+      </button>
+    </div>
+  </div>
+</div>
 
 <header class="top-bar">
   <div class="top-bar-brand">
@@ -418,20 +537,20 @@
 <nav class="nav-rail" aria-label="Colecciones" hidden>
   <div class="nav-rail-inner">
     <button type="button" class="nav-link nav-back meta" id="navBack" aria-label="Volver a las colecciones">&#8249;<span class="nav-back-txt">&nbsp;Colecciones</span></button>
-    <button type="button" class="nav-link meta" data-target="col-conciertos" aria-haspopup="true" aria-expanded="false">Conciertos</button>
-    <button type="button" class="nav-link meta" data-target="col-retratos" aria-haspopup="true" aria-expanded="false">Retratos</button>
-    <button type="button" class="nav-link meta" data-target="col-campanas" aria-haspopup="true" aria-expanded="false">Campañas</button>
+    <button type="button" class="nav-link meta" data-target="col-conciertos">Conciertos</button>
+    <button type="button" class="nav-link meta" data-target="col-retratos">Retratos</button>
+    <button type="button" class="nav-link meta" data-target="col-campanas">Campañas</button>
     <button type="button" class="nav-link meta" data-target="col-films">Films</button>
   </div>
-  <div class="nav-sub" id="navSub" role="menu" hidden></div>
 </nav>
 
 <main>
 <noscript><p class="noscript-note">Activa JavaScript para ver la galería completa.</p></noscript>
 <section class="col-section" id="col-conciertos" hidden>
+  <h2 class="col-title">Conciertos</h2>
+  <div class="col-rule" aria-hidden="true"></div>
   <div class="series">
-    <h3 class="series-name">Maluma · 2024</h3>
-    <p class="series-loc"><span class="series-flag" role="img" aria-label="Bandera de Venezuela">🇻🇪</span>Venezuela</p>
+    <h3 class="series-name">Maluma · 2024 · <i class="series-flag" role="img" aria-label="Venezuela"></i></h3>
     <div class="series-grid">
       <figure class="shot is-lead" data-ar="0.6539" data-full="img/conciertos/con-59.jpg" data-ser="Conciertos · Maluma" data-alt="Conciertos — Maluma, fotografía de Jara">
         <div class="shot-frame" style="--ar:0.6539">
@@ -560,8 +679,7 @@
       </figure>    </div>
   </div>
   <div class="series">
-    <h3 class="series-name">Luis Miguel · 2024</h3>
-    <p class="series-loc"><span class="series-flag" role="img" aria-label="Bandera de Venezuela">🇻🇪</span>Venezuela</p>
+    <h3 class="series-name">Luis Miguel · 2024 · <i class="series-flag" role="img" aria-label="Venezuela"></i></h3>
     <div class="series-grid">
       <figure class="shot is-lead" data-ar="0.6671" data-full="img/conciertos/con-12.jpg" data-ser="Conciertos · Luis Miguel" data-alt="Conciertos — Luis Miguel, fotografía de Jara">
         <div class="shot-frame" style="--ar:0.6671">
@@ -634,8 +752,7 @@
       </figure>    </div>
   </div>
   <div class="series">
-    <h3 class="series-name">Beéle · 2024</h3>
-    <p class="series-loc"><span class="series-flag" role="img" aria-label="Bandera de Venezuela">🇻🇪</span>Venezuela</p>
+    <h3 class="series-name">Beéle · 2024 · <i class="series-flag" role="img" aria-label="Venezuela"></i></h3>
     <div class="series-grid">
       <figure class="shot is-lead" data-ar="0.6605" data-full="img/conciertos/con-42.jpg" data-ser="Conciertos · Beéle" data-alt="Conciertos — Beéle, fotografía de Jara">
         <div class="shot-frame" style="--ar:0.6605">
@@ -722,212 +839,215 @@
   </div>
 </section>
 <section class="col-section" id="col-retratos" hidden>
+  <h2 class="col-title">Retratos</h2>
+  <div class="col-rule" aria-hidden="true"></div>
   <div class="series">
-    <h3 class="series-name">Estudio</h3>
+    <h3 class="series-name">En Estudio</h3>
     <div class="series-grid">
-      <figure class="shot is-lead" data-ar="0.8" data-full="img/retratos/ret-30.jpg" data-ser="Retratos · Estudio" data-alt="Retratos — Estudio, fotografía de Jara">
+      <figure class="shot is-lead" data-ar="0.8" data-full="img/retratos/ret-30.jpg" data-ser="Retratos · En Estudio" data-alt="Retratos — En Estudio, fotografía de Jara">
         <div class="shot-frame" style="--ar:0.8">
-          <img src="img/retratos/t/ret-30.jpg" width="1080" height="1350" sizes="(max-width:780px) 100vw, 50vw" alt="Retratos — Estudio, fotografía de Jara" loading="lazy" decoding="async">
+          <img src="img/retratos/t/ret-30.jpg" width="1080" height="1350" sizes="(max-width:780px) 100vw, 50vw" alt="Retratos — En Estudio, fotografía de Jara" loading="lazy" decoding="async">
         </div>
-      </figure>      <figure class="shot" data-ar="0.8" data-full="img/retratos/ret-19.jpg" data-ser="Retratos · Estudio" data-alt="Retratos — Estudio, fotografía de Jara">
+      </figure>      <figure class="shot" data-ar="0.8" data-full="img/retratos/ret-19.jpg" data-ser="Retratos · En Estudio" data-alt="Retratos — En Estudio, fotografía de Jara">
         <div class="shot-frame" style="--ar:0.8">
-          <img src="img/retratos/t/ret-19.jpg" width="608" height="760" sizes="(max-width:780px) 50vw, 25vw" alt="Retratos — Estudio, fotografía de Jara" loading="lazy" decoding="async">
+          <img src="img/retratos/t/ret-19.jpg" width="608" height="760" sizes="(max-width:780px) 50vw, 25vw" alt="Retratos — En Estudio, fotografía de Jara" loading="lazy" decoding="async">
         </div>
-      </figure>      <figure class="shot" data-ar="0.8" data-full="img/retratos/ret-17.jpg" data-ser="Retratos · Estudio" data-alt="Retratos — Estudio, fotografía de Jara">
+      </figure>      <figure class="shot" data-ar="0.8" data-full="img/retratos/ret-17.jpg" data-ser="Retratos · En Estudio" data-alt="Retratos — En Estudio, fotografía de Jara">
         <div class="shot-frame" style="--ar:0.8">
-          <img src="img/retratos/t/ret-17.jpg" width="608" height="760" sizes="(max-width:780px) 50vw, 25vw" alt="Retratos — Estudio, fotografía de Jara" loading="lazy" decoding="async">
+          <img src="img/retratos/t/ret-17.jpg" width="608" height="760" sizes="(max-width:780px) 50vw, 25vw" alt="Retratos — En Estudio, fotografía de Jara" loading="lazy" decoding="async">
         </div>
-      </figure>      <figure class="shot" data-ar="0.8" data-full="img/retratos/ret-18.jpg" data-ser="Retratos · Estudio" data-alt="Retratos — Estudio, fotografía de Jara">
+      </figure>      <figure class="shot" data-ar="0.8" data-full="img/retratos/ret-18.jpg" data-ser="Retratos · En Estudio" data-alt="Retratos — En Estudio, fotografía de Jara">
         <div class="shot-frame" style="--ar:0.8">
-          <img src="img/retratos/t/ret-18.jpg" width="608" height="760" sizes="(max-width:780px) 50vw, 25vw" alt="Retratos — Estudio, fotografía de Jara" loading="lazy" decoding="async">
+          <img src="img/retratos/t/ret-18.jpg" width="608" height="760" sizes="(max-width:780px) 50vw, 25vw" alt="Retratos — En Estudio, fotografía de Jara" loading="lazy" decoding="async">
         </div>
-      </figure>      <figure class="shot" data-ar="0.8" data-full="img/retratos/ret-20.jpg" data-ser="Retratos · Estudio" data-alt="Retratos — Estudio, fotografía de Jara">
+      </figure>      <figure class="shot" data-ar="0.8" data-full="img/retratos/ret-20.jpg" data-ser="Retratos · En Estudio" data-alt="Retratos — En Estudio, fotografía de Jara">
         <div class="shot-frame" style="--ar:0.8">
-          <img src="img/retratos/t/ret-20.jpg" width="608" height="760" sizes="(max-width:780px) 50vw, 25vw" alt="Retratos — Estudio, fotografía de Jara" loading="lazy" decoding="async">
+          <img src="img/retratos/t/ret-20.jpg" width="608" height="760" sizes="(max-width:780px) 50vw, 25vw" alt="Retratos — En Estudio, fotografía de Jara" loading="lazy" decoding="async">
         </div>
-      </figure>      <figure class="shot" data-ar="0.8" data-full="img/retratos/ret-28.jpg" data-ser="Retratos · Estudio" data-alt="Retratos — Estudio, fotografía de Jara">
+      </figure>      <figure class="shot" data-ar="0.8" data-full="img/retratos/ret-28.jpg" data-ser="Retratos · En Estudio" data-alt="Retratos — En Estudio, fotografía de Jara">
         <div class="shot-frame" style="--ar:0.8">
-          <img src="img/retratos/t/ret-28.jpg" width="608" height="760" sizes="(max-width:780px) 50vw, 25vw" alt="Retratos — Estudio, fotografía de Jara" loading="lazy" decoding="async">
+          <img src="img/retratos/t/ret-28.jpg" width="608" height="760" sizes="(max-width:780px) 50vw, 25vw" alt="Retratos — En Estudio, fotografía de Jara" loading="lazy" decoding="async">
         </div>
-      </figure>      <figure class="shot" data-ar="0.8" data-full="img/retratos/ret-29.jpg" data-ser="Retratos · Estudio" data-alt="Retratos — Estudio, fotografía de Jara">
+      </figure>      <figure class="shot" data-ar="0.8" data-full="img/retratos/ret-29.jpg" data-ser="Retratos · En Estudio" data-alt="Retratos — En Estudio, fotografía de Jara">
         <div class="shot-frame" style="--ar:0.8">
-          <img src="img/retratos/t/ret-29.jpg" width="608" height="760" sizes="(max-width:780px) 50vw, 25vw" alt="Retratos — Estudio, fotografía de Jara" loading="lazy" decoding="async">
+          <img src="img/retratos/t/ret-29.jpg" width="608" height="760" sizes="(max-width:780px) 50vw, 25vw" alt="Retratos — En Estudio, fotografía de Jara" loading="lazy" decoding="async">
         </div>
-      </figure>      <figure class="shot" data-ar="0.8" data-full="img/retratos/ret-31.jpg" data-ser="Retratos · Estudio" data-alt="Retratos — Estudio, fotografía de Jara">
+      </figure>      <figure class="shot" data-ar="0.8" data-full="img/retratos/ret-31.jpg" data-ser="Retratos · En Estudio" data-alt="Retratos — En Estudio, fotografía de Jara">
         <div class="shot-frame" style="--ar:0.8">
-          <img src="img/retratos/t/ret-31.jpg" width="608" height="760" sizes="(max-width:780px) 50vw, 25vw" alt="Retratos — Estudio, fotografía de Jara" loading="lazy" decoding="async">
+          <img src="img/retratos/t/ret-31.jpg" width="608" height="760" sizes="(max-width:780px) 50vw, 25vw" alt="Retratos — En Estudio, fotografía de Jara" loading="lazy" decoding="async">
         </div>
-      </figure>      <figure class="shot" data-ar="0.8" data-full="img/retratos/ret-26.jpg" data-ser="Retratos · Estudio" data-alt="Retratos — Estudio, fotografía de Jara">
+      </figure>      <figure class="shot" data-ar="0.8" data-full="img/retratos/ret-26.jpg" data-ser="Retratos · En Estudio" data-alt="Retratos — En Estudio, fotografía de Jara">
         <div class="shot-frame" style="--ar:0.8">
-          <img src="img/retratos/t/ret-26.jpg" width="608" height="760" sizes="(max-width:780px) 50vw, 25vw" alt="Retratos — Estudio, fotografía de Jara" loading="lazy" decoding="async">
+          <img src="img/retratos/t/ret-26.jpg" width="608" height="760" sizes="(max-width:780px) 50vw, 25vw" alt="Retratos — En Estudio, fotografía de Jara" loading="lazy" decoding="async">
         </div>
-      </figure>      <figure class="shot" data-ar="0.8" data-full="img/retratos/ret-25.jpg" data-ser="Retratos · Estudio" data-alt="Retratos — Estudio, fotografía de Jara">
+      </figure>      <figure class="shot" data-ar="0.8" data-full="img/retratos/ret-25.jpg" data-ser="Retratos · En Estudio" data-alt="Retratos — En Estudio, fotografía de Jara">
         <div class="shot-frame" style="--ar:0.8">
-          <img src="img/retratos/t/ret-25.jpg" width="608" height="760" sizes="(max-width:780px) 50vw, 25vw" alt="Retratos — Estudio, fotografía de Jara" loading="lazy" decoding="async">
+          <img src="img/retratos/t/ret-25.jpg" width="608" height="760" sizes="(max-width:780px) 50vw, 25vw" alt="Retratos — En Estudio, fotografía de Jara" loading="lazy" decoding="async">
         </div>
-      </figure>      <figure class="shot" data-ar="0.8" data-full="img/retratos/ret-27.jpg" data-ser="Retratos · Estudio" data-alt="Retratos — Estudio, fotografía de Jara">
+      </figure>      <figure class="shot" data-ar="0.8" data-full="img/retratos/ret-27.jpg" data-ser="Retratos · En Estudio" data-alt="Retratos — En Estudio, fotografía de Jara">
         <div class="shot-frame" style="--ar:0.8">
-          <img src="img/retratos/t/ret-27.jpg" width="608" height="760" sizes="(max-width:780px) 50vw, 25vw" alt="Retratos — Estudio, fotografía de Jara" loading="lazy" decoding="async">
+          <img src="img/retratos/t/ret-27.jpg" width="608" height="760" sizes="(max-width:780px) 50vw, 25vw" alt="Retratos — En Estudio, fotografía de Jara" loading="lazy" decoding="async">
         </div>
-      </figure>      <figure class="shot" data-ar="0.8" data-full="img/retratos/ret-23.jpg" data-ser="Retratos · Estudio" data-alt="Retratos — Estudio, fotografía de Jara">
+      </figure>      <figure class="shot" data-ar="0.8" data-full="img/retratos/ret-23.jpg" data-ser="Retratos · En Estudio" data-alt="Retratos — En Estudio, fotografía de Jara">
         <div class="shot-frame" style="--ar:0.8">
-          <img src="img/retratos/t/ret-23.jpg" width="608" height="760" sizes="(max-width:780px) 50vw, 25vw" alt="Retratos — Estudio, fotografía de Jara" loading="lazy" decoding="async">
+          <img src="img/retratos/t/ret-23.jpg" width="608" height="760" sizes="(max-width:780px) 50vw, 25vw" alt="Retratos — En Estudio, fotografía de Jara" loading="lazy" decoding="async">
         </div>
-      </figure>      <figure class="shot" data-ar="0.8" data-full="img/retratos/ret-21.jpg" data-ser="Retratos · Estudio" data-alt="Retratos — Estudio, fotografía de Jara">
+      </figure>      <figure class="shot" data-ar="0.8" data-full="img/retratos/ret-21.jpg" data-ser="Retratos · En Estudio" data-alt="Retratos — En Estudio, fotografía de Jara">
         <div class="shot-frame" style="--ar:0.8">
-          <img src="img/retratos/t/ret-21.jpg" width="608" height="760" sizes="(max-width:780px) 50vw, 25vw" alt="Retratos — Estudio, fotografía de Jara" loading="lazy" decoding="async">
+          <img src="img/retratos/t/ret-21.jpg" width="608" height="760" sizes="(max-width:780px) 50vw, 25vw" alt="Retratos — En Estudio, fotografía de Jara" loading="lazy" decoding="async">
         </div>
-      </figure>      <figure class="shot" data-ar="0.8" data-full="img/retratos/ret-24.jpg" data-ser="Retratos · Estudio" data-alt="Retratos — Estudio, fotografía de Jara">
+      </figure>      <figure class="shot" data-ar="0.8" data-full="img/retratos/ret-24.jpg" data-ser="Retratos · En Estudio" data-alt="Retratos — En Estudio, fotografía de Jara">
         <div class="shot-frame" style="--ar:0.8">
-          <img src="img/retratos/t/ret-24.jpg" width="608" height="760" sizes="(max-width:780px) 50vw, 25vw" alt="Retratos — Estudio, fotografía de Jara" loading="lazy" decoding="async">
+          <img src="img/retratos/t/ret-24.jpg" width="608" height="760" sizes="(max-width:780px) 50vw, 25vw" alt="Retratos — En Estudio, fotografía de Jara" loading="lazy" decoding="async">
         </div>
-      </figure>      <figure class="shot" data-ar="0.8" data-full="img/retratos/ret-22.jpg" data-ser="Retratos · Estudio" data-alt="Retratos — Estudio, fotografía de Jara">
+      </figure>      <figure class="shot" data-ar="0.8" data-full="img/retratos/ret-22.jpg" data-ser="Retratos · En Estudio" data-alt="Retratos — En Estudio, fotografía de Jara">
         <div class="shot-frame" style="--ar:0.8">
-          <img src="img/retratos/t/ret-22.jpg" width="608" height="760" sizes="(max-width:780px) 50vw, 25vw" alt="Retratos — Estudio, fotografía de Jara" loading="lazy" decoding="async">
+          <img src="img/retratos/t/ret-22.jpg" width="608" height="760" sizes="(max-width:780px) 50vw, 25vw" alt="Retratos — En Estudio, fotografía de Jara" loading="lazy" decoding="async">
         </div>
-      </figure>      <figure class="shot" data-ar="0.8" data-full="img/retratos/ret-39.jpg" data-ser="Retratos · Estudio" data-alt="Retratos — Estudio, fotografía de Jara">
+      </figure>      <figure class="shot" data-ar="0.8" data-full="img/retratos/ret-39.jpg" data-ser="Retratos · En Estudio" data-alt="Retratos — En Estudio, fotografía de Jara">
         <div class="shot-frame" style="--ar:0.8">
-          <img src="img/retratos/t/ret-39.jpg" width="608" height="760" sizes="(max-width:780px) 50vw, 25vw" alt="Retratos — Estudio, fotografía de Jara" loading="lazy" decoding="async">
+          <img src="img/retratos/t/ret-39.jpg" width="608" height="760" sizes="(max-width:780px) 50vw, 25vw" alt="Retratos — En Estudio, fotografía de Jara" loading="lazy" decoding="async">
         </div>
-      </figure>      <figure class="shot" data-ar="0.8" data-full="img/retratos/ret-42.jpg" data-ser="Retratos · Estudio" data-alt="Retratos — Estudio, fotografía de Jara">
+      </figure>      <figure class="shot" data-ar="0.8" data-full="img/retratos/ret-42.jpg" data-ser="Retratos · En Estudio" data-alt="Retratos — En Estudio, fotografía de Jara">
         <div class="shot-frame" style="--ar:0.8">
-          <img src="img/retratos/t/ret-42.jpg" width="608" height="760" sizes="(max-width:780px) 50vw, 25vw" alt="Retratos — Estudio, fotografía de Jara" loading="lazy" decoding="async">
+          <img src="img/retratos/t/ret-42.jpg" width="608" height="760" sizes="(max-width:780px) 50vw, 25vw" alt="Retratos — En Estudio, fotografía de Jara" loading="lazy" decoding="async">
         </div>
-      </figure>      <figure class="shot" data-ar="0.8" data-full="img/retratos/ret-41.jpg" data-ser="Retratos · Estudio" data-alt="Retratos — Estudio, fotografía de Jara">
+      </figure>      <figure class="shot" data-ar="0.8" data-full="img/retratos/ret-41.jpg" data-ser="Retratos · En Estudio" data-alt="Retratos — En Estudio, fotografía de Jara">
         <div class="shot-frame" style="--ar:0.8">
-          <img src="img/retratos/t/ret-41.jpg" width="608" height="760" sizes="(max-width:780px) 50vw, 25vw" alt="Retratos — Estudio, fotografía de Jara" loading="lazy" decoding="async">
+          <img src="img/retratos/t/ret-41.jpg" width="608" height="760" sizes="(max-width:780px) 50vw, 25vw" alt="Retratos — En Estudio, fotografía de Jara" loading="lazy" decoding="async">
         </div>
-      </figure>      <figure class="shot" data-ar="0.8" data-full="img/retratos/ret-40.jpg" data-ser="Retratos · Estudio" data-alt="Retratos — Estudio, fotografía de Jara">
+      </figure>      <figure class="shot" data-ar="0.8" data-full="img/retratos/ret-40.jpg" data-ser="Retratos · En Estudio" data-alt="Retratos — En Estudio, fotografía de Jara">
         <div class="shot-frame" style="--ar:0.8">
-          <img src="img/retratos/t/ret-40.jpg" width="608" height="760" sizes="(max-width:780px) 50vw, 25vw" alt="Retratos — Estudio, fotografía de Jara" loading="lazy" decoding="async">
+          <img src="img/retratos/t/ret-40.jpg" width="608" height="760" sizes="(max-width:780px) 50vw, 25vw" alt="Retratos — En Estudio, fotografía de Jara" loading="lazy" decoding="async">
         </div>
       </figure>    </div>
   </div>
   <div class="series">
-    <h3 class="series-name">Exteriores</h3>
+    <h3 class="series-name">Ambientados</h3>
     <div class="series-grid">
-      <figure class="shot is-lead" data-ar="0.8" data-full="img/retratos/ret-36.jpg" data-ser="Retratos · Exteriores" data-alt="Retratos — Exteriores, fotografía de Jara">
+      <figure class="shot is-lead" data-ar="0.8" data-full="img/retratos/ret-36.jpg" data-ser="Retratos · Ambientados" data-alt="Retratos — Ambientados, fotografía de Jara">
         <div class="shot-frame" style="--ar:0.8">
-          <img src="img/retratos/t/ret-36.jpg" width="1080" height="1349" sizes="(max-width:780px) 100vw, 50vw" alt="Retratos — Exteriores, fotografía de Jara" loading="lazy" decoding="async">
+          <img src="img/retratos/t/ret-36.jpg" width="1080" height="1349" sizes="(max-width:780px) 100vw, 50vw" alt="Retratos — Ambientados, fotografía de Jara" loading="lazy" decoding="async">
         </div>
-      </figure>      <figure class="shot" data-ar="0.6344" data-full="img/retratos/ret-43.jpg" data-ser="Retratos · Exteriores" data-alt="Retratos — Exteriores, fotografía de Jara">
+      </figure>      <figure class="shot" data-ar="0.6344" data-full="img/retratos/ret-43.jpg" data-ser="Retratos · Ambientados" data-alt="Retratos — Ambientados, fotografía de Jara">
         <div class="shot-frame" style="--ar:0.6344">
-          <img src="img/retratos/t/ret-43.jpg" width="482" height="760" sizes="(max-width:780px) 50vw, 25vw" alt="Retratos — Exteriores, fotografía de Jara" loading="lazy" decoding="async">
+          <img src="img/retratos/t/ret-43.jpg" width="482" height="760" sizes="(max-width:780px) 50vw, 25vw" alt="Retratos — Ambientados, fotografía de Jara" loading="lazy" decoding="async">
         </div>
-      </figure>      <figure class="shot" data-ar="0.6408" data-full="img/retratos/ret-02.jpg" data-ser="Retratos · Exteriores" data-alt="Retratos — Exteriores, fotografía de Jara">
+      </figure>      <figure class="shot" data-ar="0.6408" data-full="img/retratos/ret-02.jpg" data-ser="Retratos · Ambientados" data-alt="Retratos — Ambientados, fotografía de Jara">
         <div class="shot-frame" style="--ar:0.6408">
-          <img src="img/retratos/t/ret-02.jpg" width="487" height="760" sizes="(max-width:780px) 50vw, 25vw" alt="Retratos — Exteriores, fotografía de Jara" loading="lazy" decoding="async">
+          <img src="img/retratos/t/ret-02.jpg" width="487" height="760" sizes="(max-width:780px) 50vw, 25vw" alt="Retratos — Ambientados, fotografía de Jara" loading="lazy" decoding="async">
         </div>
-      </figure>      <figure class="shot" data-ar="0.6671" data-full="img/retratos/ret-01.jpg" data-ser="Retratos · Exteriores" data-alt="Retratos — Exteriores, fotografía de Jara">
+      </figure>      <figure class="shot" data-ar="0.6671" data-full="img/retratos/ret-01.jpg" data-ser="Retratos · Ambientados" data-alt="Retratos — Ambientados, fotografía de Jara">
         <div class="shot-frame" style="--ar:0.6671">
-          <img src="img/retratos/t/ret-01.jpg" width="507" height="760" sizes="(max-width:780px) 50vw, 25vw" alt="Retratos — Exteriores, fotografía de Jara" loading="lazy" decoding="async">
+          <img src="img/retratos/t/ret-01.jpg" width="507" height="760" sizes="(max-width:780px) 50vw, 25vw" alt="Retratos — Ambientados, fotografía de Jara" loading="lazy" decoding="async">
         </div>
-      </figure>      <figure class="shot" data-ar="0.6671" data-full="img/retratos/ret-03.jpg" data-ser="Retratos · Exteriores" data-alt="Retratos — Exteriores, fotografía de Jara">
+      </figure>      <figure class="shot" data-ar="0.6671" data-full="img/retratos/ret-03.jpg" data-ser="Retratos · Ambientados" data-alt="Retratos — Ambientados, fotografía de Jara">
         <div class="shot-frame" style="--ar:0.6671">
-          <img src="img/retratos/t/ret-03.jpg" width="507" height="760" sizes="(max-width:780px) 50vw, 25vw" alt="Retratos — Exteriores, fotografía de Jara" loading="lazy" decoding="async">
+          <img src="img/retratos/t/ret-03.jpg" width="507" height="760" sizes="(max-width:780px) 50vw, 25vw" alt="Retratos — Ambientados, fotografía de Jara" loading="lazy" decoding="async">
         </div>
-      </figure>      <figure class="shot" data-ar="0.6947" data-full="img/retratos/ret-45.jpg" data-ser="Retratos · Exteriores" data-alt="Retratos — Exteriores, fotografía de Jara">
+      </figure>      <figure class="shot" data-ar="0.6947" data-full="img/retratos/ret-45.jpg" data-ser="Retratos · Ambientados" data-alt="Retratos — Ambientados, fotografía de Jara">
         <div class="shot-frame" style="--ar:0.6947">
-          <img src="img/retratos/t/ret-45.jpg" width="528" height="760" sizes="(max-width:780px) 50vw, 25vw" alt="Retratos — Exteriores, fotografía de Jara" loading="lazy" decoding="async">
+          <img src="img/retratos/t/ret-45.jpg" width="528" height="760" sizes="(max-width:780px) 50vw, 25vw" alt="Retratos — Ambientados, fotografía de Jara" loading="lazy" decoding="async">
         </div>
-      </figure>      <figure class="shot" data-ar="0.6671" data-full="img/retratos/ret-46.jpg" data-ser="Retratos · Exteriores" data-alt="Retratos — Exteriores, fotografía de Jara">
+      </figure>      <figure class="shot" data-ar="0.6671" data-full="img/retratos/ret-46.jpg" data-ser="Retratos · Ambientados" data-alt="Retratos — Ambientados, fotografía de Jara">
         <div class="shot-frame" style="--ar:0.6671">
-          <img src="img/retratos/t/ret-46.jpg" width="507" height="760" sizes="(max-width:780px) 50vw, 25vw" alt="Retratos — Exteriores, fotografía de Jara" loading="lazy" decoding="async">
+          <img src="img/retratos/t/ret-46.jpg" width="507" height="760" sizes="(max-width:780px) 50vw, 25vw" alt="Retratos — Ambientados, fotografía de Jara" loading="lazy" decoding="async">
         </div>
-      </figure>      <figure class="shot" data-ar="0.6671" data-full="img/retratos/ret-47.jpg" data-ser="Retratos · Exteriores" data-alt="Retratos — Exteriores, fotografía de Jara">
+      </figure>      <figure class="shot" data-ar="0.6671" data-full="img/retratos/ret-47.jpg" data-ser="Retratos · Ambientados" data-alt="Retratos — Ambientados, fotografía de Jara">
         <div class="shot-frame" style="--ar:0.6671">
-          <img src="img/retratos/t/ret-47.jpg" width="507" height="760" sizes="(max-width:780px) 50vw, 25vw" alt="Retratos — Exteriores, fotografía de Jara" loading="lazy" decoding="async">
+          <img src="img/retratos/t/ret-47.jpg" width="507" height="760" sizes="(max-width:780px) 50vw, 25vw" alt="Retratos — Ambientados, fotografía de Jara" loading="lazy" decoding="async">
         </div>
-      </figure>      <figure class="shot" data-ar="0.7066" data-full="img/retratos/ret-44.jpg" data-ser="Retratos · Exteriores" data-alt="Retratos — Exteriores, fotografía de Jara">
+      </figure>      <figure class="shot" data-ar="0.7066" data-full="img/retratos/ret-44.jpg" data-ser="Retratos · Ambientados" data-alt="Retratos — Ambientados, fotografía de Jara">
         <div class="shot-frame" style="--ar:0.7066">
-          <img src="img/retratos/t/ret-44.jpg" width="537" height="760" sizes="(max-width:780px) 50vw, 25vw" alt="Retratos — Exteriores, fotografía de Jara" loading="lazy" decoding="async">
+          <img src="img/retratos/t/ret-44.jpg" width="537" height="760" sizes="(max-width:780px) 50vw, 25vw" alt="Retratos — Ambientados, fotografía de Jara" loading="lazy" decoding="async">
         </div>
-      </figure>      <figure class="shot" data-ar="0.6671" data-full="img/retratos/ret-48.jpg" data-ser="Retratos · Exteriores" data-alt="Retratos — Exteriores, fotografía de Jara">
+      </figure>      <figure class="shot" data-ar="0.6671" data-full="img/retratos/ret-48.jpg" data-ser="Retratos · Ambientados" data-alt="Retratos — Ambientados, fotografía de Jara">
         <div class="shot-frame" style="--ar:0.6671">
-          <img src="img/retratos/t/ret-48.jpg" width="507" height="760" sizes="(max-width:780px) 50vw, 25vw" alt="Retratos — Exteriores, fotografía de Jara" loading="lazy" decoding="async">
+          <img src="img/retratos/t/ret-48.jpg" width="507" height="760" sizes="(max-width:780px) 50vw, 25vw" alt="Retratos — Ambientados, fotografía de Jara" loading="lazy" decoding="async">
         </div>
-      </figure>      <figure class="shot" data-ar="0.6671" data-full="img/retratos/ret-05.jpg" data-ser="Retratos · Exteriores" data-alt="Retratos — Exteriores, fotografía de Jara">
+      </figure>      <figure class="shot" data-ar="0.6671" data-full="img/retratos/ret-05.jpg" data-ser="Retratos · Ambientados" data-alt="Retratos — Ambientados, fotografía de Jara">
         <div class="shot-frame" style="--ar:0.6671">
-          <img src="img/retratos/t/ret-05.jpg" width="507" height="760" sizes="(max-width:780px) 50vw, 25vw" alt="Retratos — Exteriores, fotografía de Jara" loading="lazy" decoding="async">
+          <img src="img/retratos/t/ret-05.jpg" width="507" height="760" sizes="(max-width:780px) 50vw, 25vw" alt="Retratos — Ambientados, fotografía de Jara" loading="lazy" decoding="async">
         </div>
-      </figure>      <figure class="shot" data-ar="0.6671" data-full="img/retratos/ret-06.jpg" data-ser="Retratos · Exteriores" data-alt="Retratos — Exteriores, fotografía de Jara">
+      </figure>      <figure class="shot" data-ar="0.6671" data-full="img/retratos/ret-06.jpg" data-ser="Retratos · Ambientados" data-alt="Retratos — Ambientados, fotografía de Jara">
         <div class="shot-frame" style="--ar:0.6671">
-          <img src="img/retratos/t/ret-06.jpg" width="507" height="760" sizes="(max-width:780px) 50vw, 25vw" alt="Retratos — Exteriores, fotografía de Jara" loading="lazy" decoding="async">
+          <img src="img/retratos/t/ret-06.jpg" width="507" height="760" sizes="(max-width:780px) 50vw, 25vw" alt="Retratos — Ambientados, fotografía de Jara" loading="lazy" decoding="async">
         </div>
-      </figure>      <figure class="shot" data-ar="0.6671" data-full="img/retratos/ret-07.jpg" data-ser="Retratos · Exteriores" data-alt="Retratos — Exteriores, fotografía de Jara">
+      </figure>      <figure class="shot" data-ar="0.6671" data-full="img/retratos/ret-07.jpg" data-ser="Retratos · Ambientados" data-alt="Retratos — Ambientados, fotografía de Jara">
         <div class="shot-frame" style="--ar:0.6671">
-          <img src="img/retratos/t/ret-07.jpg" width="507" height="760" sizes="(max-width:780px) 50vw, 25vw" alt="Retratos — Exteriores, fotografía de Jara" loading="lazy" decoding="async">
+          <img src="img/retratos/t/ret-07.jpg" width="507" height="760" sizes="(max-width:780px) 50vw, 25vw" alt="Retratos — Ambientados, fotografía de Jara" loading="lazy" decoding="async">
         </div>
-      </figure>      <figure class="shot" data-ar="0.6671" data-full="img/retratos/ret-08.jpg" data-ser="Retratos · Exteriores" data-alt="Retratos — Exteriores, fotografía de Jara">
+      </figure>      <figure class="shot" data-ar="0.6671" data-full="img/retratos/ret-08.jpg" data-ser="Retratos · Ambientados" data-alt="Retratos — Ambientados, fotografía de Jara">
         <div class="shot-frame" style="--ar:0.6671">
-          <img src="img/retratos/t/ret-08.jpg" width="507" height="760" sizes="(max-width:780px) 50vw, 25vw" alt="Retratos — Exteriores, fotografía de Jara" loading="lazy" decoding="async">
+          <img src="img/retratos/t/ret-08.jpg" width="507" height="760" sizes="(max-width:780px) 50vw, 25vw" alt="Retratos — Ambientados, fotografía de Jara" loading="lazy" decoding="async">
         </div>
-      </figure>      <figure class="shot" data-ar="0.6355" data-full="img/retratos/ret-04.jpg" data-ser="Retratos · Exteriores" data-alt="Retratos — Exteriores, fotografía de Jara">
+      </figure>      <figure class="shot" data-ar="0.6355" data-full="img/retratos/ret-04.jpg" data-ser="Retratos · Ambientados" data-alt="Retratos — Ambientados, fotografía de Jara">
         <div class="shot-frame" style="--ar:0.6355">
-          <img src="img/retratos/t/ret-04.jpg" width="483" height="760" sizes="(max-width:780px) 50vw, 25vw" alt="Retratos — Exteriores, fotografía de Jara" loading="lazy" decoding="async">
+          <img src="img/retratos/t/ret-04.jpg" width="483" height="760" sizes="(max-width:780px) 50vw, 25vw" alt="Retratos — Ambientados, fotografía de Jara" loading="lazy" decoding="async">
         </div>
-      </figure>      <figure class="shot" data-ar="0.6566" data-full="img/retratos/ret-11.jpg" data-ser="Retratos · Exteriores" data-alt="Retratos — Exteriores, fotografía de Jara">
+      </figure>      <figure class="shot" data-ar="0.6566" data-full="img/retratos/ret-11.jpg" data-ser="Retratos · Ambientados" data-alt="Retratos — Ambientados, fotografía de Jara">
         <div class="shot-frame" style="--ar:0.6566">
-          <img src="img/retratos/t/ret-11.jpg" width="499" height="760" sizes="(max-width:780px) 50vw, 25vw" alt="Retratos — Exteriores, fotografía de Jara" loading="lazy" decoding="async">
+          <img src="img/retratos/t/ret-11.jpg" width="499" height="760" sizes="(max-width:780px) 50vw, 25vw" alt="Retratos — Ambientados, fotografía de Jara" loading="lazy" decoding="async">
         </div>
-      </figure>      <figure class="shot" data-ar="0.7" data-full="img/retratos/ret-09.jpg" data-ser="Retratos · Exteriores" data-alt="Retratos — Exteriores, fotografía de Jara">
+      </figure>      <figure class="shot" data-ar="0.7" data-full="img/retratos/ret-09.jpg" data-ser="Retratos · Ambientados" data-alt="Retratos — Ambientados, fotografía de Jara">
         <div class="shot-frame" style="--ar:0.7">
-          <img src="img/retratos/t/ret-09.jpg" width="532" height="760" sizes="(max-width:780px) 50vw, 25vw" alt="Retratos — Exteriores, fotografía de Jara" loading="lazy" decoding="async">
+          <img src="img/retratos/t/ret-09.jpg" width="532" height="760" sizes="(max-width:780px) 50vw, 25vw" alt="Retratos — Ambientados, fotografía de Jara" loading="lazy" decoding="async">
         </div>
-      </figure>      <figure class="shot" data-ar="0.6408" data-full="img/retratos/ret-10.jpg" data-ser="Retratos · Exteriores" data-alt="Retratos — Exteriores, fotografía de Jara">
+      </figure>      <figure class="shot" data-ar="0.6408" data-full="img/retratos/ret-10.jpg" data-ser="Retratos · Ambientados" data-alt="Retratos — Ambientados, fotografía de Jara">
         <div class="shot-frame" style="--ar:0.6408">
-          <img src="img/retratos/t/ret-10.jpg" width="487" height="760" sizes="(max-width:780px) 50vw, 25vw" alt="Retratos — Exteriores, fotografía de Jara" loading="lazy" decoding="async">
+          <img src="img/retratos/t/ret-10.jpg" width="487" height="760" sizes="(max-width:780px) 50vw, 25vw" alt="Retratos — Ambientados, fotografía de Jara" loading="lazy" decoding="async">
         </div>
-      </figure>      <figure class="shot" data-ar="0.7026" data-full="img/retratos/ret-12.jpg" data-ser="Retratos · Exteriores" data-alt="Retratos — Exteriores, fotografía de Jara">
+      </figure>      <figure class="shot" data-ar="0.7026" data-full="img/retratos/ret-12.jpg" data-ser="Retratos · Ambientados" data-alt="Retratos — Ambientados, fotografía de Jara">
         <div class="shot-frame" style="--ar:0.7026">
-          <img src="img/retratos/t/ret-12.jpg" width="534" height="760" sizes="(max-width:780px) 50vw, 25vw" alt="Retratos — Exteriores, fotografía de Jara" loading="lazy" decoding="async">
+          <img src="img/retratos/t/ret-12.jpg" width="534" height="760" sizes="(max-width:780px) 50vw, 25vw" alt="Retratos — Ambientados, fotografía de Jara" loading="lazy" decoding="async">
         </div>
-      </figure>      <figure class="shot" data-ar="0.8" data-full="img/retratos/ret-34.jpg" data-ser="Retratos · Exteriores" data-alt="Retratos — Exteriores, fotografía de Jara">
+      </figure>      <figure class="shot" data-ar="0.8" data-full="img/retratos/ret-34.jpg" data-ser="Retratos · Ambientados" data-alt="Retratos — Ambientados, fotografía de Jara">
         <div class="shot-frame" style="--ar:0.8">
-          <img src="img/retratos/t/ret-34.jpg" width="608" height="760" sizes="(max-width:780px) 50vw, 25vw" alt="Retratos — Exteriores, fotografía de Jara" loading="lazy" decoding="async">
+          <img src="img/retratos/t/ret-34.jpg" width="608" height="760" sizes="(max-width:780px) 50vw, 25vw" alt="Retratos — Ambientados, fotografía de Jara" loading="lazy" decoding="async">
         </div>
-      </figure>      <figure class="shot" data-ar="0.8" data-full="img/retratos/ret-32.jpg" data-ser="Retratos · Exteriores" data-alt="Retratos — Exteriores, fotografía de Jara">
+      </figure>      <figure class="shot" data-ar="0.8" data-full="img/retratos/ret-32.jpg" data-ser="Retratos · Ambientados" data-alt="Retratos — Ambientados, fotografía de Jara">
         <div class="shot-frame" style="--ar:0.8">
-          <img src="img/retratos/t/ret-32.jpg" width="608" height="760" sizes="(max-width:780px) 50vw, 25vw" alt="Retratos — Exteriores, fotografía de Jara" loading="lazy" decoding="async">
+          <img src="img/retratos/t/ret-32.jpg" width="608" height="760" sizes="(max-width:780px) 50vw, 25vw" alt="Retratos — Ambientados, fotografía de Jara" loading="lazy" decoding="async">
         </div>
-      </figure>      <figure class="shot" data-ar="0.8" data-full="img/retratos/ret-33.jpg" data-ser="Retratos · Exteriores" data-alt="Retratos — Exteriores, fotografía de Jara">
+      </figure>      <figure class="shot" data-ar="0.8" data-full="img/retratos/ret-33.jpg" data-ser="Retratos · Ambientados" data-alt="Retratos — Ambientados, fotografía de Jara">
         <div class="shot-frame" style="--ar:0.8">
-          <img src="img/retratos/t/ret-33.jpg" width="608" height="760" sizes="(max-width:780px) 50vw, 25vw" alt="Retratos — Exteriores, fotografía de Jara" loading="lazy" decoding="async">
+          <img src="img/retratos/t/ret-33.jpg" width="608" height="760" sizes="(max-width:780px) 50vw, 25vw" alt="Retratos — Ambientados, fotografía de Jara" loading="lazy" decoding="async">
         </div>
-      </figure>      <figure class="shot" data-ar="0.8" data-full="img/retratos/ret-35.jpg" data-ser="Retratos · Exteriores" data-alt="Retratos — Exteriores, fotografía de Jara">
+      </figure>      <figure class="shot" data-ar="0.8" data-full="img/retratos/ret-35.jpg" data-ser="Retratos · Ambientados" data-alt="Retratos — Ambientados, fotografía de Jara">
         <div class="shot-frame" style="--ar:0.8">
-          <img src="img/retratos/t/ret-35.jpg" width="608" height="760" sizes="(max-width:780px) 50vw, 25vw" alt="Retratos — Exteriores, fotografía de Jara" loading="lazy" decoding="async">
+          <img src="img/retratos/t/ret-35.jpg" width="608" height="760" sizes="(max-width:780px) 50vw, 25vw" alt="Retratos — Ambientados, fotografía de Jara" loading="lazy" decoding="async">
         </div>
-      </figure>      <figure class="shot" data-ar="0.8" data-full="img/retratos/ret-37.jpg" data-ser="Retratos · Exteriores" data-alt="Retratos — Exteriores, fotografía de Jara">
+      </figure>      <figure class="shot" data-ar="0.8" data-full="img/retratos/ret-37.jpg" data-ser="Retratos · Ambientados" data-alt="Retratos — Ambientados, fotografía de Jara">
         <div class="shot-frame" style="--ar:0.8">
-          <img src="img/retratos/t/ret-37.jpg" width="608" height="760" sizes="(max-width:780px) 50vw, 25vw" alt="Retratos — Exteriores, fotografía de Jara" loading="lazy" decoding="async">
+          <img src="img/retratos/t/ret-37.jpg" width="608" height="760" sizes="(max-width:780px) 50vw, 25vw" alt="Retratos — Ambientados, fotografía de Jara" loading="lazy" decoding="async">
         </div>
-      </figure>      <figure class="shot" data-ar="0.8" data-full="img/retratos/ret-38.jpg" data-ser="Retratos · Exteriores" data-alt="Retratos — Exteriores, fotografía de Jara">
+      </figure>      <figure class="shot" data-ar="0.8" data-full="img/retratos/ret-38.jpg" data-ser="Retratos · Ambientados" data-alt="Retratos — Ambientados, fotografía de Jara">
         <div class="shot-frame" style="--ar:0.8">
-          <img src="img/retratos/t/ret-38.jpg" width="608" height="760" sizes="(max-width:780px) 50vw, 25vw" alt="Retratos — Exteriores, fotografía de Jara" loading="lazy" decoding="async">
+          <img src="img/retratos/t/ret-38.jpg" width="608" height="760" sizes="(max-width:780px) 50vw, 25vw" alt="Retratos — Ambientados, fotografía de Jara" loading="lazy" decoding="async">
         </div>
-      </figure>      <figure class="shot" data-ar="0.7" data-full="img/retratos/ret-14.jpg" data-ser="Retratos · Exteriores" data-alt="Retratos — Exteriores, fotografía de Jara">
+      </figure>      <figure class="shot" data-ar="0.7" data-full="img/retratos/ret-14.jpg" data-ser="Retratos · Ambientados" data-alt="Retratos — Ambientados, fotografía de Jara">
         <div class="shot-frame" style="--ar:0.7">
-          <img src="img/retratos/t/ret-14.jpg" width="532" height="760" sizes="(max-width:780px) 50vw, 25vw" alt="Retratos — Exteriores, fotografía de Jara" loading="lazy" decoding="async">
+          <img src="img/retratos/t/ret-14.jpg" width="532" height="760" sizes="(max-width:780px) 50vw, 25vw" alt="Retratos — Ambientados, fotografía de Jara" loading="lazy" decoding="async">
         </div>
-      </figure>      <figure class="shot" data-ar="0.6671" data-full="img/retratos/ret-13.jpg" data-ser="Retratos · Exteriores" data-alt="Retratos — Exteriores, fotografía de Jara">
+      </figure>      <figure class="shot" data-ar="0.6671" data-full="img/retratos/ret-13.jpg" data-ser="Retratos · Ambientados" data-alt="Retratos — Ambientados, fotografía de Jara">
         <div class="shot-frame" style="--ar:0.6671">
-          <img src="img/retratos/t/ret-13.jpg" width="507" height="760" sizes="(max-width:780px) 50vw, 25vw" alt="Retratos — Exteriores, fotografía de Jara" loading="lazy" decoding="async">
+          <img src="img/retratos/t/ret-13.jpg" width="507" height="760" sizes="(max-width:780px) 50vw, 25vw" alt="Retratos — Ambientados, fotografía de Jara" loading="lazy" decoding="async">
         </div>
-      </figure>      <figure class="shot" data-ar="0.6671" data-full="img/retratos/ret-16.jpg" data-ser="Retratos · Exteriores" data-alt="Retratos — Exteriores, fotografía de Jara">
+      </figure>      <figure class="shot" data-ar="0.6671" data-full="img/retratos/ret-16.jpg" data-ser="Retratos · Ambientados" data-alt="Retratos — Ambientados, fotografía de Jara">
         <div class="shot-frame" style="--ar:0.6671">
-          <img src="img/retratos/t/ret-16.jpg" width="507" height="760" sizes="(max-width:780px) 50vw, 25vw" alt="Retratos — Exteriores, fotografía de Jara" loading="lazy" decoding="async">
+          <img src="img/retratos/t/ret-16.jpg" width="507" height="760" sizes="(max-width:780px) 50vw, 25vw" alt="Retratos — Ambientados, fotografía de Jara" loading="lazy" decoding="async">
         </div>
-      </figure>      <figure class="shot" data-ar="0.6658" data-full="img/retratos/ret-15.jpg" data-ser="Retratos · Exteriores" data-alt="Retratos — Exteriores, fotografía de Jara">
+      </figure>      <figure class="shot" data-ar="0.6658" data-full="img/retratos/ret-15.jpg" data-ser="Retratos · Ambientados" data-alt="Retratos — Ambientados, fotografía de Jara">
         <div class="shot-frame" style="--ar:0.6658">
-          <img src="img/retratos/t/ret-15.jpg" width="506" height="760" sizes="(max-width:780px) 50vw, 25vw" alt="Retratos — Exteriores, fotografía de Jara" loading="lazy" decoding="async">
+          <img src="img/retratos/t/ret-15.jpg" width="506" height="760" sizes="(max-width:780px) 50vw, 25vw" alt="Retratos — Ambientados, fotografía de Jara" loading="lazy" decoding="async">
         </div>
       </figure>    </div>
   </div>
 </section>
 <section class="col-section" id="col-campanas" hidden>
+  <h2 class="col-title">Campañas</h2>
+  <div class="col-rule" aria-hidden="true"></div>
   <div class="series">
-    <h3 class="series-name">Estudio</h3>
     <div class="series-grid">
       <figure class="shot is-lead" data-ar="0.7145" data-full="img/campanas/cam-09.jpg" data-ser="Campañas · Estudio" data-alt="Campañas — Estudio, fotografía de Jara">
         <div class="shot-frame" style="--ar:0.7145">
@@ -977,6 +1097,8 @@
   </div>
 </section>
 <section class="col-section" id="col-films" hidden>
+  <h2 class="col-title">Films</h2>
+  <div class="col-rule" aria-hidden="true"></div>
   <p class="col-empty meta">Próximamente</p>
 </section>
 </main>
@@ -1003,6 +1125,10 @@
 
 <button type="button" class="to-top" id="toTop" aria-label="Volver arriba">
   <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+</button>
+
+<button type="button" class="theme-toggle" id="themeToggle" aria-label="Cambiar entre modo claro y oscuro" title="Modo claro / oscuro">
+  <span class="theme-toggle-ico" aria-hidden="true"></span>
 </button>
 
 <div class="lb" id="lb" hidden role="dialog" aria-modal="true" aria-label="Visor de fotografías">
@@ -1128,8 +1254,14 @@
   measureBars();
   layout();
 
-  var rt;
+  /* Al bajar despacio en el movil, Chrome esconde y saca su barra: eso
+     dispara un "resize" aunque el ancho no haya cambiado. Si se rehace el
+     mosaico en ese momento las fotos se re-recortan y parece que hacen
+     zoom. Solo se recalcula cuando cambia el ANCHO. */
+  var rt, anchoPrev = window.innerWidth;
   window.addEventListener('resize', function(){
+    if (window.innerWidth === anchoPrev){ measureBars(); return; }
+    anchoPrev = window.innerWidth;
     clearTimeout(rt);
     rt = setTimeout(function(){ measureBars(); layout(); }, 140);
   });
@@ -1161,7 +1293,6 @@
   var ID_BY = { 'conciertos':'col-conciertos', 'retratos':'col-retratos', 'campanas':'col-campanas', 'films':'col-films' };
 
   function openCol(id){
-    closeSub();
     for (var i = 0; i < cols.length; i++){ cols[i].hidden = (cols[i].id !== id); }
     document.body.classList.add('view-col');
     railEl.hidden = false;
@@ -1177,7 +1308,6 @@
   }
 
   function goHome(toIndex){
-    closeSub();
     for (var i = 0; i < cols.length; i++){ cols[i].hidden = true; }
     document.body.classList.remove('view-col');
     railEl.hidden = true;
@@ -1194,121 +1324,13 @@
     else goHome(h === 'colecciones');
   }
 
-  /* ---------- submenu de subcategorias ----------
-     En pc se despliega al pasar el cursor sobre una categoria; en movil,
-     al tocarla (un segundo toque sobre la misma categoria abierta entra
-     en la coleccion). Los datos salen de los <h3 class="series-name">
-     que ya existen dentro de cada categoria. */
-  var navSub    = document.getElementById('navSub');
-  var canHover  = window.matchMedia('(hover:hover)').matches;
-  var openSubId = null;
-  function isMobileNav(){ return window.matchMedia('(max-width:760px)').matches; }
-
-  var subData = {};
-  cols.forEach(function(sec){
-    var arr = [];
-    var series = Array.prototype.slice.call(sec.querySelectorAll(':scope > .series'));
-    series.forEach(function(s, i){
-      if (!s.id) s.id = 's-' + sec.id.replace('col-', '') + '-' + i;
-      var h = s.querySelector('.series-name');
-      if (h) arr.push({ label: h.textContent.split('·')[0].trim(), id: s.id });
-    });
-    subData[sec.id] = arr;
-  });
   links.forEach(function(l){
-    var id = l.getAttribute('data-target');
-    if ((subData[id] || []).length){
-      var caret = document.createElement('span');
-      caret.className = 'nav-caret'; caret.textContent = '▾'; caret.setAttribute('aria-hidden', 'true');
-      l.appendChild(caret);
-    } else {
-      l.removeAttribute('aria-haspopup');
-    }
-  });
-
-  function closeSub(){
-    if (!openSubId) return;
-    navSub.hidden = true;
-    navSub.innerHTML = '';
-    links.forEach(function(l){
-      l.classList.remove('is-sub-open');
-      if (l.hasAttribute('aria-haspopup')) l.setAttribute('aria-expanded', 'false');
-    });
-    openSubId = null;
-  }
-
-  function openSub(btn, catId){
-    var items = subData[catId] || [];
-    if (!items.length){ closeSub(); return; }
-    navSub.innerHTML = '';
-    items.forEach(function(it){
-      var b = document.createElement('button');
-      b.type = 'button'; b.className = 'nav-sub-link'; b.setAttribute('role', 'menuitem');
-      b.textContent = it.label;
-      b.addEventListener('click', function(e){
-        e.stopPropagation();
-        closeSub();
-        goToSeries(catId, it.id);
-      });
-      navSub.appendChild(b);
-    });
-    navSub.hidden = false;
-    links.forEach(function(l){
-      l.classList.toggle('is-sub-open', l === btn);
-      if (l.hasAttribute('aria-haspopup')) l.setAttribute('aria-expanded', l === btn ? 'true' : 'false');
-    });
-    openSubId = catId;
-    if (!isMobileNav()){
-      var railR = railEl.getBoundingClientRect();
-      var btnR  = btn.getBoundingClientRect();
-      var w     = navSub.offsetWidth;
-      var left  = btnR.left - railR.left;
-      var maxLeft = railEl.clientWidth - w - 8;
-      navSub.style.left = Math.max(8, Math.min(left, maxLeft)) + 'px';
-    }
-  }
-
-  function goToSeries(catId, serId){
-    var slug = SLUG[catId];
-    if (location.hash.replace('#', '') !== slug) location.hash = slug;
-    else openCol(catId);
-    setTimeout(function(){
-      var el = document.getElementById(serId);
-      if (el && el.scrollIntoView) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }, 90);
-  }
-
-  links.forEach(function(l){
-    l.addEventListener('click', function(e){
+    l.addEventListener('click', function(){
       var id = l.getAttribute('data-target');
-      var items = subData[id] || [];
-      if (!canHover && items.length){
-        e.preventDefault();
-        if (openSubId === id){
-          closeSub();
-          if (location.hash.replace('#', '') === SLUG[id]) openCol(id);
-          else location.hash = SLUG[id];
-        } else {
-          openSub(l, id);
-        }
-        return;
-      }
-      if (location.hash.replace('#', '') === SLUG[id]) openCol(id);
+      if (location.hash.replace('#','') === SLUG[id]) openCol(id);
       else location.hash = SLUG[id];
     });
-    if (canHover){
-      l.addEventListener('mouseenter', function(){
-        var id = l.getAttribute('data-target');
-        if ((subData[id] || []).length) openSub(l, id); else closeSub();
-      });
-    }
   });
-  if (canHover) railEl.addEventListener('mouseleave', closeSub);
-  document.addEventListener('click', function(e){
-    if (openSubId && !railEl.contains(e.target)) closeSub();
-  });
-  document.addEventListener('keydown', function(e){ if (e.key === 'Escape') closeSub(); });
-  window.addEventListener('resize', closeSub);
 
   var backBtn = document.getElementById('navBack');
   if (backBtn) backBtn.addEventListener('click', function(){
@@ -1430,6 +1452,40 @@
     if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)) show(idx + (dx < 0 ? 1 : -1));
     else if (dy > 90 && Math.abs(dy) > Math.abs(dx)) close();
   }, { passive: true });
+})();
+</script>
+
+<script>
+/* Modo claro / oscuro. La eleccion se recuerda en este navegador, asi que
+   la pregunta del principio solo sale la primera vez; despues se cambia
+   con el boton redondo de abajo a la derecha. */
+(function(){
+  "use strict";
+  var CLAVE = 'jara-tema';
+  var raiz  = document.documentElement;
+  var gate  = document.getElementById('themeGate');
+
+  function aplicar(t){
+    if (t === 'light') raiz.setAttribute('data-theme', 'light');
+    else raiz.removeAttribute('data-theme');
+    try { localStorage.setItem(CLAVE, t); } catch(e){}
+  }
+
+  Array.prototype.forEach.call(document.querySelectorAll('[data-theme-pick]'), function(b){
+    b.addEventListener('click', function(){
+      aplicar(b.getAttribute('data-theme-pick'));
+      gate.classList.add('is-out');
+      setTimeout(function(){
+        raiz.classList.remove('sin-tema');
+        gate.classList.remove('is-out');
+      }, 300);
+    });
+  });
+
+  var tg = document.getElementById('themeToggle');
+  if (tg) tg.addEventListener('click', function(){
+    aplicar(raiz.getAttribute('data-theme') === 'light' ? 'dark' : 'light');
+  });
 })();
 </script>
 </body>
