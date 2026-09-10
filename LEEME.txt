@@ -1,0 +1,155 @@
+JARA — SITIO WEB
+================
+
+CONTENIDO
+---------
+index.html           Landing con el formulario/encuesta que envía a WhatsApp.
+                     Es la página de inicio del sitio.
+portafolio.html      Portafolio: 4 colecciones y 7 secciones.
+portafolio-beige.html   VISTA PREVIA 1: todo claro. Cabecera y selector en
+                     867 V TANGO, fondo en 870 V MADERA. Logo y texto en
+                     oscuro. No forma parte del sitio.
+portafolio-beige2.html  VISTA PREVIA 2: fondo claro (870 V MADERA) pero
+                     cabecera y selector en el OSCURO de siempre. Logo y
+                     texto de la cabecera en blanco, como ahora. No forma
+                     parte del sitio.
+                     -- Las dos previas son solo para decidir.
+                       867 V TANGO  (~#A98E6B)  cabecera y selector
+                       870 V MADERA (~#E9DCC0)  fondo bajo colecciones y fotos
+                     Pantone no tiene equivalente exacto en pantalla, asi que
+                     esos HEX son aproximados. El panel de abajo tiene dos
+                     selectores para afinarlos en vivo; tambien estan al
+                     principio del archivo en --c-header y --c-fondo.
+                     Sobre estos dos tonos claros el texto y el logo van en
+                     oscuro (un logo blanco no se veria). El icono de TikTok
+                     se deja en su cuadro negro de marca.
+                     Si te gusta, se aplica al portafolio de verdad y este
+                     archivo se borra; si no, se borra y ya.
+img/                 Fotografías optimizadas para web.
+  landing/           Las 4 fotos del collage de la portada y del formulario.
+  conciertos/        fotos a 1600 px (visor)  ·  t/ = miniaturas a 760 px (galería)
+  retratos/
+  campanas/
+  portadas/          Las 3 portadas de colección, recortadas a 4:5.
+
+IMPORTANTE: los dos HTML y la carpeta img/ deben ir SIEMPRE juntos.
+Si separas los archivos, el portafolio se queda sin fotos.
+
+
+ESTRUCTURA
+----------
+Las fotos y las secciones salen de tus carpetas de FOTOGRAFIAS.
+
+CONCIERTOS                    Portada: con-62 (IMAGEN REPRESENTANTE DE CONCIERTOS)
+   Maluma                       protagonista: con-59
+   Luis Miguel                  protagonista: con-12
+   Beéle                        protagonista: con-42
+   Otros artistas               protagonista: con-45
+
+RETRATOS                      Portada: ret-19 (IMAGEN REPRESENTANTE DE RETRATOS)
+   Estudio                      protagonista: ret-30
+   Exteriores                   protagonista: ret-36
+
+CAMPAÑAS                      Portada: cam-05 (IMAGEN REPRESENTANTE DE CAMPAÑAS)
+   Estudio                      protagonista: cam-09
+
+FILMS                         Todavía sin contenido: la tarjeta y la sección
+                              existen y dicen "Próximamente". Cuando tengas el
+                              material se añade dentro de <section id="col-films">.
+
+La foto protagonista de cada sección abre a doble ancho y se genera con más
+resolución y calidad que las demás (2400 px, frente a 1600 px).
+
+Las 5 fotos de la carpeta "NO TENER EN CUENTA FOTOS" ya no están en la web.
+
+
+CÓMO SE NAVEGA
+--------------
+La primera pantalla llega hasta las colecciones: hay que elegir una de las
+categorías principales para ver fotos. Dentro de una categoría se ven todas
+sus fotos repartidas por subcategorías, y la barra superior mantiene a la
+vista las cuatro categorías principales más el botón "‹ Colecciones" para
+volver atrás. En el móvil el botón de volver se queda solo en la flecha para
+que quepan las cuatro categorías.
+
+Cada categoría tiene su propia dirección, así que se puede enlazar directo:
+  portafolio.html#conciertos
+  portafolio.html#retratos
+  portafolio.html#campanas
+  portafolio.html#films
+
+El visor de fotos recorre solo la categoría que está abierta.
+
+
+OPTIMIZACIÓN PARA TELÉFONO
+--------------------------
+· La cabecera se va con el scroll en móvil: solo queda fija la barra de
+  categorías. Una sola barra fija = scroll más fluido y más foto en pantalla.
+· El mosaico se calcula con la proporción ya conocida de cada foto, sin medir
+  imagen por imagen. Se coloca cada foto en la columna más corta y se reparte
+  el sobrante, así ninguna sección termina con un hueco.
+· Las fotos se cargan solo al acercarse a la pantalla, y las de las categorías
+  que no has abierto no se descargan.
+· Sin desenfoques ni animaciones de fondo en móvil: son lo que más traba el
+  scroll en iPhone y Samsung.
+· Altura del hero en unidades svh, para que la barra de Safari en iPhone no
+  descuadre la portada.
+· El visor bloquea el scroll de fondo con position:fixed, que es la forma que
+  funciona bien en iOS, y devuelve la posición exacta al cerrar.
+
+
+CÓMO CAMBIAR COSAS
+------------------
+· Cambiar una portada de colección:
+  reemplaza el archivo en img/portadas/ manteniendo el nombre
+  (conciertos.jpg, retratos.jpg, campanas.jpg). Recorte 4:5.
+
+· Cambiar la foto protagonista de una sección:
+  en portafolio.html, quita class="shot is-lead" de la foto actual
+  (déjala como class="shot") y pónselo a la que quieras, que además debe ser
+  la primera del bloque <div class="series-grid">.
+  Avísame y además le regenero la versión en alta calidad.
+
+· Renombrar una sección:
+  busca el texto (por ejemplo "Otros artistas") y reemplázalo. Aparece en el
+  título de la sección y en la etiqueta del visor (data-ser).
+
+· Quitar una foto:
+  borra su bloque <figure class="shot" ...> ... </figure> completo.
+
+· Cuánto se recortan las fotos para cuadrar las columnas:
+  en el <script>, la línea  var STRETCH_MAX = 0.14;
+  Subirlo cuadra mejor las columnas pero recorta más el encuadre original.
+  Bajarlo respeta más la foto y deja algún desnivel al final de la sección.
+
+
+PARA PUBLICARLO EN INTERNET
+---------------------------
+Sube esta carpeta completa a cualquier hosting estático (Netlify, Vercel,
+GitHub Pages, Hostinger, cPanel). No necesita base de datos ni servidor.
+Los nombres ya están listos para publicar: index.html es la portada que
+abre el visitante y portafolio.html cuelga de ella. No hace falta tocar nada.
+
+
+FALLOS CORREGIDOS EN LA LANDING
+-------------------------------
+· El botón "Enviar por WhatsApp" salía desde el paso 1. Ahora aparece solo
+  en el paso 4.
+· La encuesta estaba en modo pruebas y dejaba avanzar sin rellenar nada.
+  La validación paso a paso ya está activada.
+· Si el cliente dejaba la hora en "Sin definir", el calendario guardaba las
+  12:00 igualmente y el mensaje de WhatsApp inventaba esa hora. Ahora escribe
+  "(hora por definir)".
+· La hoja de estilos pasaba todo el texto a Mayúscula Inicial ("Paso 1 De 4",
+  "Enviar Por WhatsApp", "Tu@Correo.Com"). Corregido: el texto corrido va en
+  minúscula normal y los botones en mayúscula, como en el portafolio.
+· El botón de WhatsApp está a la vista desde el paso 1. Si lo pulsan con
+  campos sin llenar, la encuesta salta al primer paso incompleto y avisa
+  qué falta; no se envía nada hasta que esté todo.
+· Las 4 fotos del collage estaban incrustadas dentro del HTML: index.html
+  pesaba 1,4 MB y se descargaba entero antes de mostrar nada. Ahora están en
+  img/landing/ optimizadas a 1600 px, el HTML pesa 323 KB y el navegador se
+  las guarda en caché.
+
+El número de WhatsApp al que llegan las encuestas es +58 412 907 1347
+(en index.html, la línea WHATSAPP_NUMBER). Compruébalo antes de publicar.
