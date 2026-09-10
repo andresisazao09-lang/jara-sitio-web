@@ -159,21 +159,49 @@
   }
   .nav-link.is-active{color:var(--text);}
   .nav-link.is-active::after{content:"";position:absolute;left:15px;right:15px;bottom:0;height:1px;background:var(--text);}
+  .nav-caret{display:inline-block;margin-left:5px;font-size:8px;vertical-align:1px;opacity:.6;transition:transform .18s ease;}
+  .nav-link.is-sub-open .nav-caret{transform:rotate(180deg);}
+
+  /* ---------- submenu de subcategorias (hover en pc, toque en movil) ---------- */
+  .nav-sub{
+    position:absolute;top:100%;left:0;z-index:50;
+    min-width:200px;max-width:calc(100vw - 16px);
+    background:var(--bg-deep);
+    border:1px solid var(--border);
+    box-shadow:0 20px 44px rgba(0,0,0,0.45);
+    padding:6px 0;
+    display:flex;flex-direction:column;
+  }
+  .nav-sub[hidden]{display:none;}
+  .nav-sub-link{
+    display:block;width:100%;background:none;border:none;font-family:inherit;cursor:pointer;
+    padding:12px 22px;text-align:left;white-space:nowrap;
+    font-size:12px;letter-spacing:0.14em;text-transform:uppercase;color:var(--text-muted);
+    transition:color .15s ease,background .15s ease;
+  }
+  .nav-sub-link.is-active{color:var(--text);}
+  @media (hover:hover){ .nav-sub-link:hover{color:var(--text);background:rgba(243,241,234,0.05);} }
+  .nav-sub-link:focus-visible{color:var(--text);background:rgba(243,241,234,0.05);}
 
   /* ---------- colección ---------- */
-  .col-section{padding:84px 5vw 24px;scroll-margin-top:calc(var(--bar-h,62px) + var(--rail-h,48px));}
+  .col-section{padding:40px 5vw 24px;scroll-margin-top:calc(var(--bar-h,62px) + var(--rail-h,48px));}
   .col-num{display:block;font-size:11px;letter-spacing:0.26em;color:var(--text-muted);margin:0 0 14px;}
   .col-title{font-size:clamp(36px,7.4vw,78px);text-transform:uppercase;margin:0;line-height:1;letter-spacing:0.01em;}
   .col-total{display:block;margin:16px 0 0;font-size:10.5px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text-muted);}
   .col-rule{width:44px;height:1px;background:var(--border-strong);margin:26px auto 0;}
 
   /* ---------- sección ---------- */
-  .series{max-width:1400px;margin:0 auto;padding-top:60px;}
+  .series{max-width:1400px;margin:0 auto;padding-top:60px;scroll-margin-top:calc(var(--bar-h,62px) + var(--rail-h,48px) + 12px);}
+  .col-section > .series:first-of-type{padding-top:8px;}
   .series-name{font-size:clamp(27px,3.6vw,42px);text-transform:uppercase;letter-spacing:0.05em;margin:0;}
   .series-sub{display:block;margin:8px 0 0;font-size:11px;letter-spacing:0.1em;color:var(--text-muted);font-style:italic;}
   .series-n{display:block;margin:10px 0 20px;font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text-muted);}
+  /* fecha en el nombre + pais con bandera debajo (Conciertos) */
+  .series-loc{display:flex;align-items:center;gap:8px;margin:11px 0 0;font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text-muted);}
+  .series-flag{font-size:16px;line-height:1;font-family:"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif;}
 
   .series-name + .series-grid{margin-top:24px;}
+  .series-loc + .series-grid{margin-top:24px;}
   .series-grid{
     --cols:2;
     display:grid;
@@ -264,7 +292,10 @@
     .nav-rail{top:0;margin-top:40px;}
     .nav-link{padding:15px 11px;font-size:11.5px;letter-spacing:0.1em;}
     .col-section{padding:52px 4vw 16px;scroll-margin-top:var(--rail-h,46px);}
-    .series{padding-top:38px;}
+    .series{padding-top:38px;scroll-margin-top:calc(var(--rail-h,46px) + 10px);}
+    .col-section > .series:first-of-type{padding-top:6px;}
+    .nav-sub{left:0;right:0;min-width:0;max-width:none;}
+    .nav-sub-link{text-align:center;padding:14px 18px;}
     .idx{padding:56px 4vw 16px;}
     .idx h2{margin-bottom:26px;}
     .p-cta{margin-top:44px;padding:70px 6vw 76px;}
@@ -387,20 +418,20 @@
 <nav class="nav-rail" aria-label="Colecciones" hidden>
   <div class="nav-rail-inner">
     <button type="button" class="nav-link nav-back meta" id="navBack" aria-label="Volver a las colecciones">&#8249;<span class="nav-back-txt">&nbsp;Colecciones</span></button>
-    <button type="button" class="nav-link meta" data-target="col-conciertos">Conciertos</button>
-    <button type="button" class="nav-link meta" data-target="col-retratos">Retratos</button>
-    <button type="button" class="nav-link meta" data-target="col-campanas">Campañas</button>
+    <button type="button" class="nav-link meta" data-target="col-conciertos" aria-haspopup="true" aria-expanded="false">Conciertos</button>
+    <button type="button" class="nav-link meta" data-target="col-retratos" aria-haspopup="true" aria-expanded="false">Retratos</button>
+    <button type="button" class="nav-link meta" data-target="col-campanas" aria-haspopup="true" aria-expanded="false">Campañas</button>
     <button type="button" class="nav-link meta" data-target="col-films">Films</button>
   </div>
+  <div class="nav-sub" id="navSub" role="menu" hidden></div>
 </nav>
 
 <main>
 <noscript><p class="noscript-note">Activa JavaScript para ver la galería completa.</p></noscript>
 <section class="col-section" id="col-conciertos" hidden>
-  <h2 class="col-title">Conciertos</h2>
-  <div class="col-rule" aria-hidden="true"></div>
   <div class="series">
-    <h3 class="series-name">Maluma</h3>
+    <h3 class="series-name">Maluma · 2024</h3>
+    <p class="series-loc"><span class="series-flag" role="img" aria-label="Bandera de Venezuela">🇻🇪</span>Venezuela</p>
     <div class="series-grid">
       <figure class="shot is-lead" data-ar="0.6539" data-full="img/conciertos/con-59.jpg" data-ser="Conciertos · Maluma" data-alt="Conciertos — Maluma, fotografía de Jara">
         <div class="shot-frame" style="--ar:0.6539">
@@ -529,7 +560,8 @@
       </figure>    </div>
   </div>
   <div class="series">
-    <h3 class="series-name">Luis Miguel</h3>
+    <h3 class="series-name">Luis Miguel · 2024</h3>
+    <p class="series-loc"><span class="series-flag" role="img" aria-label="Bandera de Venezuela">🇻🇪</span>Venezuela</p>
     <div class="series-grid">
       <figure class="shot is-lead" data-ar="0.6671" data-full="img/conciertos/con-12.jpg" data-ser="Conciertos · Luis Miguel" data-alt="Conciertos — Luis Miguel, fotografía de Jara">
         <div class="shot-frame" style="--ar:0.6671">
@@ -602,7 +634,8 @@
       </figure>    </div>
   </div>
   <div class="series">
-    <h3 class="series-name">Beéle</h3>
+    <h3 class="series-name">Beéle · 2024</h3>
+    <p class="series-loc"><span class="series-flag" role="img" aria-label="Bandera de Venezuela">🇻🇪</span>Venezuela</p>
     <div class="series-grid">
       <figure class="shot is-lead" data-ar="0.6605" data-full="img/conciertos/con-42.jpg" data-ser="Conciertos · Beéle" data-alt="Conciertos — Beéle, fotografía de Jara">
         <div class="shot-frame" style="--ar:0.6605">
@@ -689,8 +722,6 @@
   </div>
 </section>
 <section class="col-section" id="col-retratos" hidden>
-  <h2 class="col-title">Retratos</h2>
-  <div class="col-rule" aria-hidden="true"></div>
   <div class="series">
     <h3 class="series-name">Estudio</h3>
     <div class="series-grid">
@@ -895,8 +926,6 @@
   </div>
 </section>
 <section class="col-section" id="col-campanas" hidden>
-  <h2 class="col-title">Campañas</h2>
-  <div class="col-rule" aria-hidden="true"></div>
   <div class="series">
     <h3 class="series-name">Estudio</h3>
     <div class="series-grid">
@@ -948,8 +977,6 @@
   </div>
 </section>
 <section class="col-section" id="col-films" hidden>
-  <h2 class="col-title">Films</h2>
-  <div class="col-rule" aria-hidden="true"></div>
   <p class="col-empty meta">Próximamente</p>
 </section>
 </main>
@@ -1134,6 +1161,7 @@
   var ID_BY = { 'conciertos':'col-conciertos', 'retratos':'col-retratos', 'campanas':'col-campanas', 'films':'col-films' };
 
   function openCol(id){
+    closeSub();
     for (var i = 0; i < cols.length; i++){ cols[i].hidden = (cols[i].id !== id); }
     document.body.classList.add('view-col');
     railEl.hidden = false;
@@ -1149,6 +1177,7 @@
   }
 
   function goHome(toIndex){
+    closeSub();
     for (var i = 0; i < cols.length; i++){ cols[i].hidden = true; }
     document.body.classList.remove('view-col');
     railEl.hidden = true;
@@ -1165,13 +1194,121 @@
     else goHome(h === 'colecciones');
   }
 
+  /* ---------- submenu de subcategorias ----------
+     En pc se despliega al pasar el cursor sobre una categoria; en movil,
+     al tocarla (un segundo toque sobre la misma categoria abierta entra
+     en la coleccion). Los datos salen de los <h3 class="series-name">
+     que ya existen dentro de cada categoria. */
+  var navSub    = document.getElementById('navSub');
+  var canHover  = window.matchMedia('(hover:hover)').matches;
+  var openSubId = null;
+  function isMobileNav(){ return window.matchMedia('(max-width:760px)').matches; }
+
+  var subData = {};
+  cols.forEach(function(sec){
+    var arr = [];
+    var series = Array.prototype.slice.call(sec.querySelectorAll(':scope > .series'));
+    series.forEach(function(s, i){
+      if (!s.id) s.id = 's-' + sec.id.replace('col-', '') + '-' + i;
+      var h = s.querySelector('.series-name');
+      if (h) arr.push({ label: h.textContent.split('·')[0].trim(), id: s.id });
+    });
+    subData[sec.id] = arr;
+  });
   links.forEach(function(l){
-    l.addEventListener('click', function(){
+    var id = l.getAttribute('data-target');
+    if ((subData[id] || []).length){
+      var caret = document.createElement('span');
+      caret.className = 'nav-caret'; caret.textContent = '▾'; caret.setAttribute('aria-hidden', 'true');
+      l.appendChild(caret);
+    } else {
+      l.removeAttribute('aria-haspopup');
+    }
+  });
+
+  function closeSub(){
+    if (!openSubId) return;
+    navSub.hidden = true;
+    navSub.innerHTML = '';
+    links.forEach(function(l){
+      l.classList.remove('is-sub-open');
+      if (l.hasAttribute('aria-haspopup')) l.setAttribute('aria-expanded', 'false');
+    });
+    openSubId = null;
+  }
+
+  function openSub(btn, catId){
+    var items = subData[catId] || [];
+    if (!items.length){ closeSub(); return; }
+    navSub.innerHTML = '';
+    items.forEach(function(it){
+      var b = document.createElement('button');
+      b.type = 'button'; b.className = 'nav-sub-link'; b.setAttribute('role', 'menuitem');
+      b.textContent = it.label;
+      b.addEventListener('click', function(e){
+        e.stopPropagation();
+        closeSub();
+        goToSeries(catId, it.id);
+      });
+      navSub.appendChild(b);
+    });
+    navSub.hidden = false;
+    links.forEach(function(l){
+      l.classList.toggle('is-sub-open', l === btn);
+      if (l.hasAttribute('aria-haspopup')) l.setAttribute('aria-expanded', l === btn ? 'true' : 'false');
+    });
+    openSubId = catId;
+    if (!isMobileNav()){
+      var railR = railEl.getBoundingClientRect();
+      var btnR  = btn.getBoundingClientRect();
+      var w     = navSub.offsetWidth;
+      var left  = btnR.left - railR.left;
+      var maxLeft = railEl.clientWidth - w - 8;
+      navSub.style.left = Math.max(8, Math.min(left, maxLeft)) + 'px';
+    }
+  }
+
+  function goToSeries(catId, serId){
+    var slug = SLUG[catId];
+    if (location.hash.replace('#', '') !== slug) location.hash = slug;
+    else openCol(catId);
+    setTimeout(function(){
+      var el = document.getElementById(serId);
+      if (el && el.scrollIntoView) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 90);
+  }
+
+  links.forEach(function(l){
+    l.addEventListener('click', function(e){
       var id = l.getAttribute('data-target');
-      if (location.hash.replace('#','') === SLUG[id]) openCol(id);
+      var items = subData[id] || [];
+      if (!canHover && items.length){
+        e.preventDefault();
+        if (openSubId === id){
+          closeSub();
+          if (location.hash.replace('#', '') === SLUG[id]) openCol(id);
+          else location.hash = SLUG[id];
+        } else {
+          openSub(l, id);
+        }
+        return;
+      }
+      if (location.hash.replace('#', '') === SLUG[id]) openCol(id);
       else location.hash = SLUG[id];
     });
+    if (canHover){
+      l.addEventListener('mouseenter', function(){
+        var id = l.getAttribute('data-target');
+        if ((subData[id] || []).length) openSub(l, id); else closeSub();
+      });
+    }
   });
+  if (canHover) railEl.addEventListener('mouseleave', closeSub);
+  document.addEventListener('click', function(e){
+    if (openSubId && !railEl.contains(e.target)) closeSub();
+  });
+  document.addEventListener('keydown', function(e){ if (e.key === 'Escape') closeSub(); });
+  window.addEventListener('resize', closeSub);
 
   var backBtn = document.getElementById('navBack');
   if (backBtn) backBtn.addEventListener('click', function(){
