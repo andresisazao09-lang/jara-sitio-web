@@ -836,6 +836,17 @@
     window.addEventListener('load', medir);
   })();
 
+  /* Si se llega desde el boton de WhatsApp del portafolio (index.html#form),
+     se recoloca el salto cuando ya han cargado las fotos: si no, el navegador
+     salta con las medidas de antes y el formulario queda descuadrado. */
+  (function(){
+    if (location.hash !== '#form') return;
+    window.addEventListener('load', function(){
+      var f = document.getElementById('form');
+      if (f) f.scrollIntoView({ block: 'start' });
+    });
+  })();
+
   document.getElementById('scrollToForm').addEventListener('click', function(){
     document.getElementById('form').scrollIntoView({behavior:'smooth', block:'start'});
   });

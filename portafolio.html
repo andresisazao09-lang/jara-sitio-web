@@ -177,7 +177,8 @@
   .series-flag{
     display:inline-block;vertical-align:.02em;
     width:.70em;height:.4667em;
-    background:url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2030%2020'%3E%3Crect%20width='30'%20height='20'%20fill='%23CF142B'/%3E%3Crect%20width='30'%20height='13.34'%20fill='%2300247D'/%3E%3Crect%20width='30'%20height='6.67'%20fill='%23FFCC00'/%3E%3Cg%20fill='%23ffffff'%3E%3Cpath%20transform='translate(18.73%208.82)'%20d='M0,-.95L.223,-.307L.904,-.294L.361,.117L.558,.769L0,.38L-.558,.769L-.361,.117L-.904,-.294L-.223,-.307Z'/%3E%3Cpath%20transform='translate(17.75%209.39)'%20d='M0,-.95L.223,-.307L.904,-.294L.361,.117L.558,.769L0,.38L-.558,.769L-.361,.117L-.904,-.294L-.223,-.307Z'/%3E%3Cpath%20transform='translate(16.68%209.78)'%20d='M0,-.95L.223,-.307L.904,-.294L.361,.117L.558,.769L0,.38L-.558,.769L-.361,.117L-.904,-.294L-.223,-.307Z'/%3E%3Cpath%20transform='translate(15.57%209.98)'%20d='M0,-.95L.223,-.307L.904,-.294L.361,.117L.558,.769L0,.38L-.558,.769L-.361,.117L-.904,-.294L-.223,-.307Z'/%3E%3Cpath%20transform='translate(14.43%209.98)'%20d='M0,-.95L.223,-.307L.904,-.294L.361,.117L.558,.769L0,.38L-.558,.769L-.361,.117L-.904,-.294L-.223,-.307Z'/%3E%3Cpath%20transform='translate(13.32%209.78)'%20d='M0,-.95L.223,-.307L.904,-.294L.361,.117L.558,.769L0,.38L-.558,.769L-.361,.117L-.904,-.294L-.223,-.307Z'/%3E%3Cpath%20transform='translate(12.25%209.39)'%20d='M0,-.95L.223,-.307L.904,-.294L.361,.117L.558,.769L0,.38L-.558,.769L-.361,.117L-.904,-.294L-.223,-.307Z'/%3E%3Cpath%20transform='translate(11.27%208.82)'%20d='M0,-.95L.223,-.307L.904,-.294L.361,.117L.558,.769L0,.38L-.558,.769L-.361,.117L-.904,-.294L-.223,-.307Z'/%3E%3C/g%3E%3C/svg%3E") center/100% 100% no-repeat;
+    margin:0 .36em;  /* la bandera hace de separador: sustituye a los puntos */
+    background:url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2030%2020'%3E%3Crect%20width='30'%20height='20'%20fill='%23CF142B'/%3E%3Crect%20width='30'%20height='13.334'%20fill='%2300247D'/%3E%3Crect%20width='30'%20height='6.667'%20fill='%23FFCC00'/%3E%3Cg%20fill='%23ffffff'%3E%3Cpath%20transform='translate(9.44%2011.75)'%20d='M0,-.85L.2,-.275L.809,-.263L.323,.105L.499,.688L0,.34L-.499,.688L-.323,.105L-.809,-.263L-.2,-.275Z'/%3E%3Cpath%20transform='translate(10.50%2010.03)'%20d='M0,-.85L.2,-.275L.809,-.263L.323,.105L.499,.688L0,.34L-.499,.688L-.323,.105L-.809,-.263L-.2,-.275Z'/%3E%3Cpath%20transform='translate(12.08%208.76)'%20d='M0,-.85L.2,-.275L.809,-.263L.323,.105L.499,.688L0,.34L-.499,.688L-.323,.105L-.809,-.263L-.2,-.275Z'/%3E%3Cpath%20transform='translate(13.99%208.09)'%20d='M0,-.85L.2,-.275L.809,-.263L.323,.105L.499,.688L0,.34L-.499,.688L-.323,.105L-.809,-.263L-.2,-.275Z'/%3E%3Cpath%20transform='translate(16.01%208.09)'%20d='M0,-.85L.2,-.275L.809,-.263L.323,.105L.499,.688L0,.34L-.499,.688L-.323,.105L-.809,-.263L-.2,-.275Z'/%3E%3Cpath%20transform='translate(17.92%208.76)'%20d='M0,-.85L.2,-.275L.809,-.263L.323,.105L.499,.688L0,.34L-.499,.688L-.323,.105L-.809,-.263L-.2,-.275Z'/%3E%3Cpath%20transform='translate(19.50%2010.03)'%20d='M0,-.85L.2,-.275L.809,-.263L.323,.105L.499,.688L0,.34L-.499,.688L-.323,.105L-.809,-.263L-.2,-.275Z'/%3E%3Cpath%20transform='translate(20.56%2011.75)'%20d='M0,-.85L.2,-.275L.809,-.263L.323,.105L.499,.688L0,.34L-.499,.688L-.323,.105L-.809,-.263L-.2,-.275Z'/%3E%3C/g%3E%3C/svg%3E") center/100% 100% no-repeat;
     border-radius:.03em;
   }
 
@@ -319,147 +320,26 @@
   .idx-card-soon .idx-card-veil{background:linear-gradient(180deg,rgba(10,10,9,0.10) 0%,rgba(10,10,9,0.75) 100%);}
   .col-empty{margin:64px 0 24px;font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:var(--text-muted);}
 
-  /* ============================================================
-     MODO CLARO
-     Fondo 870 V MADERA. La cabecera y la barra de categorias se
-     quedan en el oscuro de siempre, igual que en la landing.
-     ============================================================ */
-  [data-theme="light"]{
-    --c-fondo:#E9DCC0;
-    --bg:var(--c-fondo);
-    --bg-deep:#111110;
-    --text:#2B2620;
-    --text-muted:#625A4B;
-    --border:rgba(43,38,32,0.16);
-    --border-strong:rgba(43,38,32,0.36);
-  }
-  [data-theme="light"] body{background:var(--bg);color:var(--text);}
-  [data-theme="light"] ::selection{background:#2B2620;color:#E9DCC0;}
-
-  /* cabecera y selector: siguen oscuros, su texto en claro */
-  [data-theme="light"] .top-bar,
-  [data-theme="light"] .nav-rail{border-bottom-color:rgba(243,241,234,0.14);}
-  [data-theme="light"] .top-bar-role{color:#f3f1ea;}
-  [data-theme="light"] .top-bar-loc{color:rgba(243,241,234,0.60);}
-  [data-theme="light"] .nav-link{color:rgba(243,241,234,0.58);}
-  [data-theme="light"] .nav-link.is-active,
-  [data-theme="light"] .nav-back{color:#f3f1ea;}
-  [data-theme="light"] .nav-link.is-active::after{background:#f3f1ea;}
-
-  /* la portada se funde hacia el fondo claro */
-  [data-theme="light"] .p-hero{background:var(--bg);}
-  [data-theme="light"] .p-hero-veil{
-    background:
-      radial-gradient(ellipse 620px 480px at 50% 50%, rgba(20,16,10,0.44), transparent 76%),
-      linear-gradient(180deg, rgba(20,16,10,0.30) 0%, rgba(20,16,10,0.05) 38%, transparent 58%),
-      linear-gradient(180deg, transparent 52%, var(--bg) 100%);
-  }
-  [data-theme="light"] .p-hero-title{color:#ffffff;}
-
-  /* Degradados oscuros bajo cada foto: sobre el fondo claro las fotografias
-     perderian peso, asi siguen siendo lo primero que ve el ojo. */
-  [data-theme="light"] .shot{
-    background:rgba(43,38,32,0.10);
-    box-shadow:0 18px 30px -16px rgba(36,30,20,0.62), 0 3px 8px rgba(36,30,20,0.16);
-  }
-  [data-theme="light"] .idx-card{
-    background:rgba(43,38,32,0.10);
-    box-shadow:0 22px 38px -18px rgba(36,30,20,0.66), 0 3px 10px rgba(36,30,20,0.16);
-  }
-  [data-theme="light"] .idx-card-veil{background:linear-gradient(180deg,rgba(10,10,9,0.34) 0%,rgba(10,10,9,0.04) 36%,rgba(10,10,9,0.92) 100%);}
-  /* el nombre de la coleccion va encima de la foto: sigue en claro */
-  [data-theme="light"] .idx-card-name,
-  [data-theme="light"] .idx-card-count{color:#f3f1ea;}
-  [data-theme="light"] .idx-card-soon .idx-card-frame{background:rgba(43,38,32,0.13);}
-  [data-theme="light"] .idx-card-soon .idx-card-name,
-  [data-theme="light"] .idx-card-soon .idx-card-count{color:#3a352c;}
-  [data-theme="light"] .idx-card-soon .idx-card-veil{background:none;}
-
-  [data-theme="light"] .p-cta{background:var(--bg);border-top-color:var(--border);}
-  [data-theme="light"] .p-cta .btn{color:var(--text);border-color:var(--border-strong);}
-  [data-theme="light"] .p-cta .btn-primary{background:#2B2620;color:#E9DCC0;border-color:#2B2620;}
-  [data-theme="light"] .to-top{background:var(--bg);border-color:var(--border-strong);color:var(--text);}
-
-  /* el visor sigue oscuro: la foto manda */
-  [data-theme="light"] .lb-btn{background:rgba(243,241,234,0.08);border-color:rgba(243,241,234,0.14);color:#f3f1ea;}
-  [data-theme="light"] .lb-ser,
-  [data-theme="light"] .lb-counter{color:rgba(243,241,234,0.6);}
-
-  /* ---------- eleccion de modo al entrar ---------- */
-  .theme-gate{
-    position:fixed;inset:0;z-index:1000;
-    display:none;align-items:center;justify-content:center;
-    background:#0d0d0c;padding:28px 6vw;text-align:center;
-  }
-  html.sin-tema .theme-gate{display:flex;}
-  .theme-gate.is-out{opacity:0;pointer-events:none;transition:opacity .3s ease;}
-  .theme-gate-inner{width:100%;max-width:520px;}
-  .theme-gate-kicker{margin:0 0 14px;font-size:10.5px;letter-spacing:0.3em;text-transform:uppercase;color:#8d8779;}
-  .theme-gate-q{margin:0 0 34px;font-size:clamp(21px,4.4vw,32px);line-height:1.15;letter-spacing:0.02em;text-transform:uppercase;color:#f3f1ea;}
-  .theme-gate-actions{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
-  .theme-opt{
-    display:flex;flex-direction:column;align-items:center;gap:14px;
-    padding:20px 16px;cursor:pointer;font-family:inherit;
-    border:1px solid rgba(243,241,234,0.22);border-radius:4px;
-    background:transparent;color:#f3f1ea;
-    font-size:11px;letter-spacing:0.18em;text-transform:uppercase;
-    transition:border-color .18s ease,background .18s ease,transform .18s ease;
-  }
-  @media (hover:hover) and (pointer:fine){
-    .theme-opt:hover{border-color:#f3f1ea;background:rgba(243,241,234,0.05);}
-  }
-  .theme-opt:active{transform:scale(.985);}
-  .theme-swatch{display:block;width:100%;height:62px;border-radius:3px;border:1px solid rgba(243,241,234,0.14);}
-  .theme-swatch-dark{background:linear-gradient(160deg,#242422 0%,#111110 100%);}
-  .theme-swatch-light{background:linear-gradient(160deg,#E9DCC0 0%,#cfbf98 100%);}
-
-  /* ---------- cambiar de modo en cualquier momento ---------- */
-  .theme-toggle{
-    position:fixed;right:16px;bottom:66px;z-index:55;
-    width:42px;height:42px;border-radius:50%;
-    border:1px solid var(--border-strong);background:rgba(17,17,16,0.92);
-    color:var(--text);cursor:pointer;
+  /* ---------- boton flotante de WhatsApp ---------- */
+  .wa-fab{
+    position:fixed;right:16px;bottom:66px;z-index:56;
+    width:52px;height:52px;border-radius:50%;
+    background:#25D366;color:#fff;
     display:flex;align-items:center;justify-content:center;
+    box-shadow:0 6px 18px rgba(0,0,0,0.38);
+    transition:transform .18s var(--ease),box-shadow .18s ease;
   }
-  [data-theme="light"] .theme-toggle{background:var(--bg);}
-  html.sin-tema .theme-toggle{display:none;}
-  .theme-toggle-ico{
-    width:17px;height:17px;border-radius:50%;
-    border:1.5px solid currentColor;
-    background:linear-gradient(90deg,currentColor 0 50%,transparent 50% 100%);
+  .wa-fab svg{width:29px;height:29px;display:block;}
+  @media (hover:hover) and (pointer:fine){
+    .wa-fab:hover{transform:scale(1.06);box-shadow:0 10px 24px rgba(0,0,0,0.46);}
   }
-</style>
-<script>
-  /* Se aplica el modo guardado antes de pintar, para que no haya un
-     parpadeo de color al abrir. Si aun no ha elegido, se marca la pagina
-     con "sin-tema" y se muestra la eleccion. */
-  (function(){
-    var t = null;
-    try { t = localStorage.getItem('jara-tema'); } catch(e){}
-    var r = document.documentElement;
-    if (t === 'light') r.setAttribute('data-theme','light');
-    else if (t !== 'dark') r.classList.add('sin-tema');
-  })();
-</script>
-</head>
+  .wa-fab:active{transform:scale(.96);}
+  @media (max-width:760px){
+    .wa-fab{width:48px;height:48px;right:14px;bottom:62px;}
+    .wa-fab svg{width:26px;height:26px;}
+  }
+</style></head>
 <body>
-
-<div class="theme-gate" id="themeGate">
-  <div class="theme-gate-inner">
-    <p class="theme-gate-kicker meta">Jara — Portafolio</p>
-    <p class="theme-gate-q">¿Cómo prefieres verlo?</p>
-    <div class="theme-gate-actions">
-      <button type="button" class="theme-opt meta" data-theme-pick="dark">
-        <span class="theme-swatch theme-swatch-dark" aria-hidden="true"></span>
-        <span>Modo oscuro</span>
-      </button>
-      <button type="button" class="theme-opt meta" data-theme-pick="light">
-        <span class="theme-swatch theme-swatch-light" aria-hidden="true"></span>
-        <span>Modo claro</span>
-      </button>
-    </div>
-  </div>
-</div>
 
 <header class="top-bar">
   <div class="top-bar-brand">
@@ -550,7 +430,7 @@
   <h2 class="col-title">Conciertos</h2>
   <div class="col-rule" aria-hidden="true"></div>
   <div class="series">
-    <h3 class="series-name">Maluma · 2024 · <i class="series-flag" role="img" aria-label="Venezuela"></i></h3>
+    <h3 class="series-name">Maluma<i class="series-flag" role="img" aria-label="Venezuela"></i>2024</h3>
     <div class="series-grid">
       <figure class="shot is-lead" data-ar="0.6539" data-full="img/conciertos/con-59.jpg" data-ser="Conciertos · Maluma" data-alt="Conciertos — Maluma, fotografía de Jara">
         <div class="shot-frame" style="--ar:0.6539">
@@ -679,7 +559,7 @@
       </figure>    </div>
   </div>
   <div class="series">
-    <h3 class="series-name">Luis Miguel · 2024 · <i class="series-flag" role="img" aria-label="Venezuela"></i></h3>
+    <h3 class="series-name">Luis Miguel<i class="series-flag" role="img" aria-label="Venezuela"></i>2024</h3>
     <div class="series-grid">
       <figure class="shot is-lead" data-ar="0.6671" data-full="img/conciertos/con-12.jpg" data-ser="Conciertos · Luis Miguel" data-alt="Conciertos — Luis Miguel, fotografía de Jara">
         <div class="shot-frame" style="--ar:0.6671">
@@ -752,7 +632,7 @@
       </figure>    </div>
   </div>
   <div class="series">
-    <h3 class="series-name">Beéle · 2024 · <i class="series-flag" role="img" aria-label="Venezuela"></i></h3>
+    <h3 class="series-name">Beéle<i class="series-flag" role="img" aria-label="Venezuela"></i>2024</h3>
     <div class="series-grid">
       <figure class="shot is-lead" data-ar="0.6605" data-full="img/conciertos/con-42.jpg" data-ser="Conciertos · Beéle" data-alt="Conciertos — Beéle, fotografía de Jara">
         <div class="shot-frame" style="--ar:0.6605">
@@ -841,87 +721,6 @@
 <section class="col-section" id="col-retratos" hidden>
   <h2 class="col-title">Retratos</h2>
   <div class="col-rule" aria-hidden="true"></div>
-  <div class="series">
-    <h3 class="series-name">En Estudio</h3>
-    <div class="series-grid">
-      <figure class="shot is-lead" data-ar="0.8" data-full="img/retratos/ret-30.jpg" data-ser="Retratos · En Estudio" data-alt="Retratos — En Estudio, fotografía de Jara">
-        <div class="shot-frame" style="--ar:0.8">
-          <img src="img/retratos/t/ret-30.jpg" width="1080" height="1350" sizes="(max-width:780px) 100vw, 50vw" alt="Retratos — En Estudio, fotografía de Jara" loading="lazy" decoding="async">
-        </div>
-      </figure>      <figure class="shot" data-ar="0.8" data-full="img/retratos/ret-19.jpg" data-ser="Retratos · En Estudio" data-alt="Retratos — En Estudio, fotografía de Jara">
-        <div class="shot-frame" style="--ar:0.8">
-          <img src="img/retratos/t/ret-19.jpg" width="608" height="760" sizes="(max-width:780px) 50vw, 25vw" alt="Retratos — En Estudio, fotografía de Jara" loading="lazy" decoding="async">
-        </div>
-      </figure>      <figure class="shot" data-ar="0.8" data-full="img/retratos/ret-17.jpg" data-ser="Retratos · En Estudio" data-alt="Retratos — En Estudio, fotografía de Jara">
-        <div class="shot-frame" style="--ar:0.8">
-          <img src="img/retratos/t/ret-17.jpg" width="608" height="760" sizes="(max-width:780px) 50vw, 25vw" alt="Retratos — En Estudio, fotografía de Jara" loading="lazy" decoding="async">
-        </div>
-      </figure>      <figure class="shot" data-ar="0.8" data-full="img/retratos/ret-18.jpg" data-ser="Retratos · En Estudio" data-alt="Retratos — En Estudio, fotografía de Jara">
-        <div class="shot-frame" style="--ar:0.8">
-          <img src="img/retratos/t/ret-18.jpg" width="608" height="760" sizes="(max-width:780px) 50vw, 25vw" alt="Retratos — En Estudio, fotografía de Jara" loading="lazy" decoding="async">
-        </div>
-      </figure>      <figure class="shot" data-ar="0.8" data-full="img/retratos/ret-20.jpg" data-ser="Retratos · En Estudio" data-alt="Retratos — En Estudio, fotografía de Jara">
-        <div class="shot-frame" style="--ar:0.8">
-          <img src="img/retratos/t/ret-20.jpg" width="608" height="760" sizes="(max-width:780px) 50vw, 25vw" alt="Retratos — En Estudio, fotografía de Jara" loading="lazy" decoding="async">
-        </div>
-      </figure>      <figure class="shot" data-ar="0.8" data-full="img/retratos/ret-28.jpg" data-ser="Retratos · En Estudio" data-alt="Retratos — En Estudio, fotografía de Jara">
-        <div class="shot-frame" style="--ar:0.8">
-          <img src="img/retratos/t/ret-28.jpg" width="608" height="760" sizes="(max-width:780px) 50vw, 25vw" alt="Retratos — En Estudio, fotografía de Jara" loading="lazy" decoding="async">
-        </div>
-      </figure>      <figure class="shot" data-ar="0.8" data-full="img/retratos/ret-29.jpg" data-ser="Retratos · En Estudio" data-alt="Retratos — En Estudio, fotografía de Jara">
-        <div class="shot-frame" style="--ar:0.8">
-          <img src="img/retratos/t/ret-29.jpg" width="608" height="760" sizes="(max-width:780px) 50vw, 25vw" alt="Retratos — En Estudio, fotografía de Jara" loading="lazy" decoding="async">
-        </div>
-      </figure>      <figure class="shot" data-ar="0.8" data-full="img/retratos/ret-31.jpg" data-ser="Retratos · En Estudio" data-alt="Retratos — En Estudio, fotografía de Jara">
-        <div class="shot-frame" style="--ar:0.8">
-          <img src="img/retratos/t/ret-31.jpg" width="608" height="760" sizes="(max-width:780px) 50vw, 25vw" alt="Retratos — En Estudio, fotografía de Jara" loading="lazy" decoding="async">
-        </div>
-      </figure>      <figure class="shot" data-ar="0.8" data-full="img/retratos/ret-26.jpg" data-ser="Retratos · En Estudio" data-alt="Retratos — En Estudio, fotografía de Jara">
-        <div class="shot-frame" style="--ar:0.8">
-          <img src="img/retratos/t/ret-26.jpg" width="608" height="760" sizes="(max-width:780px) 50vw, 25vw" alt="Retratos — En Estudio, fotografía de Jara" loading="lazy" decoding="async">
-        </div>
-      </figure>      <figure class="shot" data-ar="0.8" data-full="img/retratos/ret-25.jpg" data-ser="Retratos · En Estudio" data-alt="Retratos — En Estudio, fotografía de Jara">
-        <div class="shot-frame" style="--ar:0.8">
-          <img src="img/retratos/t/ret-25.jpg" width="608" height="760" sizes="(max-width:780px) 50vw, 25vw" alt="Retratos — En Estudio, fotografía de Jara" loading="lazy" decoding="async">
-        </div>
-      </figure>      <figure class="shot" data-ar="0.8" data-full="img/retratos/ret-27.jpg" data-ser="Retratos · En Estudio" data-alt="Retratos — En Estudio, fotografía de Jara">
-        <div class="shot-frame" style="--ar:0.8">
-          <img src="img/retratos/t/ret-27.jpg" width="608" height="760" sizes="(max-width:780px) 50vw, 25vw" alt="Retratos — En Estudio, fotografía de Jara" loading="lazy" decoding="async">
-        </div>
-      </figure>      <figure class="shot" data-ar="0.8" data-full="img/retratos/ret-23.jpg" data-ser="Retratos · En Estudio" data-alt="Retratos — En Estudio, fotografía de Jara">
-        <div class="shot-frame" style="--ar:0.8">
-          <img src="img/retratos/t/ret-23.jpg" width="608" height="760" sizes="(max-width:780px) 50vw, 25vw" alt="Retratos — En Estudio, fotografía de Jara" loading="lazy" decoding="async">
-        </div>
-      </figure>      <figure class="shot" data-ar="0.8" data-full="img/retratos/ret-21.jpg" data-ser="Retratos · En Estudio" data-alt="Retratos — En Estudio, fotografía de Jara">
-        <div class="shot-frame" style="--ar:0.8">
-          <img src="img/retratos/t/ret-21.jpg" width="608" height="760" sizes="(max-width:780px) 50vw, 25vw" alt="Retratos — En Estudio, fotografía de Jara" loading="lazy" decoding="async">
-        </div>
-      </figure>      <figure class="shot" data-ar="0.8" data-full="img/retratos/ret-24.jpg" data-ser="Retratos · En Estudio" data-alt="Retratos — En Estudio, fotografía de Jara">
-        <div class="shot-frame" style="--ar:0.8">
-          <img src="img/retratos/t/ret-24.jpg" width="608" height="760" sizes="(max-width:780px) 50vw, 25vw" alt="Retratos — En Estudio, fotografía de Jara" loading="lazy" decoding="async">
-        </div>
-      </figure>      <figure class="shot" data-ar="0.8" data-full="img/retratos/ret-22.jpg" data-ser="Retratos · En Estudio" data-alt="Retratos — En Estudio, fotografía de Jara">
-        <div class="shot-frame" style="--ar:0.8">
-          <img src="img/retratos/t/ret-22.jpg" width="608" height="760" sizes="(max-width:780px) 50vw, 25vw" alt="Retratos — En Estudio, fotografía de Jara" loading="lazy" decoding="async">
-        </div>
-      </figure>      <figure class="shot" data-ar="0.8" data-full="img/retratos/ret-39.jpg" data-ser="Retratos · En Estudio" data-alt="Retratos — En Estudio, fotografía de Jara">
-        <div class="shot-frame" style="--ar:0.8">
-          <img src="img/retratos/t/ret-39.jpg" width="608" height="760" sizes="(max-width:780px) 50vw, 25vw" alt="Retratos — En Estudio, fotografía de Jara" loading="lazy" decoding="async">
-        </div>
-      </figure>      <figure class="shot" data-ar="0.8" data-full="img/retratos/ret-42.jpg" data-ser="Retratos · En Estudio" data-alt="Retratos — En Estudio, fotografía de Jara">
-        <div class="shot-frame" style="--ar:0.8">
-          <img src="img/retratos/t/ret-42.jpg" width="608" height="760" sizes="(max-width:780px) 50vw, 25vw" alt="Retratos — En Estudio, fotografía de Jara" loading="lazy" decoding="async">
-        </div>
-      </figure>      <figure class="shot" data-ar="0.8" data-full="img/retratos/ret-41.jpg" data-ser="Retratos · En Estudio" data-alt="Retratos — En Estudio, fotografía de Jara">
-        <div class="shot-frame" style="--ar:0.8">
-          <img src="img/retratos/t/ret-41.jpg" width="608" height="760" sizes="(max-width:780px) 50vw, 25vw" alt="Retratos — En Estudio, fotografía de Jara" loading="lazy" decoding="async">
-        </div>
-      </figure>      <figure class="shot" data-ar="0.8" data-full="img/retratos/ret-40.jpg" data-ser="Retratos · En Estudio" data-alt="Retratos — En Estudio, fotografía de Jara">
-        <div class="shot-frame" style="--ar:0.8">
-          <img src="img/retratos/t/ret-40.jpg" width="608" height="760" sizes="(max-width:780px) 50vw, 25vw" alt="Retratos — En Estudio, fotografía de Jara" loading="lazy" decoding="async">
-        </div>
-      </figure>    </div>
-  </div>
   <div class="series">
     <h3 class="series-name">Ambientados</h3>
     <div class="series-grid">
@@ -1043,6 +842,87 @@
         </div>
       </figure>    </div>
   </div>
+  <div class="series">
+    <h3 class="series-name">En Estudio</h3>
+    <div class="series-grid">
+      <figure class="shot is-lead" data-ar="0.8" data-full="img/retratos/ret-30.jpg" data-ser="Retratos · En Estudio" data-alt="Retratos — En Estudio, fotografía de Jara">
+        <div class="shot-frame" style="--ar:0.8">
+          <img src="img/retratos/t/ret-30.jpg" width="1080" height="1350" sizes="(max-width:780px) 100vw, 50vw" alt="Retratos — En Estudio, fotografía de Jara" loading="lazy" decoding="async">
+        </div>
+      </figure>      <figure class="shot" data-ar="0.8" data-full="img/retratos/ret-19.jpg" data-ser="Retratos · En Estudio" data-alt="Retratos — En Estudio, fotografía de Jara">
+        <div class="shot-frame" style="--ar:0.8">
+          <img src="img/retratos/t/ret-19.jpg" width="608" height="760" sizes="(max-width:780px) 50vw, 25vw" alt="Retratos — En Estudio, fotografía de Jara" loading="lazy" decoding="async">
+        </div>
+      </figure>      <figure class="shot" data-ar="0.8" data-full="img/retratos/ret-17.jpg" data-ser="Retratos · En Estudio" data-alt="Retratos — En Estudio, fotografía de Jara">
+        <div class="shot-frame" style="--ar:0.8">
+          <img src="img/retratos/t/ret-17.jpg" width="608" height="760" sizes="(max-width:780px) 50vw, 25vw" alt="Retratos — En Estudio, fotografía de Jara" loading="lazy" decoding="async">
+        </div>
+      </figure>      <figure class="shot" data-ar="0.8" data-full="img/retratos/ret-18.jpg" data-ser="Retratos · En Estudio" data-alt="Retratos — En Estudio, fotografía de Jara">
+        <div class="shot-frame" style="--ar:0.8">
+          <img src="img/retratos/t/ret-18.jpg" width="608" height="760" sizes="(max-width:780px) 50vw, 25vw" alt="Retratos — En Estudio, fotografía de Jara" loading="lazy" decoding="async">
+        </div>
+      </figure>      <figure class="shot" data-ar="0.8" data-full="img/retratos/ret-20.jpg" data-ser="Retratos · En Estudio" data-alt="Retratos — En Estudio, fotografía de Jara">
+        <div class="shot-frame" style="--ar:0.8">
+          <img src="img/retratos/t/ret-20.jpg" width="608" height="760" sizes="(max-width:780px) 50vw, 25vw" alt="Retratos — En Estudio, fotografía de Jara" loading="lazy" decoding="async">
+        </div>
+      </figure>      <figure class="shot" data-ar="0.8" data-full="img/retratos/ret-28.jpg" data-ser="Retratos · En Estudio" data-alt="Retratos — En Estudio, fotografía de Jara">
+        <div class="shot-frame" style="--ar:0.8">
+          <img src="img/retratos/t/ret-28.jpg" width="608" height="760" sizes="(max-width:780px) 50vw, 25vw" alt="Retratos — En Estudio, fotografía de Jara" loading="lazy" decoding="async">
+        </div>
+      </figure>      <figure class="shot" data-ar="0.8" data-full="img/retratos/ret-29.jpg" data-ser="Retratos · En Estudio" data-alt="Retratos — En Estudio, fotografía de Jara">
+        <div class="shot-frame" style="--ar:0.8">
+          <img src="img/retratos/t/ret-29.jpg" width="608" height="760" sizes="(max-width:780px) 50vw, 25vw" alt="Retratos — En Estudio, fotografía de Jara" loading="lazy" decoding="async">
+        </div>
+      </figure>      <figure class="shot" data-ar="0.8" data-full="img/retratos/ret-31.jpg" data-ser="Retratos · En Estudio" data-alt="Retratos — En Estudio, fotografía de Jara">
+        <div class="shot-frame" style="--ar:0.8">
+          <img src="img/retratos/t/ret-31.jpg" width="608" height="760" sizes="(max-width:780px) 50vw, 25vw" alt="Retratos — En Estudio, fotografía de Jara" loading="lazy" decoding="async">
+        </div>
+      </figure>      <figure class="shot" data-ar="0.8" data-full="img/retratos/ret-26.jpg" data-ser="Retratos · En Estudio" data-alt="Retratos — En Estudio, fotografía de Jara">
+        <div class="shot-frame" style="--ar:0.8">
+          <img src="img/retratos/t/ret-26.jpg" width="608" height="760" sizes="(max-width:780px) 50vw, 25vw" alt="Retratos — En Estudio, fotografía de Jara" loading="lazy" decoding="async">
+        </div>
+      </figure>      <figure class="shot" data-ar="0.8" data-full="img/retratos/ret-25.jpg" data-ser="Retratos · En Estudio" data-alt="Retratos — En Estudio, fotografía de Jara">
+        <div class="shot-frame" style="--ar:0.8">
+          <img src="img/retratos/t/ret-25.jpg" width="608" height="760" sizes="(max-width:780px) 50vw, 25vw" alt="Retratos — En Estudio, fotografía de Jara" loading="lazy" decoding="async">
+        </div>
+      </figure>      <figure class="shot" data-ar="0.8" data-full="img/retratos/ret-27.jpg" data-ser="Retratos · En Estudio" data-alt="Retratos — En Estudio, fotografía de Jara">
+        <div class="shot-frame" style="--ar:0.8">
+          <img src="img/retratos/t/ret-27.jpg" width="608" height="760" sizes="(max-width:780px) 50vw, 25vw" alt="Retratos — En Estudio, fotografía de Jara" loading="lazy" decoding="async">
+        </div>
+      </figure>      <figure class="shot" data-ar="0.8" data-full="img/retratos/ret-23.jpg" data-ser="Retratos · En Estudio" data-alt="Retratos — En Estudio, fotografía de Jara">
+        <div class="shot-frame" style="--ar:0.8">
+          <img src="img/retratos/t/ret-23.jpg" width="608" height="760" sizes="(max-width:780px) 50vw, 25vw" alt="Retratos — En Estudio, fotografía de Jara" loading="lazy" decoding="async">
+        </div>
+      </figure>      <figure class="shot" data-ar="0.8" data-full="img/retratos/ret-21.jpg" data-ser="Retratos · En Estudio" data-alt="Retratos — En Estudio, fotografía de Jara">
+        <div class="shot-frame" style="--ar:0.8">
+          <img src="img/retratos/t/ret-21.jpg" width="608" height="760" sizes="(max-width:780px) 50vw, 25vw" alt="Retratos — En Estudio, fotografía de Jara" loading="lazy" decoding="async">
+        </div>
+      </figure>      <figure class="shot" data-ar="0.8" data-full="img/retratos/ret-24.jpg" data-ser="Retratos · En Estudio" data-alt="Retratos — En Estudio, fotografía de Jara">
+        <div class="shot-frame" style="--ar:0.8">
+          <img src="img/retratos/t/ret-24.jpg" width="608" height="760" sizes="(max-width:780px) 50vw, 25vw" alt="Retratos — En Estudio, fotografía de Jara" loading="lazy" decoding="async">
+        </div>
+      </figure>      <figure class="shot" data-ar="0.8" data-full="img/retratos/ret-22.jpg" data-ser="Retratos · En Estudio" data-alt="Retratos — En Estudio, fotografía de Jara">
+        <div class="shot-frame" style="--ar:0.8">
+          <img src="img/retratos/t/ret-22.jpg" width="608" height="760" sizes="(max-width:780px) 50vw, 25vw" alt="Retratos — En Estudio, fotografía de Jara" loading="lazy" decoding="async">
+        </div>
+      </figure>      <figure class="shot" data-ar="0.8" data-full="img/retratos/ret-39.jpg" data-ser="Retratos · En Estudio" data-alt="Retratos — En Estudio, fotografía de Jara">
+        <div class="shot-frame" style="--ar:0.8">
+          <img src="img/retratos/t/ret-39.jpg" width="608" height="760" sizes="(max-width:780px) 50vw, 25vw" alt="Retratos — En Estudio, fotografía de Jara" loading="lazy" decoding="async">
+        </div>
+      </figure>      <figure class="shot" data-ar="0.8" data-full="img/retratos/ret-42.jpg" data-ser="Retratos · En Estudio" data-alt="Retratos — En Estudio, fotografía de Jara">
+        <div class="shot-frame" style="--ar:0.8">
+          <img src="img/retratos/t/ret-42.jpg" width="608" height="760" sizes="(max-width:780px) 50vw, 25vw" alt="Retratos — En Estudio, fotografía de Jara" loading="lazy" decoding="async">
+        </div>
+      </figure>      <figure class="shot" data-ar="0.8" data-full="img/retratos/ret-41.jpg" data-ser="Retratos · En Estudio" data-alt="Retratos — En Estudio, fotografía de Jara">
+        <div class="shot-frame" style="--ar:0.8">
+          <img src="img/retratos/t/ret-41.jpg" width="608" height="760" sizes="(max-width:780px) 50vw, 25vw" alt="Retratos — En Estudio, fotografía de Jara" loading="lazy" decoding="async">
+        </div>
+      </figure>      <figure class="shot" data-ar="0.8" data-full="img/retratos/ret-40.jpg" data-ser="Retratos · En Estudio" data-alt="Retratos — En Estudio, fotografía de Jara">
+        <div class="shot-frame" style="--ar:0.8">
+          <img src="img/retratos/t/ret-40.jpg" width="608" height="760" sizes="(max-width:780px) 50vw, 25vw" alt="Retratos — En Estudio, fotografía de Jara" loading="lazy" decoding="async">
+        </div>
+      </figure>    </div>
+  </div>
 </section>
 <section class="col-section" id="col-campanas" hidden>
   <h2 class="col-title">Campañas</h2>
@@ -1127,9 +1007,11 @@
   <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
 </button>
 
-<button type="button" class="theme-toggle" id="themeToggle" aria-label="Cambiar entre modo claro y oscuro" title="Modo claro / oscuro">
-  <span class="theme-toggle-ico" aria-hidden="true"></span>
-</button>
+<a class="wa-fab" href="index.html#form" aria-label="Cotiza tu sesión por WhatsApp" title="Cotiza tu sesión">
+  <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/>
+  </svg>
+</a>
 
 <div class="lb" id="lb" hidden role="dialog" aria-modal="true" aria-label="Visor de fotografías">
   <div class="lb-top">
@@ -1455,38 +1337,5 @@
 })();
 </script>
 
-<script>
-/* Modo claro / oscuro. La eleccion se recuerda en este navegador, asi que
-   la pregunta del principio solo sale la primera vez; despues se cambia
-   con el boton redondo de abajo a la derecha. */
-(function(){
-  "use strict";
-  var CLAVE = 'jara-tema';
-  var raiz  = document.documentElement;
-  var gate  = document.getElementById('themeGate');
-
-  function aplicar(t){
-    if (t === 'light') raiz.setAttribute('data-theme', 'light');
-    else raiz.removeAttribute('data-theme');
-    try { localStorage.setItem(CLAVE, t); } catch(e){}
-  }
-
-  Array.prototype.forEach.call(document.querySelectorAll('[data-theme-pick]'), function(b){
-    b.addEventListener('click', function(){
-      aplicar(b.getAttribute('data-theme-pick'));
-      gate.classList.add('is-out');
-      setTimeout(function(){
-        raiz.classList.remove('sin-tema');
-        gate.classList.remove('is-out');
-      }, 300);
-    });
-  });
-
-  var tg = document.getElementById('themeToggle');
-  if (tg) tg.addEventListener('click', function(){
-    aplicar(raiz.getAttribute('data-theme') === 'light' ? 'dark' : 'light');
-  });
-})();
-</script>
 </body>
 </html>
