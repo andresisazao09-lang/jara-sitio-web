@@ -344,19 +344,18 @@
   .wa-fab{
     position:fixed;right:16px;bottom:66px;z-index:56;
     width:52px;height:52px;border-radius:50%;
-    background:#25D366;color:#fff;
+    background:none;color:#fff;
     display:flex;align-items:center;justify-content:center;
-    box-shadow:0 6px 18px rgba(0,0,0,0.38);
+    filter:drop-shadow(0 4px 10px rgba(0,0,0,0.35));
     transition:transform .18s var(--ease),box-shadow .18s ease;
   }
-  .wa-fab svg{width:29px;height:29px;display:block;}
+  .wa-fab svg{width:100%;height:100%;display:block;overflow:visible;}
   @media (hover:hover) and (pointer:fine){
-    .wa-fab:hover{transform:scale(1.06);box-shadow:0 10px 24px rgba(0,0,0,0.46);}
+    .wa-fab:hover{transform:scale(1.06);}
   }
   .wa-fab:active{transform:scale(.96);}
   @media (max-width:760px){
     .wa-fab{width:48px;height:48px;right:14px;bottom:62px;}
-    .wa-fab svg{width:26px;height:26px;}
   }
   /* ============================================================
      PALETAS DE MUESTRA PARA EL CLIENTE
@@ -447,21 +446,6 @@
   [data-theme="total"] .nav-link.is-active::after{background:var(--text);}
   @media (hover:hover) and (pointer:fine){ [data-theme="total"] .nav-link:hover{color:var(--text);} }
 
-  /* 5) Transparente (data-theme="white" + data-header="clear"): fondo blanco y la
-     cabecera flota sin fondo ni linea sobre las fotos de la portada, que ocupan
-     tambien la zona de la cabecera; la portada crece para bajar el encuadre. */
-  [data-header="clear"]{--hdr:72px;}
-  [data-header="clear"] .top-bar{
-    position:absolute;top:0;left:0;right:0;
-    background:transparent;
-    border-bottom:0;
-  }
-  [data-header="clear"] .top-bar-role,
-  [data-header="clear"] .top-bar-loc{text-shadow:0 1px 12px rgba(0,0,0,0.7);}
-  [data-header="clear"] body.view-col .top-bar{position:static;background:var(--bg-deep);border-bottom-color:var(--border);}
-  [data-header="clear"] .p-hero{min-height:calc(86vh + var(--hdr));min-height:calc(86svh + var(--hdr));padding-top:var(--hdr);}
-  [data-header="clear"] .nav-rail{top:0;}
-  [data-header="clear"] .col-section{scroll-margin-top:var(--rail-h,48px);}
 
   /* ---------- pregunta al entrar ---------- */
   .theme-gate{
@@ -471,10 +455,10 @@
   }
   html.sin-tema .theme-gate{display:flex;}
   .theme-gate.is-out{opacity:0;pointer-events:none;transition:opacity .3s ease;}
-  .theme-gate-inner{width:100%;max-width:760px;}
+  .theme-gate-inner{width:100%;max-width:640px;}
   .theme-gate-kicker{margin:0 0 14px;font-size:10.5px;letter-spacing:0.3em;text-transform:uppercase;color:#8d8779;}
   .theme-gate-q{margin:0 0 34px;font-size:clamp(21px,4.4vw,32px);line-height:1.15;letter-spacing:0.02em;text-transform:uppercase;color:#f3f1ea;}
-  .theme-gate-actions{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;}
+  .theme-gate-actions{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
   .theme-opt{
     display:flex;flex-direction:column;align-items:center;gap:14px;
     padding:20px 16px;cursor:pointer;font-family:inherit;
@@ -492,9 +476,8 @@
   .theme-swatch-light{background:linear-gradient(180deg,#111110 0 24%,#E9DCC0 24% 100%);}
   .theme-swatch-white{background:linear-gradient(180deg,#111110 0 24%,#ffffff 24% 100%);}
   .theme-swatch-total{background:linear-gradient(180deg,#ffffff 0 24%,#d9d6cf 24% 25.5%,#ffffff 25.5% 100%);}
-  .theme-swatch-clear{background:linear-gradient(180deg,transparent 0 58%,#ffffff 58% 100%),linear-gradient(120deg,#4b3a7a 0%,#b58c73 55%,#2a2a28 100%);}
   @media (max-width:760px){
-    .theme-gate-actions{grid-template-columns:repeat(2,1fr);gap:10px;}
+    .theme-gate-actions{grid-template-columns:repeat(3,1fr);gap:8px;}
     .theme-opt{padding:14px 6px;gap:10px;font-size:9.5px;letter-spacing:0.1em;}
     .theme-swatch{height:52px;}
   }
@@ -536,7 +519,6 @@
     try { t = localStorage.getItem('jara-paleta'); } catch(e){}
     var r = document.documentElement;
     if (t === 'white' || t === 'total') r.setAttribute('data-theme', t);
-    else if (t === 'clear') { r.setAttribute('data-theme', 'white'); r.setAttribute('data-header', 'clear'); }
     else if (t !== 'dark') r.classList.add('sin-tema');
   })();
 </script>
@@ -558,10 +540,6 @@
       <button type="button" class="theme-opt meta" data-theme-pick="total">
         <span class="theme-swatch theme-swatch-total" aria-hidden="true"></span>
         <span>Blanco total</span>
-      </button>
-      <button type="button" class="theme-opt meta" data-theme-pick="clear">
-        <span class="theme-swatch theme-swatch-clear" aria-hidden="true"></span>
-        <span>Transparente</span>
       </button>
     </div>
   </div>
@@ -1234,8 +1212,11 @@
 </button>
 
 <a class="wa-fab" href="index.html#form" aria-label="Cotiza tu sesión por WhatsApp" title="Cotiza tu sesión">
-  <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/>
+  <svg viewBox="-1.2 -1.2 26.4 26.4" aria-hidden="true">
+    <defs><linearGradient id="waG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#60D66A"/><stop offset="1" stop-color="#1FAF38"/></linearGradient></defs>
+    <path fill="#fff" stroke="#fff" stroke-width="1.2" stroke-linejoin="round" d="M20.464 3.488A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/>
+    <path fill="url(#waG)" d="M12.051 21.785h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884Z"/>
+    <path fill="#fff" d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347Z"/>
   </svg>
 </a>
 
@@ -1575,18 +1556,16 @@
 (function(){
   "use strict";
   var CLAVE   = 'jara-paleta';
-  var ORDEN   = ['dark', 'white', 'total', 'clear'];
-  var NOMBRES = { dark:'Oscuro', white:'Blanco/Negro', total:'Blanco total', clear:'Transparente' };
+  var ORDEN   = ['dark', 'white', 'total'];
+  var NOMBRES = { dark:'Oscuro', white:'Blanco/Negro', total:'Blanco total' };
   var raiz  = document.documentElement;
   var gate  = document.getElementById('themeGate');
   var label = document.getElementById('themeLabel');
   var timer;
-  function actual(){ return raiz.getAttribute('data-header') ? 'clear' : (raiz.getAttribute('data-theme') || 'dark'); }
+  function actual(){ return raiz.getAttribute('data-theme') || 'dark'; }
   function aplicar(t){
-    if (t === 'white' || t === 'total' || t === 'clear') raiz.setAttribute('data-theme', t === 'clear' ? 'white' : t);
+    if (t === 'white' || t === 'total') raiz.setAttribute('data-theme', t);
     else raiz.removeAttribute('data-theme');
-    if (t === 'clear') raiz.setAttribute('data-header', 'clear');
-    else raiz.removeAttribute('data-header');
     try { localStorage.setItem(CLAVE, t); } catch(e){}
   }
   Array.prototype.forEach.call(document.querySelectorAll('[data-theme-pick]'), function(b){

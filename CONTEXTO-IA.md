@@ -112,9 +112,9 @@ app móvil de GitHub, y la web publicada se actualiza sola 1–2 minutos despué
   `portafolio.html`): al entrar pregunta "¿Cómo prefieres verlo?" con 3 opciones —
   **Oscuro** (predeterminado), **Beige** (870 V MADERA) y **Blanco** (cabecera oscura
   de siempre + fondo blanco) y **Blanco total** (`data-theme="total"`: cabecera, barra
-  de categorías y fondo en blanco, logo invertido a negro, barra de Safari blanca) y **Transparente** (`data-theme="white"` +
-  `data-header="clear"`: fondo blanco, cabecera sin fondo ni línea flotando sobre las
-  fotos de la portada, portada más alta para bajar el encuadre).
+  de categorías y fondo en blanco, logo invertido a negro, barra de Safari blanca). **Modo Transparente eliminado (16-09-2026)**, no volver a ponerlo.
+  Icono de WhatsApp flotante: logo oficial (bocadillo verde en degradado con borde blanco
+  grueso y sombra), sin círculo verde de fondo.
   **Beige quitado de la pregunta y del botón (16-09-2026)**; su CSS `[data-theme="light"]` sigue en el archivo.
   Nombres visibles: **Oscuro, Blanco/Negro, Blanco total, Transparente**.
   Logo de TikTok (cabecera y pie, los dos archivos): SVG redondo oficial incrustado en base64
