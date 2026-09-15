@@ -113,7 +113,8 @@ app móvil de GitHub, y la web publicada se actualiza sola 1–2 minutos despué
   **Oscuro** (predeterminado), **Beige** (870 V MADERA) y **Blanco** (cabecera oscura
   de siempre + fondo blanco). Se recuerda en el navegador (`localStorage` `jara-paleta`)
   y se cambia con el botón redondo **encima del de WhatsApp**, del mismo tamaño.
-  Safari tiñe sus barras con el fondo de `html`/`body`: `html` es `#111110`, `body` transparente y el color de la paleta va en `body::before`. No lo cambies.
+  Safari tiñe sus barras con el fondo de `html`/`body`: en **los dos archivos** `html` es `#111110`, `body` transparente y el fondo va en `body::before`. No lo cambies.
+  El fundido de la portada del portafolio hacia el fondo es `.p-hero::after` (curva suave, sin línea).
 - ❌ **Menú desplegable de subcategorías en la barra de categorías** (al pasar el
   cursor o al tocar) → no me gustó, se revirtió.
 - ✅ **Los títulos grandes de cada categoría** (CONCIERTOS, RETRATOS…) **se quedan.**

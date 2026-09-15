@@ -122,7 +122,24 @@
     position:absolute;inset:0;
     background:
       radial-gradient(ellipse 620px 480px at 50% 52%, rgba(20,19,17,0.46), transparent 78%),
-      linear-gradient(180deg, rgba(20,19,17,0.22) 0%, rgba(20,19,17,0.06) 42%, rgba(28,28,26,0.94) 100%);
+      linear-gradient(180deg, rgba(20,19,17,0.22) 0%, rgba(20,19,17,0.06) 42%, transparent 60%);
+  }
+  /* Fundido inferior en curva suave hacia el fondo de la paleta: sin linea
+     visible entre la foto y la pagina, en los tres modos. */
+  .p-hero::after{
+    content:"";position:absolute;left:0;right:0;bottom:-1px;height:56%;z-index:1;pointer-events:none;
+    background:linear-gradient(180deg,
+      color-mix(in srgb,var(--bg) 0%,transparent) 0%,
+      color-mix(in srgb,var(--bg) 3%,transparent) 15%,
+      color-mix(in srgb,var(--bg) 10%,transparent) 28%,
+      color-mix(in srgb,var(--bg) 22%,transparent) 40%,
+      color-mix(in srgb,var(--bg) 38%,transparent) 52%,
+      color-mix(in srgb,var(--bg) 55%,transparent) 63%,
+      color-mix(in srgb,var(--bg) 71%,transparent) 73%,
+      color-mix(in srgb,var(--bg) 84%,transparent) 82%,
+      color-mix(in srgb,var(--bg) 93%,transparent) 90%,
+      color-mix(in srgb,var(--bg) 98%,transparent) 96%,
+      var(--bg) 100%);
   }
   .p-hero-inner{position:relative;z-index:2;padding:0 6vw;text-shadow:0 2px 26px rgba(6,6,5,0.85);}
   .p-hero-kicker{font-size:11px;letter-spacing:0.28em;text-transform:uppercase;color:var(--text-muted);margin:0 0 20px;}
@@ -380,8 +397,7 @@
   [data-theme] .p-hero-veil{
     background:
       radial-gradient(ellipse 620px 480px at 50% 50%, rgba(20,16,10,0.44), transparent 76%),
-      linear-gradient(180deg, rgba(20,16,10,0.30) 0%, rgba(20,16,10,0.05) 38%, transparent 58%),
-      linear-gradient(180deg, transparent 52%, var(--bg) 100%);
+      linear-gradient(180deg, rgba(20,16,10,0.30) 0%, rgba(20,16,10,0.05) 38%, transparent 58%);
   }
   [data-theme] .p-hero-title{color:#ffffff;}
   /* sombras bajo cada foto: sobre fondo claro siguen mandando las fotografias */

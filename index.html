@@ -18,14 +18,17 @@
     --radius-pill:999px;
   }
   *{box-sizing:border-box;}
-  html{scroll-behavior:smooth;}
+  html{scroll-behavior:smooth;background:#111110;}
   body{
     margin:0;
-    background:var(--bg);
+    background:transparent;position:relative;
     color:var(--text);
     font-family:Georgia,'Times New Roman',serif;
     line-height:1.6;
   }
+  /* Safari tine sus barras con el fondo de html/body: se quedan en #111110,
+     igual que en el portafolio, y el fondo de la pagina va en una capa. */
+  body::before{content:"";position:absolute;inset:0;z-index:-1;background:var(--bg);}
   a{color:inherit;}
   img,svg{display:block;}
   .visually-hidden{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;}
