@@ -112,9 +112,10 @@ app móvil de GitHub, y la web publicada se actualiza sola 1–2 minutos despué
   `portafolio.html`): al entrar pregunta "¿Cómo prefieres verlo?" con 3 opciones —
   **Oscuro** (predeterminado), **Beige** (870 V MADERA) y **Blanco** (cabecera oscura
   de siempre + fondo blanco) y **Blanco total** (`data-theme="total"`: cabecera, barra
-  de categorías y fondo en blanco, logo invertido a negro, barra de Safari blanca) y **Transparente** (`data-header="clear"`,
-  no usa `data-theme`: paleta oscura, cabecera flotando sobre la portada y fotos bajadas
-  media cabecera para no tapar el encuadre).
+  de categorías y fondo en blanco, logo invertido a negro, barra de Safari blanca) y **Transparente** (`data-theme="white"` +
+  `data-header="clear"`: fondo blanco, cabecera sin fondo ni línea flotando sobre las
+  fotos de la portada, portada más alta para bajar el encuadre).
+  **Beige quitado de la pregunta y del botón (16-09-2026)**; su CSS `[data-theme="light"]` sigue en el archivo.
   Logo de TikTok redondo en los dos archivos: `a[href*="tiktok.com"] img{border-radius:50%}`. Se recuerda en el navegador (`localStorage` `jara-paleta`)
   y se cambia con el botón redondo **encima del de WhatsApp**, del mismo tamaño.
   Safari tiñe sus barras con el fondo de `html`/`body`: en **los dos archivos** `html` es `#111110`, `body` transparente y el fondo va en `body::before`. No lo cambies.

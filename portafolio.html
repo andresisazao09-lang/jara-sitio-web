@@ -448,26 +448,19 @@
   [data-theme="total"] .nav-link.is-active::after{background:var(--text);}
   @media (hover:hover) and (pointer:fine){ [data-theme="total"] .nav-link:hover{color:var(--text);} }
 
-  /* 5) Transparente (data-header="clear"): paleta oscura y la cabecera flota
-     sobre las fotos de la portada. Las fotos bajan media cabecera para que
-     no tape el encuadre; arriba se funden con el oscuro. */
+  /* 5) Transparente (data-theme="white" + data-header="clear"): fondo blanco y la
+     cabecera flota sin fondo ni linea sobre las fotos de la portada, que ocupan
+     tambien la zona de la cabecera; la portada crece para bajar el encuadre. */
   [data-header="clear"]{--hdr:72px;}
   [data-header="clear"] .top-bar{
     position:absolute;top:0;left:0;right:0;
-    background:linear-gradient(180deg,rgba(8,8,7,0.55) 0%,rgba(8,8,7,0.22) 65%,transparent 100%);
-    border-bottom-color:transparent;
+    background:transparent;
+    border-bottom:0;
   }
   [data-header="clear"] .top-bar-role,
   [data-header="clear"] .top-bar-loc{text-shadow:0 1px 12px rgba(0,0,0,0.7);}
   [data-header="clear"] body.view-col .top-bar{position:static;background:var(--bg-deep);border-bottom-color:var(--border);}
   [data-header="clear"] .p-hero{min-height:calc(86vh + var(--hdr));min-height:calc(86svh + var(--hdr));padding-top:var(--hdr);}
-  [data-header="clear"] .p-hero-bg{top:calc(var(--hdr) * 0.5);}
-  [data-header="clear"] .p-hero-veil{
-    background:
-      linear-gradient(180deg, #111110 0, #111110 calc(var(--hdr) * 0.5), rgba(17,17,16,0) calc(var(--hdr) * 0.5 + 90px)),
-      radial-gradient(ellipse 620px 480px at 50% 52%, rgba(20,19,17,0.46), transparent 78%),
-      linear-gradient(180deg, rgba(20,19,17,0.22) 0%, rgba(20,19,17,0.06) 42%, transparent 60%);
-  }
   [data-header="clear"] .nav-rail{top:0;}
   [data-header="clear"] .col-section{scroll-margin-top:var(--rail-h,48px);}
 
@@ -479,10 +472,10 @@
   }
   html.sin-tema .theme-gate{display:flex;}
   .theme-gate.is-out{opacity:0;pointer-events:none;transition:opacity .3s ease;}
-  .theme-gate-inner{width:100%;max-width:940px;}
+  .theme-gate-inner{width:100%;max-width:760px;}
   .theme-gate-kicker{margin:0 0 14px;font-size:10.5px;letter-spacing:0.3em;text-transform:uppercase;color:#8d8779;}
   .theme-gate-q{margin:0 0 34px;font-size:clamp(21px,4.4vw,32px);line-height:1.15;letter-spacing:0.02em;text-transform:uppercase;color:#f3f1ea;}
-  .theme-gate-actions{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;}
+  .theme-gate-actions{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;}
   .theme-opt{
     display:flex;flex-direction:column;align-items:center;gap:14px;
     padding:20px 16px;cursor:pointer;font-family:inherit;
@@ -500,10 +493,9 @@
   .theme-swatch-light{background:linear-gradient(180deg,#111110 0 24%,#E9DCC0 24% 100%);}
   .theme-swatch-white{background:linear-gradient(180deg,#111110 0 24%,#ffffff 24% 100%);}
   .theme-swatch-total{background:linear-gradient(180deg,#ffffff 0 24%,#d9d6cf 24% 25.5%,#ffffff 25.5% 100%);}
-  .theme-swatch-clear{background:linear-gradient(180deg,rgba(17,17,16,0.9) 0,rgba(17,17,16,0.2) 30%,transparent 46%),linear-gradient(120deg,#4b3a7a 0%,#b58c73 55%,#2a2a28 100%);}
+  .theme-swatch-clear{background:linear-gradient(180deg,transparent 0 58%,#ffffff 58% 100%),linear-gradient(120deg,#4b3a7a 0%,#b58c73 55%,#2a2a28 100%);}
   @media (max-width:760px){
     .theme-gate-actions{grid-template-columns:repeat(2,1fr);gap:10px;}
-    .theme-opt:last-child{grid-column:span 2;}
     .theme-opt{padding:14px 6px;gap:10px;font-size:9.5px;letter-spacing:0.1em;}
     .theme-swatch{height:52px;}
   }
@@ -544,8 +536,8 @@
     var t = null;
     try { t = localStorage.getItem('jara-paleta'); } catch(e){}
     var r = document.documentElement;
-    if (t === 'light' || t === 'white' || t === 'total') r.setAttribute('data-theme', t);
-    else if (t === 'clear') r.setAttribute('data-header', 'clear');
+    if (t === 'white' || t === 'total') r.setAttribute('data-theme', t);
+    else if (t === 'clear') { r.setAttribute('data-theme', 'white'); r.setAttribute('data-header', 'clear'); }
     else if (t !== 'dark') r.classList.add('sin-tema');
   })();
 </script>
@@ -559,10 +551,6 @@
       <button type="button" class="theme-opt meta" data-theme-pick="dark">
         <span class="theme-swatch theme-swatch-dark" aria-hidden="true"></span>
         <span>Oscuro</span>
-      </button>
-      <button type="button" class="theme-opt meta" data-theme-pick="light">
-        <span class="theme-swatch theme-swatch-light" aria-hidden="true"></span>
-        <span>Beige</span>
       </button>
       <button type="button" class="theme-opt meta" data-theme-pick="white">
         <span class="theme-swatch theme-swatch-white" aria-hidden="true"></span>
@@ -1588,15 +1576,15 @@
 (function(){
   "use strict";
   var CLAVE   = 'jara-paleta';
-  var ORDEN   = ['dark', 'light', 'white', 'total', 'clear'];
-  var NOMBRES = { dark:'Oscuro', light:'Beige', white:'Blanco', total:'Blanco total', clear:'Transparente' };
+  var ORDEN   = ['dark', 'white', 'total', 'clear'];
+  var NOMBRES = { dark:'Oscuro', white:'Blanco', total:'Blanco total', clear:'Transparente' };
   var raiz  = document.documentElement;
   var gate  = document.getElementById('themeGate');
   var label = document.getElementById('themeLabel');
   var timer;
-  function actual(){ return raiz.getAttribute('data-theme') || (raiz.getAttribute('data-header') ? 'clear' : 'dark'); }
+  function actual(){ return raiz.getAttribute('data-header') ? 'clear' : (raiz.getAttribute('data-theme') || 'dark'); }
   function aplicar(t){
-    if (t === 'light' || t === 'white' || t === 'total') raiz.setAttribute('data-theme', t);
+    if (t === 'white' || t === 'total' || t === 'clear') raiz.setAttribute('data-theme', t === 'clear' ? 'white' : t);
     else raiz.removeAttribute('data-theme');
     if (t === 'clear') raiz.setAttribute('data-header', 'clear');
     else raiz.removeAttribute('data-header');
