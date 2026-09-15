@@ -758,7 +758,7 @@
   [data-theme] .dp-days button:disabled{color:rgba(28,28,26,0.26);}
   [data-theme] .dp-wheel div{color:rgba(28,28,26,0.34);}
   [data-theme] .dp-wheel-bar{background:rgba(28,28,26,0.06);}
-  [data-theme] .dp-switch{background:#c9c9c4;}
+  [data-theme] .dp-switch:not([aria-checked="true"]){background:#c9c9c4;}  /* encendido: se queda verde */
   [data-theme] #dpDone{background:#1c1c1a;border-color:#1c1c1a;color:#ffffff;}
   [data-theme] .dp-backdrop,[data-theme] .sheet-backdrop{background:rgba(8,8,7,0.45);}
 </style>
@@ -1659,8 +1659,10 @@
       var texto = textos[i++];
       escribiendo(true);
       setTimeout(function(){
-        escribiendo(false);
-        if (typeof texto === 'function') texto(); else burbuja(texto, false);
+        try {
+          escribiendo(false);
+          if (typeof texto === 'function') texto(); else burbuja(texto, false);
+        } catch(err){}
         setTimeout(sig, 180);
       }, 380 + Math.min(650, (texto.length || 60) * 9));
     })();
@@ -1674,6 +1676,7 @@
     c.addEventListener('submit', function(e){
       e.preventDefault();
       var ok = c.querySelector('.wa-f-ok');
+      if (c.classList.contains('is-done')) return;
       if (c._continuar && ok && !ok.disabled) c._continuar();
     });
     lista.appendChild(c);
@@ -2029,13 +2032,23 @@
   function ajustar(){
     var vv = window.visualViewport;
     if (!vv) return;
-    chat.style.setProperty('--vvh', vv.height + 'px');
-    chat.style.setProperty('--vvt', vv.offsetTop + 'px');
+    /* Safari encoge y mueve la ventana visible al abrir el teclado o el panel de
+       autorrelleno; con medidas minimas el chat se quedaba a medias */
+    chat.style.setProperty('--vvh', Math.max(vv.height, 260) + 'px');
+    chat.style.setProperty('--vvt', Math.max(0, vv.offsetTop) + 'px');
   }
   if (window.visualViewport){
     window.visualViewport.addEventListener('resize', ajustar);
     window.visualViewport.addEventListener('scroll', ajustar);
   }
+
+  /* el autorrelleno de Safari abre y cierra su panel sin avisar del todo:
+     se recolocan las medidas al entrar y salir de cada campo */
+  function reajustar(){ setTimeout(ajustar, 60); setTimeout(ajustar, 320); }
+  window.addEventListener('resize', reajustar);
+  window.addEventListener('orientationchange', reajustar);
+  chat.addEventListener('focusin', reajustar);
+  chat.addEventListener('focusout', reajustar);
 
   function abrirChat(){
     ajustar();

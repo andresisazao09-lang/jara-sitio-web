@@ -142,6 +142,12 @@ app móvil de GitHub, y la web publicada se actualiza sola 1–2 minutos despué
 10. **Portada del portafolio:** el fundido hacia el fondo es `.p-hero::after` (curva suave, sin línea).
 11. **Portada de la landing:** el collage se funde con `.hero::after` y el pie va **sin** `border-top`:
     ese borde era la línea negra que se veía al final del degradado.
+12. **Chat y el autorrelleno de Safari:** `ajustar()` nunca usa un alto menor de 260 px, las
+    medidas se recolocan al entrar y salir de cada campo (`focusin`/`focusout`, `resize`,
+    `orientationchange`) y una tarjeta ya terminada ignora nuevos envíos. Sin esto, al
+    autorrellenar, el chat se quedaba a medias.
+13. **Interruptor de la hora:** en las paletas claras la regla gris solo se aplica cuando
+    está apagado (`:not([aria-checked="true"])`), para que al activarlo se ponga verde.
 
 ## 7. Cosas que ya probamos y NO quiero repetir
 
