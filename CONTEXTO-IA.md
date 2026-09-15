@@ -70,10 +70,14 @@ app móvil de GitHub, y la web publicada se actualiza sola 1–2 minutos despué
 
 - **Cotización = chat "Agente de Jara" (16-09-2026)** en `index.html`: ventana estilo WhatsApp
   (`#waChat`) en **4 bloques**, cada uno una tarjeta con sus campos: 1) contacto (nombre
-  simple, teléfono, correo); 2) ¿a quién representas? (Empresa / Marca personal /
-  Influencer o creador / Otro; según la respuesta cambian los campos de marca y redes);
-  3) sesión (tipo de producción + entorno); 4) agenda (fecha, país, ciudad, lugar).
-  Pendiente: poner de fondo del chat el fondo predeterminado de WhatsApp que me va a mandar. Se abre con el
+  simple, teléfono, correo); 2) ¿a quién representas? (Persona natural / Empresa / Marca
+  personal / Influencer o creador / Otro; según la respuesta cambian los campos: persona
+  natural elige ocasión — Cumpleaños, Retrato personal, Pareja, Familia, Graduación, Otra —
+  que va al mensaje como "Ocasión"); 3) sesión (tipo de producción + entorno); 4) agenda
+  (fecha, país, ciudad, lugar). Saludo: "Te haré unas preguntas rápidas…" (le gustó).
+  Foto de perfil: logo "Jara" completo, pequeño (no recortar). Fondo del chat: dibujos
+  propios estilo WhatsApp (SVG), no la imagen de WhatsApp (es de Meta).
+  El mensaje de WhatsApp lleva los títulos en negrita (`*Título:*`). Se abre con el
   botón del hero, el botón verde de la sección "Empecemos", el botón flotante `.wa-fab` y al
   llegar con `index.html#form` (enlaces del portafolio). **El `<form id="briefForm">` sigue en
   la página oculto (`hidden`)**: el chat guarda cada respuesta en sus campos y el botón final

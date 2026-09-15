@@ -573,9 +573,9 @@
   }
   .wa-card button,.wa-card input{font-family:inherit;}
   .wa-head{display:flex;align-items:center;gap:11px;padding:12px 8px 12px 14px;background:#075E54;color:#fff;flex-shrink:0;}
-  .wa-avatar{width:42px;height:42px;border-radius:50%;background:#111110;display:flex;align-items:center;justify-content:flex-start;overflow:hidden;flex-shrink:0;}
-  /* del logo "Jara" solo cabe la J: se recorta y se engrosa un poco el trazo */
-  .wa-avatar img{width:auto;max-width:none;height:34px;margin-left:5px;display:block;filter:drop-shadow(0 0 .6px #fff) drop-shadow(0 0 .6px #fff);}
+  .wa-avatar{width:44px;height:44px;border-radius:50%;background:#111110;display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0;}
+  /* el logo "Jara" completo aunque se vea pequeno; el trazo se engrosa un poco para que se lea */
+  .wa-avatar img{width:38px;max-width:none;height:auto;display:block;filter:drop-shadow(0 0 .5px #fff) drop-shadow(0 0 .5px #fff);}
   .wa-who{flex:1;min-width:0;display:flex;flex-direction:column;line-height:1.2;}
   .wa-who b{font-size:16.5px;font-weight:600;}
   .wa-who i{font-style:normal;font-size:12.5px;opacity:.85;margin-top:2px;}
@@ -583,9 +583,9 @@
   .wa-body{
     flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;
     display:flex;flex-direction:column-reverse;
-    background-color:#efeae2;
-    background-image:radial-gradient(rgba(17,27,33,0.07) 1px, transparent 1.4px);
-    background-size:16px 16px;
+    background-color:#f4efe7;
+    background-image:url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iMzAwIiB2aWV3Qm94PSIwIDAgMzAwIDMwMCI+PGcgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZTNkOWNhIiBzdHJva2Utd2lkdGg9IjEuMyIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cmVjdCB4PSIxOCIgeT0iMjYiIHdpZHRoPSIzNCIgaGVpZ2h0PSIyNCIgcng9IjQiLz48Y2lyY2xlIGN4PSIzNSIgY3k9IjM4IiByPSI3Ii8+PHBhdGggZD0iTTI2IDI2bDMtNWgxMmwzIDUiLz48cGF0aCBkPSJNOTIgNDRjLTktNi0xNC0xMS0xNC0xN2E3IDcgMCAwIDEgMTQtMiA3IDcgMCAwIDEgMTQgMmMwIDYtNSAxMS0xNCAxN3oiLz48cGF0aCBkPSJNMTQ2IDE2YzEgOCA0IDExIDEyIDEyLTggMS0xMSA0LTEyIDEyLTEtOC00LTExLTEyLTEyIDgtMSAxMS00IDEyLTEyeiIvPjxnIHRyYW5zZm9ybT0icm90YXRlKC0xNSAyMDYgMzQpIj48cmVjdCB4PSIxODgiIHk9IjI0IiB3aWR0aD0iMzYiIGhlaWdodD0iMjAiIHJ4PSIyIi8+PHBhdGggZD0iTTE4OCAyOWgzNk0xODggMzloMzZNMTk2IDI0djVNMjA0IDI0djVNMjEyIDI0djVNMTk2IDM5djVNMjA0IDM5djVNMjEyIDM5djUiLz48L2c+PHBhdGggZD0iTTI2OCAyMmExMiAxMiAwIDEgMCAxMCAxOCAxMCAxMCAwIDAgMS0xMC0xOHoiLz48cGF0aCBkPSJNMjIgMTAwaDMwYTggOCAwIDAgMC0yLTE2IDExIDExIDAgMCAwLTIxIDMgNyA3IDAgMCAwLTcgMTN6Ii8+PGNpcmNsZSBjeD0iOTYiIGN5PSI5MCIgcj0iMTQiLz48cGF0aCBkPSJNODkgOTRjNCA0IDEwIDQgMTQgME05MSA4NmguMDFNMTAxIDg2aC4wMSIvPjxyZWN0IHg9IjEzMiIgeT0iODQiIHdpZHRoPSIzMiIgaGVpZ2h0PSIyMiIgcng9IjIiLz48cGF0aCBkPSJNMTMyIDg0bDMwLTggMiA3TTE0MiA4MWw0IDVNMTUyIDc4bDQgNSIvPjxlbGxpcHNlIGN4PSIyMDgiIGN5PSI4MiIgcng9IjEwIiByeT0iMTMiLz48cGF0aCBkPSJNMjA4IDk1bC0yIDNoNHpNMjA4IDk4Yy0zIDYgMyA5IDAgMTYiLz48cGF0aCBkPSJNMjU4IDEwMFY3OGwxNC00djIwIi8+PGNpcmNsZSBjeD0iMjU0IiBjeT0iMTAwIiByPSI0Ii8+PGNpcmNsZSBjeD0iMjY4IiBjeT0iOTQiIHI9IjQiLz48cGF0aCBkPSJNMzggMTI4bC0xMCAxNmg5bC00IDE0IDEyLTE4aC05bDUtMTJ6Ii8+PHJlY3QgeD0iNzQiIHk9IjE0MCIgd2lkdGg9IjI4IiBoZWlnaHQ9IjIyIiByeD0iMiIvPjxwYXRoIGQ9Ik03MiAxMzRoMzJ2Nkg3MnpNODggMTM0djI4TTg4IDEzNGMtNC04LTEyLTYtOSAwTTg4IDEzNGM0LTggMTItNiA5IDAiLz48Y2lyY2xlIGN4PSIxNTAiIGN5PSIxNDYiIHI9IjE1Ii8+PGNpcmNsZSBjeD0iMTUwIiBjeT0iMTQ2IiByPSI2Ii8+PHBhdGggZD0iTTE1MCAxMzFsNCA5TTE2NSAxNDZsLTkgNE0xNTAgMTYxbC00LTlNMTM1IDE0Nmw5LTQiLz48cGF0aCBkPSJNMTk0IDEzNmgzMmE0IDQgMCAwIDEgNCA0djE2YTQgNCAwIDAgMS00IDRoLTIwbC04IDZ2LTZoLTRhNCA0IDAgMCAxLTQtNHYtMTZhNCA0IDAgMCAxIDQtNHpNMjAwIDE0NmgyME0yMDAgMTUyaDEyIi8+PGNpcmNsZSBjeD0iMjY2IiBjeT0iMTQ4IiByPSI4Ii8+PHBhdGggZD0iTTI2NiAxMzJ2NE0yNjYgMTYwdjRNMjUwIDE0OGg0TTI3OCAxNDhoNE0yNTUgMTM3bDMgM00yNzQgMTU2bDMgM00yNzcgMTM3bC0zIDNNMjU4IDE1NmwtMyAzIi8+PHBhdGggZD0iTTM2IDIxNHMtMTItMTItMTItMjJhMTIgMTIgMCAwIDEgMjQgMGMwIDEwLTEyIDIyLTEyIDIyeiIvPjxjaXJjbGUgY3g9IjM2IiBjeT0iMTkyIiByPSI0Ii8+PHBhdGggZD0iTTk0IDE4NGw0IDkgMTAgMS03IDcgMiAxMC05LTUtOSA1IDItMTAtNy03IDEwLTF6Ii8+PGNpcmNsZSBjeD0iMTUyIiBjeT0iMjAyIiByPSIxMyIvPjxwYXRoIGQ9Ik0xNTIgMTk0djhsNiA0Ii8+PHBhdGggZD0iTTE5OCAyMThjMC0xOCAxMi0zMCAzMC0zMCAwIDE4LTEyIDMwLTMwIDMwek0xOTggMjE4bDIwLTIwIi8+PHBhdGggZD0iTTI1NCAxOTZoMjB2MTJhOCA4IDAgMCAxLTggOGgtNGE4IDggMCAwIDEtOC04ek0yNzQgMjAwaDRhNCA0IDAgMCAxIDAgOGgtNE0yNjAgMTkwYzAtMyAzLTMgMy02TTI2NyAxOTBjMC0zIDMtMyAzLTYiLz48cmVjdCB4PSIyMCIgeT0iMjQ2IiB3aWR0aD0iMzIiIGhlaWdodD0iMjYiIHJ4PSIzIi8+PHBhdGggZD0iTTI0IDI2Nmw4LTggNiA2IDUtNCA3IDYiLz48Y2lyY2xlIGN4PSI0NCIgY3k9IjI1NCIgcj0iMi41Ii8+PHJlY3QgeD0iOTIiIHk9IjI0NCIgd2lkdGg9IjEwIiBoZWlnaHQ9IjE4IiByeD0iNSIvPjxwYXRoIGQ9Ik04NyAyNTZhMTAgMTAgMCAwIDAgMjAgME05NyAyNjZ2Nk05MiAyNzJoMTAiLz48cmVjdCB4PSIxMzQiIHk9IjI1OCIgd2lkdGg9IjMwIiBoZWlnaHQ9IjE2IiByeD0iMiIvPjxwYXRoIGQ9Ik0xMzQgMjY0YzUgNCAxMC00IDE1IDBzMTAtNCAxNSAwTTE0MiAyNTh2LTZNMTU2IDI1OHYtNk0xNDIgMjQ4di4wMU0xNTYgMjQ4di4wMSIvPjxwYXRoIGQ9Ik0xOTYgMjYybDMyLTE0LTEwIDMwLTgtMTB6TTIxMCAyNjhsMTgtMjAiLz48cGF0aCBkPSJNMjY4IDI2NmMtNS0zLTgtNi04LTlhNCA0IDAgMCAxIDgtMSA0IDQgMCAwIDEgOCAxYzAgMy0zIDYtOCA5eiIvPjxwYXRoIGQ9Ik02MCA2MGg4TTY0IDU2djhNMTcwIDExOGg2TTE3MyAxMTV2Nk0yNDAgMjM2aDhNMjQ0IDIzMnY4TTExOCAyMjJoNk0xMjEgMjE5djYiLz48Y2lyY2xlIGN4PSIxMjAiIGN5PSI2MCIgcj0iMi41Ii8+PGNpcmNsZSBjeD0iMjMyIiBjeT0iMTIwIiByPSIyIi8+PGNpcmNsZSBjeD0iNjAiIGN5PSIxNzAiIHI9IjIiLz48Y2lyY2xlIGN4PSIxNzgiIGN5PSIxNzYiIHI9IjIuNSIvPjxjaXJjbGUgY3g9IjI3MCIgY3k9IjI5MCIgcj0iMyIvPjxjaXJjbGUgY3g9IjEyMCIgY3k9IjI5MCIgcj0iMiIvPjwvZz48L3N2Zz4K");
+    background-size:250px 250px;
   }
   .wa-list{display:flex;flex-direction:column;padding:14px 14px 12px;}
   .wa-msg{
@@ -604,6 +604,7 @@
   .wa-cont::before{display:none;}
   .wa-meta{float:right;margin:7px 0 -5px 12px;font-size:11px;color:#667781;line-height:1;white-space:nowrap;}
   .wa-check{margin-left:4px;color:#53bdeb;letter-spacing:-3px;}
+  .wa-msg b{font-weight:600;}
   .wa-typing{display:flex;gap:4px;align-items:center;padding:13px 14px;}
   .wa-typing span{width:7px;height:7px;border-radius:50%;background:#8696a0;animation:waDot 1.2s infinite ease-in-out;}
   .wa-typing span:nth-child(2){animation-delay:.15s;}
@@ -773,6 +774,7 @@
           <button type="button" class="ios-trigger-select is-empty" id="categoriaTrigger">Selecciona</button>
           <select id="categoria" class="ios-select-native" tabindex="-1" aria-hidden="true">
             <option value="" disabled selected>Selecciona</option>
+            <option value="Persona natural">Persona natural</option>
             <option value="Empresa">Empresa</option>
             <option value="Marca personal">Marca personal</option>
             <option value="Influencer o creador de contenido">Influencer o creador</option>
@@ -835,6 +837,7 @@
           <span class="ios-value is-empty" id="fechaValor">Selecciona</span>
         </button>
         <input type="hidden" id="fechaHora">
+        <input type="hidden" id="ocasion">
       </div>
 
       <p class="ios-caption">¿En dónde será la sesión fotográfica?</p>
@@ -1137,6 +1140,7 @@
     const correo = document.getElementById('correo').value.trim();
     const marca = document.getElementById('marca').value.trim();
     const redes = document.getElementById('redes').value.trim();
+    const ocasion = document.getElementById('ocasion').value.trim();
 
     const catSel = document.getElementById('categoria').value;
     const categoria = catSel === 'Otro' ? document.getElementById('categoriaOtro').value.trim() : catSel;
@@ -1161,15 +1165,16 @@
 
     let mensaje = `Hola, soy ${nombre}.`;
     if(marca) mensaje += ` Escribo por parte de ${marca}.`;
-    mensaje += `\n\nCategoría: ${categoria}`;
-    mensaje += `\nTipo de producción: ${produccion}`;
-    if(redes) mensaje += `\nRedes: ${redes}`;
-    mensaje += `\nCorreo: ${correo}`;
-    mensaje += `\nTeléfono / WhatsApp de contacto: ${telefono}`;
-    mensaje += `\n\nFecha deseada: ${fecha}` + (hora ? ` a las ${hora}` : ' (hora por definir)');
-    mensaje += `\nUbicación: ${ciudad}, ${pais}`;
-    if(lugar) mensaje += `\nLugar: ${lugar}`;
-    mensaje += `\nEntorno: ${entorno}`;
+    mensaje += `\n\n*Categoría:* ${categoria}`;
+    if(ocasion) mensaje += `\n*Ocasión:* ${ocasion}`;
+    mensaje += `\n*Tipo de producción:* ${produccion}`;
+    if(redes) mensaje += `\n*Redes:* ${redes}`;
+    mensaje += `\n*Correo:* ${correo}`;
+    mensaje += `\n*Teléfono / WhatsApp de contacto:* ${telefono}`;
+    mensaje += `\n\n*Fecha deseada:* ${fecha}` + (hora ? ` a las ${hora}` : ' (hora por definir)');
+    mensaje += `\n*Ubicación:* ${ciudad}, ${pais}`;
+    if(lugar) mensaje += `\n*Lugar:* ${lugar}`;
+    mensaje += `\n*Entorno:* ${entorno}`;
     mensaje += `\n\nMe gustaría conversar sobre el proyecto.`;
 
     const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(mensaje)}`;
@@ -1551,6 +1556,20 @@
     lista.appendChild(b);
   }
 
+  /* resumen con los titulos en negrita */
+  function burbujaDatos(datos){
+    var b = el('div', 'wa-msg wa-in' + (sigue('wa-in') ? ' wa-cont' : ''));
+    var t = el('span');
+    datos.forEach(function(x, i){
+      if (i) t.appendChild(document.createTextNode('\n'));
+      t.appendChild(el('b', null, x[0] + ': '));
+      t.appendChild(document.createTextNode(x[1]));
+    });
+    b.appendChild(t);
+    b.appendChild(el('span', 'wa-meta', ahora()));
+    lista.appendChild(b);
+  }
+
   function escribiendo(si){
     if (si && !tipeo){
       tipeo = el('div', 'wa-msg wa-in wa-typing' + (sigue('wa-in') ? ' wa-cont' : ''));
@@ -1569,9 +1588,9 @@
       escribiendo(true);
       setTimeout(function(){
         escribiendo(false);
-        burbuja(texto, false);
+        if (typeof texto === 'function') texto(); else burbuja(texto, false);
         setTimeout(sig, 180);
-      }, 380 + Math.min(650, texto.length * 9));
+      }, 380 + Math.min(650, (texto.length || 60) * 9));
     })();
   }
 
@@ -1620,7 +1639,7 @@
       g.appendChild(b);
     });
     f.appendChild(g);
-    return { nodo:g,
+    return { nodo:g, fila:f,
       valor:function(){ return elegido ? elegido.value : null; },
       etiqueta:function(){ return elegido ? elegido.label : ''; } };
   }
@@ -1678,7 +1697,7 @@
 
   /* ---------- 1) contacto ---------- */
   function bloqueContacto(){
-    bot(['¡Hola! Soy el Agente de Jara.', 'Son 4 pasos rápidos. Primero, tus datos de contacto:'], function(){
+    bot(['¡Hola! Soy el Agente de Jara.', 'Te haré unas preguntas rápidas para preparar tu cotización. Al final podrás enviarme tus datos por WhatsApp.', 'Empecemos con tus datos de contacto:'], function(){
       var c = tarjeta();
       var nombre = texto(c, 'Nombre', 'text', 'Tu nombre', $('nombre').value);
 
@@ -1706,17 +1725,22 @@
 
   /* ---------- 2) a quien representa: segun la respuesta cambian los campos ---------- */
   var PERFILES = [
+    { value:'Persona natural', label:'Persona natural', ocasion:true, redes:'@usuario (opcional)' },
     { value:'Empresa', label:'Empresa', nombre:'Empresa', ph:'Nombre de la empresa', redes:'Redes o web (opcional)' },
     { value:'Marca personal', label:'Marca personal', nombre:'Marca', ph:'Nombre de tu marca (opcional)', redes:'@usuario o enlace (opcional)' },
     { value:'Influencer o creador de contenido', label:'Influencer o creador', redes:'@usuario' },
     { value:'Otro', label:'Otro', otro:true, redes:'@usuario o enlace (opcional)' }
   ];
+  /* persona natural: para que ocasion quiere la sesion */
+  var OCASIONES = ['Cumpleaños', 'Retrato personal', 'Pareja', 'Familia', 'Graduación', 'Otra'];
 
   function bloquePerfil(){
     bot(['¿A quién representas?'], function(){
-      var c = tarjeta(), p = null, cual, marca, redes;
+      var c = tarjeta(), p = null, oc, ocOtra, cual, marca, redes;
       var g = opciones(c, null, PERFILES, function(o){
         p = o;
+        oc.fila.hidden = !p.ocasion;
+        ocOtra.fila.hidden = !(p.ocasion && oc.valor() === 'Otra');
         cual.fila.hidden = !p.otro;
         marca.fila.hidden = !p.nombre;
         if (p.nombre){ marca.fila.firstChild.textContent = p.nombre; marca.placeholder = p.ph; }
@@ -1724,20 +1748,30 @@
         redes.placeholder = p.redes;
         c.querySelector('.wa-f-err').hidden = true;
       });
+      oc = opciones(c, '¿Para qué es la sesión?', OCASIONES.map(function(x){ return { value:x, label:x }; }),
+        function(o){ ocOtra.fila.hidden = o.value !== 'Otra'; });
+      ocOtra = texto(c, null, 'text', '¿Qué ocasión?', '');
       cual  = texto(c, '¿Cuál?', 'text', 'Escribe qué representas', '');
       marca = texto(c, 'Marca', 'text', '', $('marca').value);
       redes = texto(c, 'Redes', 'text', '', $('redes').value);
-      cual.fila.hidden = marca.fila.hidden = redes.fila.hidden = true;
+      oc.fila.hidden = ocOtra.fila.hidden = cual.fila.hidden = marca.fila.hidden = redes.fila.hidden = true;
 
       pie(c, function(){
         if (!p) return fallo(c, 'Elige una opción.', g.nodo);
-        var o = cual.value.trim();
+        var o = cual.value.trim(), ocasion = '';
+        if (p.ocasion){
+          if (!oc.valor()) return fallo(c, 'Elige para qué es la sesión.', oc.nodo);
+          ocasion = oc.valor() === 'Otra' ? ocOtra.value.trim() : oc.valor();
+          if (!ocasion) return fallo(c, 'Cuéntame la ocasión.', ocOtra);
+        }
         if (p.otro && !o) return fallo(c, 'Cuéntame qué representas.', cual);
         $('categoria').value = p.value; cambio('categoria');
         $('categoriaOtro').value = p.otro ? o : '';
+        $('ocasion').value = ocasion;
         $('marca').value = p.nombre ? marca.value.trim() : '';
         $('redes').value = redes.value.trim();
         var r = [p.otro ? o : p.label];
+        if (ocasion) r.push(ocasion);
         if ($('marca').value) r.push($('marca').value);
         if ($('redes').value) r.push($('redes').value);
         listo(c, r.join('\n'), bloqueSesion);
@@ -1872,21 +1906,22 @@
       if (p){ bot([p.msg], BLOQUES[s - 1]); return; }
     }
     function elegido(sel, otro){ return $(sel).value === 'Otro' ? $(otro).value.trim() : $(sel).value; }
-    var l = [
-      'Nombre: ' + $('nombre').value.trim(),
-      'Teléfono: ' + $('prefijoPais').value + ' ' + $('telefono').value.trim(),
-      'Correo: ' + $('correo').value.trim(),
-      'Representa: ' + elegido('categoria', 'categoriaOtro')
+    var d = [
+      ['Nombre', $('nombre').value.trim()],
+      ['Teléfono', $('prefijoPais').value + ' ' + $('telefono').value.trim()],
+      ['Correo', $('correo').value.trim()],
+      ['Representa', elegido('categoria', 'categoriaOtro')]
     ];
-    if ($('marca').value.trim()) l.push(($('categoria').value === 'Empresa' ? 'Empresa: ' : 'Marca: ') + $('marca').value.trim());
-    if ($('redes').value.trim()) l.push('Redes: ' + $('redes').value.trim());
-    l.push('Producción: ' + elegido('produccion', 'produccionOtro'),
-           'Entorno: ' + elegido('entorno', 'entornoOtro'),
-           'Fecha: ' + $('fechaValor').textContent,
-           'Ubicación: ' + valorCiudad() + ', ' + $('pais').value);
-    if ($('lugar').value.trim()) l.push('Lugar: ' + $('lugar').value.trim());
+    if ($('ocasion').value) d.push(['Ocasión', $('ocasion').value]);
+    if ($('marca').value.trim()) d.push([$('categoria').value === 'Empresa' ? 'Empresa' : 'Marca', $('marca').value.trim()]);
+    if ($('redes').value.trim()) d.push(['Redes', $('redes').value.trim()]);
+    d.push(['Producción', elegido('produccion', 'produccionOtro')],
+           ['Entorno', elegido('entorno', 'entornoOtro')],
+           ['Fecha', $('fechaValor').textContent],
+           ['Ubicación', valorCiudad() + ', ' + $('pais').value]);
+    if ($('lugar').value.trim()) d.push(['Lugar', $('lugar').value.trim()]);
     var nombre = $('nombre').value.trim().split(/\s+/)[0];
-    bot(['¡Listo, ' + nombre + '! Revisa tu solicitud:', l.join('\n'), 'Si todo está bien, envíamelo por WhatsApp.'], function(){
+    bot(['¡Listo, ' + nombre + '! Revisa tu solicitud:', function(){ burbujaDatos(d); }, 'Si todo está bien, envíamelo por WhatsApp.'], function(){
       fin.hidden = false;
     });
   }
