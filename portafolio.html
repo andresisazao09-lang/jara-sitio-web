@@ -338,8 +338,170 @@
     .wa-fab{width:48px;height:48px;right:14px;bottom:62px;}
     .wa-fab svg{width:26px;height:26px;}
   }
-</style></head>
+  /* ============================================================
+     PALETAS DE MUESTRA PARA EL CLIENTE
+     1) Oscuro (predeterminado)  2) Beige 870 V MADERA  3) Blanco
+     En las dos claras la cabecera y la barra de categorias se
+     quedan en el oscuro de siempre.
+     ============================================================ */
+  [data-theme="light"]{
+    --bg:#E9DCC0;
+    --text:#2B2620;
+    --text-muted:#625A4B;
+    --border:rgba(43,38,32,0.16);
+    --border-strong:rgba(43,38,32,0.36);
+    --sombra:36,30,20;
+  }
+  [data-theme="white"]{
+    --bg:#ffffff;
+    --text:#1c1c1a;
+    --text-muted:#6b675f;
+    --border:rgba(28,28,26,0.14);
+    --border-strong:rgba(28,28,26,0.34);
+    --sombra:20,20,18;
+  }
+  [data-theme] body{background:var(--bg);color:var(--text);}
+  [data-theme] ::selection{background:var(--text);color:var(--bg);}
+  /* cabecera y selector: siguen oscuros, su texto en claro */
+  [data-theme] .top-bar,
+  [data-theme] .nav-rail{border-bottom-color:rgba(243,241,234,0.14);}
+  [data-theme] .top-bar-role{color:#f3f1ea;}
+  [data-theme] .top-bar-loc{color:rgba(243,241,234,0.60);}
+  [data-theme] .nav-link{color:rgba(243,241,234,0.58);}
+  [data-theme] .nav-link.is-active,
+  [data-theme] .nav-back{color:#f3f1ea;}
+  [data-theme] .nav-link.is-active::after{background:#f3f1ea;}
+  @media (hover:hover) and (pointer:fine){ [data-theme] .nav-link:hover{color:#f3f1ea;} }
+  /* la portada se funde hacia el fondo claro */
+  [data-theme] .p-hero{background:var(--bg);}
+  [data-theme] .p-hero-veil{
+    background:
+      radial-gradient(ellipse 620px 480px at 50% 50%, rgba(20,16,10,0.44), transparent 76%),
+      linear-gradient(180deg, rgba(20,16,10,0.30) 0%, rgba(20,16,10,0.05) 38%, transparent 58%),
+      linear-gradient(180deg, transparent 52%, var(--bg) 100%);
+  }
+  [data-theme] .p-hero-title{color:#ffffff;}
+  /* sombras bajo cada foto: sobre fondo claro siguen mandando las fotografias */
+  [data-theme] .shot{
+    background:rgba(var(--sombra),0.10);
+    box-shadow:0 18px 30px -16px rgba(var(--sombra),0.62), 0 3px 8px rgba(var(--sombra),0.16);
+  }
+  [data-theme] .idx-card{
+    background:rgba(var(--sombra),0.10);
+    box-shadow:0 22px 38px -18px rgba(var(--sombra),0.66), 0 3px 10px rgba(var(--sombra),0.16);
+  }
+  [data-theme] .idx-card-veil{background:linear-gradient(180deg,rgba(10,10,9,0.34) 0%,rgba(10,10,9,0.04) 36%,rgba(10,10,9,0.92) 100%);}
+  /* el nombre de la coleccion va encima de la foto: sigue en claro */
+  [data-theme] .idx-card-name,
+  [data-theme] .idx-card-count{color:#f3f1ea;}
+  [data-theme] .idx-card-soon .idx-card-frame{background:rgba(var(--sombra),0.13);}
+  [data-theme] .idx-card-soon .idx-card-name,
+  [data-theme] .idx-card-soon .idx-card-count{color:var(--text);}
+  [data-theme] .idx-card-soon .idx-card-veil{background:none;}
+  [data-theme] .p-cta{background:var(--bg);border-top-color:var(--border);}
+  [data-theme] .btn-primary{background:var(--text);color:var(--bg);border-color:var(--text);}
+  [data-theme] .to-top{background:var(--bg);border-color:var(--border-strong);color:var(--text);}
+  /* el visor sigue oscuro: la foto manda */
+  [data-theme] .lb-btn{background:rgba(243,241,234,0.08);border-color:rgba(243,241,234,0.14);color:#f3f1ea;}
+  [data-theme] .lb-ser,
+  [data-theme] .lb-counter{color:rgba(243,241,234,0.6);}
+
+  /* ---------- pregunta al entrar ---------- */
+  .theme-gate{
+    position:fixed;inset:0;z-index:1000;
+    display:none;align-items:center;justify-content:center;
+    background:#0d0d0c;padding:28px 6vw;text-align:center;
+  }
+  html.sin-tema .theme-gate{display:flex;}
+  .theme-gate.is-out{opacity:0;pointer-events:none;transition:opacity .3s ease;}
+  .theme-gate-inner{width:100%;max-width:640px;}
+  .theme-gate-kicker{margin:0 0 14px;font-size:10.5px;letter-spacing:0.3em;text-transform:uppercase;color:#8d8779;}
+  .theme-gate-q{margin:0 0 34px;font-size:clamp(21px,4.4vw,32px);line-height:1.15;letter-spacing:0.02em;text-transform:uppercase;color:#f3f1ea;}
+  .theme-gate-actions{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+  .theme-opt{
+    display:flex;flex-direction:column;align-items:center;gap:14px;
+    padding:20px 16px;cursor:pointer;font-family:inherit;
+    border:1px solid rgba(243,241,234,0.22);border-radius:4px;
+    background:transparent;color:#f3f1ea;
+    font-size:11px;letter-spacing:0.18em;text-transform:uppercase;
+    transition:border-color .18s ease,background .18s ease,transform .18s ease;
+  }
+  @media (hover:hover) and (pointer:fine){
+    .theme-opt:hover{border-color:#f3f1ea;background:rgba(243,241,234,0.05);}
+  }
+  .theme-opt:active{transform:scale(.985);}
+  .theme-swatch{display:block;width:100%;height:62px;border-radius:3px;border:1px solid rgba(243,241,234,0.14);}
+  .theme-swatch-dark{background:linear-gradient(160deg,#242422 0%,#111110 100%);}
+  .theme-swatch-light{background:linear-gradient(180deg,#111110 0 24%,#E9DCC0 24% 100%);}
+  .theme-swatch-white{background:linear-gradient(180deg,#111110 0 24%,#ffffff 24% 100%);}
+  @media (max-width:760px){
+    .theme-gate-actions{gap:8px;}
+    .theme-opt{padding:14px 6px;gap:10px;font-size:9.5px;letter-spacing:0.1em;}
+    .theme-swatch{height:52px;}
+  }
+
+  /* ---------- cambiar de paleta en cualquier momento ---------- */
+  .theme-toggle{
+    position:fixed;left:16px;bottom:16px;z-index:55;
+    width:42px;height:42px;border-radius:50%;
+    border:1px solid var(--border-strong);background:rgba(17,17,16,0.92);
+    color:var(--text);cursor:pointer;
+    display:flex;align-items:center;justify-content:center;
+  }
+  [data-theme] .theme-toggle{background:var(--bg);}
+  html.sin-tema .theme-toggle{display:none;}
+  .theme-toggle-ico{
+    width:17px;height:17px;border-radius:50%;
+    border:1.5px solid currentColor;
+    background:linear-gradient(90deg,currentColor 0 50%,transparent 50% 100%);
+  }
+  .theme-label{
+    position:fixed;left:66px;bottom:24px;z-index:55;
+    padding:5px 12px;border-radius:999px;
+    background:rgba(17,17,16,0.92);color:#f3f1ea;
+    font-size:10.5px;letter-spacing:0.16em;text-transform:uppercase;
+    opacity:0;pointer-events:none;transition:opacity .25s ease;
+  }
+  .theme-label.is-on{opacity:1;}
+  @media (max-width:760px){
+    .theme-toggle{left:14px;bottom:14px;}
+    .theme-label{left:62px;bottom:22px;}
+  }
+</style>
+<script>
+  /* Se aplica la paleta guardada antes de pintar, para que no haya un
+     parpadeo de color al abrir. Si aun no ha elegido, se marca la pagina
+     con "sin-tema" y se muestra la pregunta. */
+  (function(){
+    var t = null;
+    try { t = localStorage.getItem('jara-tema'); } catch(e){}
+    var r = document.documentElement;
+    if (t === 'light' || t === 'white') r.setAttribute('data-theme', t);
+    else if (t !== 'dark') r.classList.add('sin-tema');
+  })();
+</script>
+</head>
 <body>
+<div class="theme-gate" id="themeGate">
+  <div class="theme-gate-inner">
+    <p class="theme-gate-kicker meta">Jara — Portafolio</p>
+    <p class="theme-gate-q">¿Cómo prefieres verlo?</p>
+    <div class="theme-gate-actions">
+      <button type="button" class="theme-opt meta" data-theme-pick="dark">
+        <span class="theme-swatch theme-swatch-dark" aria-hidden="true"></span>
+        <span>Oscuro</span>
+      </button>
+      <button type="button" class="theme-opt meta" data-theme-pick="light">
+        <span class="theme-swatch theme-swatch-light" aria-hidden="true"></span>
+        <span>Beige</span>
+      </button>
+      <button type="button" class="theme-opt meta" data-theme-pick="white">
+        <span class="theme-swatch theme-swatch-white" aria-hidden="true"></span>
+        <span>Blanco</span>
+      </button>
+    </div>
+  </div>
+</div>
 
 <header class="top-bar">
   <div class="top-bar-brand">
@@ -1013,6 +1175,11 @@
   </svg>
 </a>
 
+<button type="button" class="theme-toggle" id="themeToggle" aria-label="Cambiar paleta de colores" title="Cambiar paleta de colores">
+  <span class="theme-toggle-ico" aria-hidden="true"></span>
+</button>
+<span class="theme-label meta" id="themeLabel" aria-live="polite"></span>
+
 <div class="lb" id="lb" hidden role="dialog" aria-modal="true" aria-label="Visor de fotografías">
   <div class="lb-top">
     <span class="lb-ser meta" id="lbSer"></span>
@@ -1337,5 +1504,45 @@
 })();
 </script>
 
+<script>
+/* Paletas de muestra: Oscuro, Beige y Blanco. La eleccion se recuerda en
+   este navegador, asi que la pregunta solo sale la primera vez; despues se
+   pasa de una a otra con el boton redondo de abajo a la izquierda. */
+(function(){
+  "use strict";
+  var CLAVE   = 'jara-tema';
+  var ORDEN   = ['dark', 'light', 'white'];
+  var NOMBRES = { dark:'Oscuro', light:'Beige', white:'Blanco' };
+  var raiz  = document.documentElement;
+  var gate  = document.getElementById('themeGate');
+  var label = document.getElementById('themeLabel');
+  var timer;
+  function actual(){ return raiz.getAttribute('data-theme') || 'dark'; }
+  function aplicar(t){
+    if (t === 'light' || t === 'white') raiz.setAttribute('data-theme', t);
+    else raiz.removeAttribute('data-theme');
+    try { localStorage.setItem(CLAVE, t); } catch(e){}
+  }
+  Array.prototype.forEach.call(document.querySelectorAll('[data-theme-pick]'), function(b){
+    b.addEventListener('click', function(){
+      aplicar(b.getAttribute('data-theme-pick'));
+      gate.classList.add('is-out');
+      setTimeout(function(){
+        raiz.classList.remove('sin-tema');
+        gate.classList.remove('is-out');
+      }, 300);
+    });
+  });
+  var tg = document.getElementById('themeToggle');
+  if (tg) tg.addEventListener('click', function(){
+    var t = ORDEN[(ORDEN.indexOf(actual()) + 1) % ORDEN.length];
+    aplicar(t);
+    label.textContent = NOMBRES[t];
+    label.classList.add('is-on');
+    clearTimeout(timer);
+    timer = setTimeout(function(){ label.classList.remove('is-on'); }, 1600);
+  });
+})();
+</script>
 </body>
 </html>

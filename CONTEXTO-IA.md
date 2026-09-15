@@ -105,8 +105,11 @@ app móvil de GitHub, y la web publicada se actualiza sola 1–2 minutos despué
 
 ## 7. Cosas que ya probamos y NO quiero repetir
 
-- ❌ **Modo claro / beige y la pregunta de "¿cómo prefieres verlo?"** → eliminados.
-  Solo modo oscuro. No me lo vuelvas a proponer.
+- ✅ **Paletas de muestra para el cliente** (reactivadas el 15-09-2026, solo en
+  `portafolio.html`): al entrar pregunta "¿Cómo prefieres verlo?" con 3 opciones —
+  **Oscuro** (predeterminado), **Beige** (870 V MADERA) y **Blanco** (cabecera oscura
+  de siempre + fondo blanco). Se recuerda en el navegador (`localStorage` `jara-tema`)
+  y se cambia con el botón redondo de abajo a la izquierda.
 - ❌ **Menú desplegable de subcategorías en la barra de categorías** (al pasar el
   cursor o al tocar) → no me gustó, se revirtió.
 - ✅ **Los títulos grandes de cada categoría** (CONCIERTOS, RETRATOS…) **se quedan.**
