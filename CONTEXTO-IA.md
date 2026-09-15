@@ -140,6 +140,8 @@ app móvil de GitHub, y la web publicada se actualiza sola 1–2 minutos despué
    `html` es `#111110` (blanco en Blanco total), `body` transparente y el fondo va en
    `body::before`. No lo cambies.
 10. **Portada del portafolio:** el fundido hacia el fondo es `.p-hero::after` (curva suave, sin línea).
+11. **Portada de la landing:** el collage se funde con `.hero::after` y el pie va **sin** `border-top`:
+    ese borde era la línea negra que se veía al final del degradado.
 
 ## 7. Cosas que ya probamos y NO quiero repetir
 

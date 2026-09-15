@@ -301,7 +301,7 @@
   footer{
     padding:50px 6vw 60px;
     text-align:center;
-    border-top:1px solid var(--border);
+    /* sin linea: el collage se funde con el fondo de la pagina */
   }
   .icon-row{display:flex;gap:18px;align-items:center;justify-content:center;margin-bottom:16px;}
   .icon-row a{opacity:.85;transition:opacity .15s ease;}
@@ -1776,7 +1776,7 @@
 
   /* ---------- 1) contacto ---------- */
   function bloqueContacto(){
-    bot(['¡Hola! Soy el Agente de Jara.', 'Te haré unas preguntas rápidas para preparar tu cotización. Al final podrás enviarme tus datos por WhatsApp.', 'Empecemos con tus datos de contacto:'], function(){
+    bot(['¡Hola! Soy el Agente de Jara.', 'Te haré unas preguntas rápidas para preparar tu cotización.', 'Empecemos con tus datos de contacto:'], function(){
       var c = tarjeta();
       var nombre = texto(c, 'Nombre', 'text', 'Tu nombre', $('nombre').value);
       nombre.setAttribute('autocapitalize', 'words');
