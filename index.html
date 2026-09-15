@@ -555,7 +555,7 @@
   }
 
   /* ============================================================
-     CHAT "JARA AGENTE": la encuesta como conversacion de WhatsApp
+     CHAT "AGENTE DE JARA": la encuesta como conversacion de WhatsApp
      ============================================================ */
   html.wa-abierto, html.wa-abierto body{overflow:hidden;}
   .wa-chat{
@@ -587,7 +587,7 @@
     background-image:radial-gradient(rgba(17,27,33,0.07) 1px, transparent 1.4px);
     background-size:16px 16px;
   }
-  .wa-list{display:flex;flex-direction:column;padding:14px 14px 10px;}
+  .wa-list{display:flex;flex-direction:column;padding:14px 14px 12px;}
   .wa-msg{
     position:relative;max-width:82%;margin-top:10px;padding:7px 9px 7px 10px;border-radius:9px;
     font-size:15px;line-height:1.38;box-shadow:0 1px 0.5px rgba(11,20,26,0.13);
@@ -610,31 +610,48 @@
   .wa-typing span:nth-child(3){animation-delay:.3s;}
   @keyframes waDot{0%,60%,100%{transform:translateY(0);opacity:.45;}30%{transform:translateY(-4px);opacity:1;}}
   @keyframes waIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:none;}}
-  .wa-opts{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:7px;padding:4px 12px 10px;max-height:42%;overflow-y:auto;flex-shrink:0;}
-  .wa-opts:empty{display:none;}
+
+  /* tarjeta de cada bloque de preguntas, dentro del chat */
+  .wa-form{width:92%;max-width:92%;padding:12px;white-space:normal;}
+  .wa-f{margin:0 0 11px;}
+  .wa-f > span{display:block;font-size:12.5px;color:#667781;margin:0 0 5px 2px;}
+  .wa-card .wa-f input{
+    -webkit-appearance:none;appearance:none;display:block;width:100%;height:42px;margin:0;
+    border:1px solid #d1d7db;border-radius:10px;background:#fff;color:#111b21;box-shadow:none;outline:none;
+    padding:0 12px;font-size:16px;text-align:left;text-transform:none;letter-spacing:0;
+  }
+  .wa-card .wa-f input:focus{border-color:#00a884;}
+  .wa-card .wa-f input::placeholder{color:#8696a0;opacity:1;text-transform:none;}
+  .wa-card .wa-f input:disabled{background:#f5f6f6;color:#54656f;}
+  .wa-f-row{display:flex;gap:6px;}
+  .wa-f-row input{flex:1;min-width:0;}
+  .wa-f-pick{flex-shrink:0;height:42px;border:1px solid #d1d7db;border-radius:10px;background:#f7f8fa;color:#111b21;padding:0 10px;font-size:14px;cursor:pointer;}
+  .wa-f-btn{
+    display:flex;align-items:center;justify-content:space-between;width:100%;height:42px;
+    border:1px solid #d1d7db;border-radius:10px;background:#fff;color:#111b21;
+    padding:0 12px;font-size:15px;text-align:left;cursor:pointer;
+  }
+  .wa-f-btn.is-empty{color:#8696a0;}
+  .wa-f-btn::after{content:"\203A";margin-left:8px;color:#8696a0;font-size:20px;line-height:1;}
+  .wa-f-chips{display:flex;flex-wrap:wrap;gap:6px;border:1px solid transparent;border-radius:12px;}
   .wa-chip{
     border:1px solid #00a884;background:#fff;color:#008069;border-radius:18px;
-    padding:8px 14px;font-size:14px;line-height:1.25;cursor:pointer;text-align:center;
-    box-shadow:0 1px 0.5px rgba(11,20,26,0.1);
+    padding:7px 12px;font-size:13.5px;line-height:1.25;cursor:pointer;text-align:center;
   }
-  .wa-chip:active{background:#e7f8f2;}
-  .wa-chip-soft{border-color:#c5ced3;color:#54656f;}
-  .wa-bar{display:flex;align-items:center;gap:8px;padding:8px 10px 10px;background:#f0f2f5;flex-shrink:0;}
-  .wa-pref{flex-shrink:0;border:0;background:#fff;color:#111b21;border-radius:23px;height:46px;padding:0 12px;font-size:14px;cursor:pointer;}
-  .wa-input{flex:1;min-width:0;height:46px;border:0;border-radius:23px;background:#fff;padding:0 16px;font-size:16px;color:#111b21;outline:none;}
-  .wa-input:disabled{background:#e9edef;}
-  /* la pagina tiene estilos generales para campos: aqui se imponen los del chat */
-  .wa-card .wa-input{-webkit-appearance:none;appearance:none;margin:0;border:0;box-shadow:none;background:#fff;color:#111b21;text-align:left;text-transform:none;letter-spacing:0;padding:0 16px;height:46px;border-radius:23px;font-size:16px;}
-  .wa-card .wa-input:disabled{background:#e9edef;}
-  .wa-card .wa-input::placeholder{color:#8696a0;text-transform:none;opacity:1;}
-  .wa-send{flex-shrink:0;width:46px;height:46px;border-radius:50%;border:0;background:#075E54;display:flex;align-items:center;justify-content:center;cursor:pointer;}
-  .wa-send:disabled{opacity:.45;cursor:default;}
-  .wa-end{padding:10px 12px 12px;background:#f0f2f5;flex-shrink:0;}
+  .wa-chip.is-on{background:#00a884;border-color:#00a884;color:#fff;}
+  .wa-card .is-bad{border-color:#e5484d !important;box-shadow:0 0 0 2px rgba(229,72,77,0.15);}
+  .wa-f-err{margin:0 0 9px;color:#d93025;font-size:13px;line-height:1.3;}
+  .wa-f-ok{width:100%;height:44px;border:0;border-radius:22px;background:#075E54;color:#fff;font-size:15px;font-weight:600;cursor:pointer;}
+  .wa-form.is-done{opacity:.8;}
+  .wa-form.is-done .wa-f-ok,.wa-form.is-done .wa-f-err{display:none;}
+
+  .wa-end{padding:10px 12px 8px;background:#f0f2f5;flex-shrink:0;}
   .wa-finish{
     width:100%;display:flex;align-items:center;justify-content:center;gap:10px;height:50px;
     border:0;border-radius:25px;background:#25D366;color:#fff;font-size:15px;font-weight:600;cursor:pointer;
   }
   .wa-finish svg{width:22px;height:22px;}
+  .wa-restart{display:block;margin:4px auto 0;border:0;background:none;color:#54656f;font-size:13.5px;cursor:pointer;padding:6px 10px;}
   @media (max-width:760px){ .wa-chat{padding:10px;} .wa-card{max-height:none;border-radius:18px;} }
 
   /* boton de la seccion y boton flotante que abren el chat */
@@ -704,7 +721,7 @@
   <div class="lead-bg-overlay"></div>
   <div class="section-head">
     <h2 class="section-title section-title-xl">EMPECEMOS</h2>
-    <p class="section-sub">Chatea con Jara agente: te hará unas preguntas rápidas y al final podrás enviarme tus datos por WhatsApp para coordinar los detalles.</p>
+    <p class="section-sub">Chatea con el Agente de Jara: te hará unas preguntas rápidas y al final podrás enviarme tus datos por WhatsApp para coordinar los detalles.</p>
   </div>
 
   <div class="chat-cta">
@@ -724,7 +741,7 @@
       <div class="ios-group">
         <div class="ios-row">
           <label for="nombre">Nombre</label>
-          <input type="text" id="nombre" required placeholder="Nombre completo">
+          <input type="text" id="nombre" required placeholder="Tu nombre">
         </div>
         <div class="ios-row">
           <label for="telefono">Teléfono</label>
@@ -757,6 +774,7 @@
           <select id="categoria" class="ios-select-native" tabindex="-1" aria-hidden="true">
             <option value="" disabled selected>Selecciona</option>
             <option value="Empresa">Empresa</option>
+            <option value="Marca personal">Marca personal</option>
             <option value="Influencer o creador de contenido">Influencer o creador</option>
             <option value="Modelo">Modelo</option>
             <option value="Otro">Otro</option>
@@ -882,26 +900,19 @@
 </button>
 
 <div class="wa-chat" id="waChat" hidden>
-  <div class="wa-card" role="dialog" aria-modal="true" aria-label="Chat con Jara agente">
+  <div class="wa-card" role="dialog" aria-modal="true" aria-label="Chat con el Agente de Jara">
     <div class="wa-head">
       <span class="wa-avatar"><img id="waAvatar" alt=""></span>
-      <span class="wa-who"><b>Jara agente</b><i id="waStatus">en línea</i></span>
+      <span class="wa-who"><b>Agente de Jara</b><i id="waStatus">en línea</i></span>
       <button type="button" class="wa-close" id="waClose" aria-label="Cerrar">&times;</button>
     </div>
     <div class="wa-body"><div class="wa-list" id="waMsgs" aria-live="polite"></div></div>
-    <div class="wa-opts" id="waOpts"></div>
-    <div class="wa-bar" id="waBar">
-      <button type="button" class="wa-pref" id="waPref" hidden>VE +58</button>
-      <input type="text" class="wa-input" id="waInput" placeholder="Escribe un mensaje" autocomplete="off" enterkeyhint="send">
-      <button type="button" class="wa-send" id="waSend" aria-label="Enviar">
-        <svg viewBox="0 0 24 24" width="22" height="22" fill="#fff" aria-hidden="true"><path d="M2.01 21 23 12 2.01 3 2 10l15 2-15 2z"/></svg>
-      </button>
-    </div>
     <div class="wa-end" id="waEnd" hidden>
       <button type="button" class="wa-finish" id="waFinish">
         <svg viewBox="0 0 24 24" fill="#fff" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
         Enviar por WhatsApp
       </button>
+      <button type="button" class="wa-restart" id="waRestart">Empezar de nuevo</button>
     </div>
   </div>
 </div>
@@ -1035,7 +1046,7 @@
   function revisarPaso(n){
     function v(id){ return document.getElementById(id); }
     if(n === 1){
-      if(!v('nombre').value.trim())   return {msg:'Escribe tu nombre completo.', el:v('nombre')};
+      if(!v('nombre').value.trim())   return {msg:'Escribe tu nombre.', el:v('nombre')};
       var tel = v('telefono').value.replace(/\D/g,'');
       if(!tel)                        return {msg:'Escribe tu número telefónico.', el:v('telefono')};
       if(tel.length < 7)              return {msg:'Ese número parece incompleto.', el:v('telefono')};
@@ -1499,46 +1510,50 @@
 </script>
 
 <script>
-/* ===== Chat "Jara agente" =====
-   La encuesta como conversacion de WhatsApp: hace las mismas preguntas y en el
-   mismo orden que el formulario, que sigue oculto en la pagina. Cada respuesta
-   se guarda en su campo y el boton final usa el mismo envio de siempre, asi el
-   mensaje que llega a WhatsApp sale igual que antes. */
+/* ===== Chat "Agente de Jara" =====
+   La encuesta como conversacion de WhatsApp, en 4 bloques rapidos:
+   1) contacto, 2) a quien representa, 3) la sesion y 4) la agenda.
+   Cada bloque es una tarjeta con sus campos dentro del chat. Las respuestas se
+   guardan en los campos del formulario, que sigue oculto en la pagina, y el
+   boton final usa su mismo envio: el mensaje a WhatsApp sale igual que antes. */
 (function(){
   "use strict";
   function $(id){ return document.getElementById(id); }
-  var chat = $('waChat'), lista = $('waMsgs'), opts = $('waOpts'), bar = $('waBar'),
-      input = $('waInput'), send = $('waSend'), pref = $('waPref'),
-      estado = $('waStatus'), fin = $('waEnd');
+  var chat = $('waChat'), lista = $('waMsgs'), estado = $('waStatus'), fin = $('waEnd');
   var logo = document.querySelector('.top-bar-logo');
   if (logo) $('waAvatar').src = logo.src;
 
-  var iniciado = false, paso = -1, esperando = null, tipeo = null, prefIso = 'VE';
+  var iniciado = false, tipeo = null, prefIso = 'VE', alElegirFecha = null;
   var tactil = window.matchMedia && !window.matchMedia('(pointer:fine)').matches;
+  var EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
+  function el(tag, clase, texto){
+    var e = document.createElement(tag);
+    if (clase) e.className = clase;
+    if (texto != null) e.textContent = texto;
+    return e;
+  }
   function dos(n){ return (n < 10 ? '0' : '') + n; }
   function ahora(){ var d = new Date(); return dos(d.getHours()) + ':' + dos(d.getMinutes()); }
-  function primerNombre(){ return $('nombre').value.trim().split(/\s+/)[0] || ''; }
+  function cambio(id){ $(id).dispatchEvent(new Event('change', { bubbles:true })); }
+  function cada(nodos, fn){ Array.prototype.forEach.call(nodos, fn); }
+
+  /* ---------- mensajes ---------- */
+  function sigue(lado){ var u = lista.lastElementChild; return !!(u && u.classList.contains(lado)); }
 
   function burbuja(texto, mia){
     var lado = mia ? 'wa-out' : 'wa-in';
-    var ultimo = lista.lastElementChild;
-    var b = document.createElement('div');
-    b.className = 'wa-msg ' + lado;
-    if (ultimo && ultimo.classList.contains(lado)) b.classList.add('wa-cont');
-    var t = document.createElement('span'); t.textContent = texto;
-    var m = document.createElement('span'); m.className = 'wa-meta'; m.textContent = ahora();
-    if (mia){ var c = document.createElement('span'); c.className = 'wa-check'; c.textContent = '✓✓'; m.appendChild(c); }
-    b.appendChild(t); b.appendChild(m);
+    var b = el('div', 'wa-msg ' + lado + (sigue(lado) ? ' wa-cont' : ''));
+    b.appendChild(el('span', null, texto));
+    var m = el('span', 'wa-meta', ahora());
+    if (mia) m.appendChild(el('span', 'wa-check', '✓✓'));
+    b.appendChild(m);
     lista.appendChild(b);
   }
 
   function escribiendo(si){
     if (si && !tipeo){
-      tipeo = document.createElement('div');
-      tipeo.className = 'wa-msg wa-in wa-typing';
-      var ultimo = lista.lastElementChild;
-      if (ultimo && ultimo.classList.contains('wa-in')) tipeo.classList.add('wa-cont');
+      tipeo = el('div', 'wa-msg wa-in wa-typing' + (sigue('wa-in') ? ' wa-cont' : ''));
       tipeo.innerHTML = '<span></span><span></span><span></span>';
       lista.appendChild(tipeo);
     } else if (!si && tipeo){ tipeo.remove(); tipeo = null; }
@@ -1555,235 +1570,324 @@
       setTimeout(function(){
         escribiendo(false);
         burbuja(texto, false);
-        setTimeout(sig, 260);
-      }, 520 + Math.min(900, texto.length * 14));
+        setTimeout(sig, 180);
+      }, 380 + Math.min(650, texto.length * 9));
     })();
   }
 
-  /* barra de abajo segun lo que se esta preguntando */
-  function modo(tipo, q){
-    opts.innerHTML = '';
-    if (!tipo) return;
-    pref.hidden = tipo !== 'tel';
-    fin.hidden = tipo !== 'fin';
-    bar.hidden = tipo === 'fin';
-    var escribe = tipo === 'texto' || tipo === 'tel' || tipo === 'email' || tipo === 'ciudad';
-    input.disabled = !escribe;
-    send.disabled = !escribe;
-    input.type = tipo === 'email' ? 'email' : (tipo === 'tel' ? 'tel' : 'text');
-    input.inputMode = tipo === 'tel' ? 'numeric' : (tipo === 'email' ? 'email' : 'text');
-    input.placeholder = escribe ? ((q && q.ph) || 'Escribe un mensaje') : 'Elige una opción';
-    if (escribe && !tactil) input.focus();
+  /* ---------- tarjetas con campos ---------- */
+  function tarjeta(){
+    var c = el('div', 'wa-msg wa-in wa-form' + (sigue('wa-in') ? ' wa-cont' : ''));
+    lista.appendChild(c);
+    return c;
   }
 
-  function chip(texto, fn, suave){
-    var b = document.createElement('button');
+  function fila(c, etiqueta){
+    var f = el('div', 'wa-f');
+    if (etiqueta) f.appendChild(el('span', null, etiqueta));
+    c.appendChild(f);
+    return f;
+  }
+
+  function campo(tipo, ph, valor){
+    var i = el('input');
+    i.type = tipo; i.placeholder = ph; i.autocomplete = 'off'; i.value = valor || '';
+    if (tipo === 'tel') i.inputMode = 'numeric';
+    if (tipo === 'email'){ i.inputMode = 'email'; i.setAttribute('autocapitalize', 'off'); }
+    i.addEventListener('input', function(){ i.classList.remove('is-bad'); });
+    return i;
+  }
+
+  function texto(c, etiqueta, tipo, ph, valor){
+    var f = fila(c, etiqueta), i = campo(tipo, ph, valor);
+    f.appendChild(i);
+    i.fila = f;
+    return i;
+  }
+
+  function opciones(c, etiqueta, items, alElegir){
+    var f = fila(c, etiqueta), g = el('div', 'wa-f-chips'), elegido = null;
+    items.forEach(function(o){
+      var b = el('button', 'wa-chip', o.label);
+      b.type = 'button';
+      b.addEventListener('click', function(){
+        cada(g.children, function(x){ x.classList.remove('is-on'); });
+        b.classList.add('is-on');
+        g.classList.remove('is-bad');
+        elegido = o;
+        if (alElegir) alElegir(o);
+      });
+      g.appendChild(b);
+    });
+    f.appendChild(g);
+    return { nodo:g,
+      valor:function(){ return elegido ? elegido.value : null; },
+      etiqueta:function(){ return elegido ? elegido.label : ''; } };
+  }
+
+  function selector(c, etiqueta, vacio, alPulsar){
+    var f = fila(c, etiqueta), b = el('button', 'wa-f-btn is-empty', vacio);
     b.type = 'button';
-    b.className = 'wa-chip' + (suave ? ' wa-chip-soft' : '');
-    b.textContent = texto;
-    b.addEventListener('click', fn);
-    opts.appendChild(b);
+    b.addEventListener('click', function(){ b.classList.remove('is-bad'); alPulsar(); });
+    f.appendChild(b);
+    return { nodo:b, fila:f,
+      poner:function(t){ b.textContent = t; b.classList.remove('is-empty'); },
+      quitar:function(){ b.textContent = vacio; b.classList.add('is-empty'); } };
   }
 
-  function textoOk(msg){ return function(v){ return v ? null : msg; }; }
+  function pie(c, alContinuar){
+    var err = el('p', 'wa-f-err');
+    err.hidden = true;
+    var ok = el('button', 'wa-f-ok', 'Continuar');
+    ok.type = 'button';
+    ok.addEventListener('click', alContinuar);
+    c.appendChild(err);
+    c.appendChild(ok);
+  }
 
-  /* mismas preguntas y mismo orden que el formulario */
-  var PREGUNTAS = [
-    { tipo:'texto', ph:'Nombre completo', ok:textoOk('Escribe tu nombre completo.'),
-      guardar:function(v){ $('nombre').value = v; },
-      q:function(){ return ['¡Hola! Soy Jara agente.',
-        'Te haré unas preguntas rápidas para preparar tu cotización. Al final podrás enviarme tus datos por WhatsApp.',
-        'Empecemos con tus datos de contacto. ¿Cuál es tu nombre completo?']; } },
-    { tipo:'tel', ph:'412 1234567',
-      ok:function(v){ var d = v.replace(/\D/g, ''); if (!d) return 'Escribe tu número telefónico.'; if (d.length < 7) return 'Ese número parece incompleto.'; return null; },
-      guardar:function(v){ $('telefono').value = v; },
-      eco:function(v){ return $('prefijoPais').value + ' ' + v; },
-      q:function(){ return ['Mucho gusto, ' + primerNombre() + '. ¿Cuál es tu número de teléfono?']; } },
-    { tipo:'email', ph:'tu@correo.com',
-      ok:function(v){ if (!v) return 'Escribe tu correo electrónico.'; return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v) ? null : 'Revisa tu correo, parece tener un error.'; },
-      guardar:function(v){ $('correo').value = v; },
-      q:function(){ return ['¿Cuál es tu correo electrónico?']; } },
-    { tipo:'texto', ph:'Marca', opcional:true, campo:'marca',
-      q:function(){ return ['Ahora, sobre ti. ¿Tienes una marca? Si no, pulsa “Omitir”.']; } },
-    { tipo:'texto', ph:'@usuario o enlace', opcional:true, campo:'redes',
-      q:function(){ return ['¿Cuáles son tus redes? Tu perfil me ayuda a entender tu estilo.']; } },
-    { tipo:'opciones', select:'categoria', otro:'categoriaOtro', otroQ:'¿Cuál es tu categoría?',
-      q:function(){ return ['¿Qué categoría te describe mejor?']; } },
-    { tipo:'opciones', select:'produccion', otro:'produccionOtro', otroQ:'Cuéntame qué tipo de producción necesitas.',
-      q:function(){ return ['¿Qué tipo de producción deseas?']; } },
-    { tipo:'opciones', select:'entorno', otro:'entornoOtro', otroQ:'¿Qué entorno tienes en mente?',
-      q:function(){ return ['¿Qué entorno fotográfico prefieres?']; } },
-    { tipo:'fecha',
-      q:function(){ return ['¿Cuál es la fecha estimada de la sesión fotográfica?']; } },
-    { tipo:'pais',
-      q:function(){ return ['¿En dónde será la sesión fotográfica? Elige el país.']; } },
-    { tipo:'ciudad', ph:'Escribe tu ciudad',
-      q:function(){ return ['¿En qué ciudad?']; } },
-    { tipo:'texto', ph:'Lugar', opcional:true, campo:'lugar',
-      q:function(){ return ['¿Tienes un lugar concreto en mente? Si no, pulsa “Omitir”.']; } }
+  function fallo(c, msg, nodo){
+    cada(c.querySelectorAll('.is-bad'), function(x){ x.classList.remove('is-bad'); });
+    var err = c.querySelector('.wa-f-err');
+    err.textContent = msg;
+    err.hidden = false;
+    if (nodo){
+      nodo.classList.add('is-bad');
+      if (!tactil && nodo.focus) nodo.focus();
+    }
+  }
+
+  /* bloque terminado: la tarjeta queda fija y la respuesta sale como mensaje del cliente */
+  function listo(c, resumen, despues){
+    c.classList.add('is-done');
+    cada(c.querySelectorAll('.is-bad'), function(x){ x.classList.remove('is-bad'); });
+    c.querySelector('.wa-f-err').hidden = true;
+    cada(c.querySelectorAll('input,button'), function(x){ x.disabled = true; });
+    burbuja(resumen, true);
+    setTimeout(despues, 250);
+  }
+
+  function elegirPrefijo(alElegir){
+    abrirSheet({ title:'Código de país', search:true, selected:prefIso,
+      items: PAISES.map(function(p){ return { value:p[1], label:p[0] + '  ' + p[2] }; }),
+      onPick: function(iso){
+        PAISES.forEach(function(p){ if (p[1] === iso){ $('prefijoPais').value = p[2]; prefIso = iso; } });
+        cambio('prefijoPais');
+        alElegir(prefIso + ' ' + $('prefijoPais').value);
+      } });
+  }
+
+  /* ---------- 1) contacto ---------- */
+  function bloqueContacto(){
+    bot(['¡Hola! Soy el Agente de Jara.', 'Son 4 pasos rápidos. Primero, tus datos de contacto:'], function(){
+      var c = tarjeta();
+      var nombre = texto(c, 'Nombre', 'text', 'Tu nombre', $('nombre').value);
+
+      var ft = fila(c, 'Teléfono'), r = el('div', 'wa-f-row');
+      var pb = el('button', 'wa-f-pick', prefIso + ' ' + $('prefijoPais').value);
+      pb.type = 'button';
+      pb.addEventListener('click', function(){ elegirPrefijo(function(t){ pb.textContent = t; }); });
+      var tel = campo('tel', '412 1234567', $('telefono').value);
+      r.appendChild(pb); r.appendChild(tel); ft.appendChild(r);
+
+      var correo = texto(c, 'Correo', 'email', 'tu@correo.com', $('correo').value);
+
+      pie(c, function(){
+        var n = nombre.value.trim(), t = tel.value.trim(), m = correo.value.trim(), d = t.replace(/\D/g, '');
+        if (!n) return fallo(c, 'Escribe tu nombre.', nombre);
+        if (!d) return fallo(c, 'Escribe tu teléfono.', tel);
+        if (d.length < 7) return fallo(c, 'Ese número parece incompleto.', tel);
+        if (!EMAIL.test(m)) return fallo(c, m ? 'Revisa tu correo, parece tener un error.' : 'Escribe tu correo.', correo);
+        $('nombre').value = n; $('telefono').value = t; $('correo').value = m;
+        listo(c, n + '\n' + $('prefijoPais').value + ' ' + t + '\n' + m, bloquePerfil);
+      });
+      if (!tactil) nombre.focus();
+    });
+  }
+
+  /* ---------- 2) a quien representa: segun la respuesta cambian los campos ---------- */
+  var PERFILES = [
+    { value:'Empresa', label:'Empresa', nombre:'Empresa', ph:'Nombre de la empresa', redes:'Redes o web (opcional)' },
+    { value:'Marca personal', label:'Marca personal', nombre:'Marca', ph:'Nombre de tu marca (opcional)', redes:'@usuario o enlace (opcional)' },
+    { value:'Influencer o creador de contenido', label:'Influencer o creador', redes:'@usuario' },
+    { value:'Otro', label:'Otro', otro:true, redes:'@usuario o enlace (opcional)' }
   ];
 
-  function preguntar(i){
-    paso = i;
-    esperando = null;
-    modo(null);
-    if (i >= PREGUNTAS.length){ terminar(); return; }
-    var q = PREGUNTAS[i];
-    bot(q.q(), function(){ esperar(q, null); });
-  }
-
-  function esperar(q, sub){
-    esperando = { q:q, sub:sub };
-    if (sub){ modo('texto', { ph: sub === 'ciudadOtra' ? 'Escribe tu ciudad' : 'Especifica' }); return; }
-    var eleccion = q.tipo === 'opciones' || q.tipo === 'fecha' || q.tipo === 'pais';
-    modo(eleccion ? 'elige' : q.tipo, q);
-    if (q.opcional) chip('Omitir', function(){
-      if (!esperando) return;
-      burbuja('Omitir', true); $(q.campo).value = ''; siguiente();
-    }, true);
-    if (q.tipo === 'opciones'){
-      Array.prototype.forEach.call($(q.select).options, function(o){
-        if (o.value) chip(o.textContent, function(){ elegirOpcion(q, o.value, o.textContent); });
+  function bloquePerfil(){
+    bot(['¿A quién representas?'], function(){
+      var c = tarjeta(), p = null, cual, marca, redes;
+      var g = opciones(c, null, PERFILES, function(o){
+        p = o;
+        cual.fila.hidden = !p.otro;
+        marca.fila.hidden = !p.nombre;
+        if (p.nombre){ marca.fila.firstChild.textContent = p.nombre; marca.placeholder = p.ph; }
+        redes.fila.hidden = false;
+        redes.placeholder = p.redes;
+        c.querySelector('.wa-f-err').hidden = true;
       });
-    }
-    if (q.tipo === 'fecha') chip('Elegir fecha', function(){ $('fechaTrigger').click(); });
-    if (q.tipo === 'pais'){
-      chip('Venezuela', function(){ fijarPais('Venezuela'); });
-      chip('Otro país', function(){
-        abrirSheet({ title:'País', search:true, selected:$('pais').value,
-          items: PAISES.map(function(p){ return { value:p[0], label:p[0] }; }),
-          onPick: fijarPais });
-      }, true);
-    }
-    if (q.tipo === 'ciudad'){
-      var ciudades = CIUDADES[$('pais').value] || [];
-      if (ciudades.length) chip('Elegir ciudad', function(){
-        abrirSheet({ title:'Ciudad', search: ciudades.length > 8, selected:$('ciudad').value,
-          items: ciudades.map(function(c){ return { value:c, label:c }; }).concat([{ value:'Otra', label:'Otra ciudad' }]),
-          onPick: function(v){
-            if (!esperando) return;
-            if (v === 'Otra'){
-              esperando = null; modo(null);
-              bot(['Escribe el nombre de tu ciudad.'], function(){ esperar(q, 'ciudadOtra'); });
-              return;
-            }
-            burbuja(v, true); $('ciudad').value = v; $('ciudadOtra').value = ''; siguiente();
-          } });
+      cual  = texto(c, '¿Cuál?', 'text', 'Escribe qué representas', '');
+      marca = texto(c, 'Marca', 'text', '', $('marca').value);
+      redes = texto(c, 'Redes', 'text', '', $('redes').value);
+      cual.fila.hidden = marca.fila.hidden = redes.fila.hidden = true;
+
+      pie(c, function(){
+        if (!p) return fallo(c, 'Elige una opción.', g.nodo);
+        var o = cual.value.trim();
+        if (p.otro && !o) return fallo(c, 'Cuéntame qué representas.', cual);
+        $('categoria').value = p.value; cambio('categoria');
+        $('categoriaOtro').value = p.otro ? o : '';
+        $('marca').value = p.nombre ? marca.value.trim() : '';
+        $('redes').value = redes.value.trim();
+        var r = [p.otro ? o : p.label];
+        if ($('marca').value) r.push($('marca').value);
+        if ($('redes').value) r.push($('redes').value);
+        listo(c, r.join('\n'), bloqueSesion);
       });
-    }
+    });
   }
 
-  function siguiente(){
-    esperando = null; modo(null);
-    setTimeout(function(){ preguntar(paso + 1); }, 200);
+  /* ---------- 3) la sesion ---------- */
+  var CORTO = {
+    'Contenido comercial o publicitario para marca': 'Comercial o publicitario',
+    'Grabación profesional para eventos, cursos o lanzamientos': 'Eventos, cursos o lanzamientos',
+    'Sesión de retrato fotográfico personal o video de presentación': 'Retrato o video de presentación',
+    'Contenido orgánico para reels o TikToks': 'Reels o TikToks'
+  };
+  function de(id){
+    return Array.prototype.filter.call($(id).options, function(o){ return o.value; })
+      .map(function(o){ return { value:o.value, label:CORTO[o.value] || o.textContent }; });
+  }
+  function fijar(id, v, otroId, otro){
+    $(id).value = v; cambio(id);
+    $(otroId).value = v === 'Otro' ? otro : '';
   }
 
-  function repetir(msg){
-    var e = esperando; esperando = null; modo(null);
-    bot([msg], function(){ esperar(e.q, e.sub); });
+  function bloqueSesion(){
+    bot(['¿Cómo quieres tu sesión?'], function(){
+      var c = tarjeta(), po, eo;
+      var gp = opciones(c, 'Tipo de producción', de('produccion'), function(o){ po.fila.hidden = o.value !== 'Otro'; });
+      po = texto(c, null, 'text', '¿Qué producción?', '');
+      var ge = opciones(c, 'Entorno', de('entorno'), function(o){ eo.fila.hidden = o.value !== 'Otro'; });
+      eo = texto(c, null, 'text', '¿Qué entorno?', '');
+      po.fila.hidden = eo.fila.hidden = true;
+
+      pie(c, function(){
+        var p = gp.valor(), e = ge.valor(), pt = po.value.trim(), et = eo.value.trim();
+        if (!p) return fallo(c, 'Elige el tipo de producción.', gp.nodo);
+        if (p === 'Otro' && !pt) return fallo(c, 'Cuéntame qué producción necesitas.', po);
+        if (!e) return fallo(c, 'Elige el entorno.', ge.nodo);
+        if (e === 'Otro' && !et) return fallo(c, 'Cuéntame qué entorno tienes en mente.', eo);
+        fijar('produccion', p, 'produccionOtro', pt);
+        fijar('entorno', e, 'entornoOtro', et);
+        listo(c, (p === 'Otro' ? pt : gp.etiqueta()) + '\n' + (e === 'Otro' ? et : ge.etiqueta()), bloqueAgenda);
+      });
+    });
   }
 
-  function elegirOpcion(q, valor, etiqueta){
-    if (!esperando) return;
-    burbuja(etiqueta, true);
-    var sel = $(q.select);
-    sel.value = valor;
-    sel.dispatchEvent(new Event('change', { bubbles:true }));
-    if (valor === 'Otro'){
-      esperando = null; modo(null);
-      bot([q.otroQ], function(){ esperar(q, 'otro'); });
-      return;
-    }
-    $(q.otro).value = '';
-    siguiente();
-  }
-
-  function fijarPais(nombre){
-    if (!esperando) return;
-    var sel = $('pais');
-    sel.value = nombre;
-    sel.dispatchEvent(new Event('change', { bubbles:true }));
-    burbuja(nombre, true);
-    siguiente();
-  }
-
-  /* ciudad escrita a mano: si esta en la lista se usa esa, si no va como "Otra" */
+  /* ---------- 4) agenda ---------- */
   function fijarCiudadTexto(v){
     var igual = null;
-    (CIUDADES[$('pais').value] || []).forEach(function(c){ if (c.toLowerCase() === v.toLowerCase()) igual = c; });
+    (CIUDADES[$('pais').value] || []).forEach(function(x){ if (x.toLowerCase() === v.toLowerCase()) igual = x; });
     $('ciudad').value = igual || 'Otra';
     $('ciudadOtra').value = igual ? '' : v;
   }
 
-  function alEscribir(){
-    if (!esperando || input.disabled) return;
-    var v = input.value.trim();
-    if (!v) return;
-    input.value = '';
-    var q = esperando.q, sub = esperando.sub;
-    if (sub === 'otro'){ burbuja(v, true); $(q.otro).value = v; siguiente(); return; }
-    if (sub === 'ciudadOtra' || q.tipo === 'ciudad'){ burbuja(v, true); fijarCiudadTexto(v); siguiente(); return; }
-    burbuja(q.eco ? q.eco(v) : v, true);
-    var problema = q.ok ? q.ok(v) : null;
-    if (problema){ repetir(problema); return; }
-    if (q.guardar) q.guardar(v); else $(q.campo).value = v;
-    siguiente();
+  function bloqueAgenda(){
+    bot(['Por último, ¿cuándo y dónde?'], function(){
+      var c = tarjeta(), ciudad, otra;
+
+      var fecha = selector(c, 'Fecha estimada', 'Elegir fecha', function(){
+        alElegirFecha = function(){ fecha.poner($('fechaValor').textContent); };
+        $('fechaTrigger').click();
+      });
+      if ($('fechaHora').value) fecha.poner($('fechaValor').textContent);
+
+      var pais = selector(c, 'País', 'Elegir país', function(){
+        abrirSheet({ title:'País', search:true, selected:$('pais').value,
+          items: PAISES.map(function(p){ return { value:p[0], label:p[0] }; }),
+          onPick: function(v){ $('pais').value = v; cambio('pais'); pais.poner(v); ciudades(); } });
+      });
+      if ($('pais').value) pais.poner($('pais').value);
+
+      ciudad = selector(c, 'Ciudad', 'Elegir ciudad', function(){
+        var l = CIUDADES[$('pais').value] || [];
+        abrirSheet({ title:'Ciudad', search:l.length > 8, selected:$('ciudad').value,
+          items: l.map(function(x){ return { value:x, label:x }; }).concat([{ value:'Otra', label:'Otra ciudad' }]),
+          onPick: function(v){
+            $('ciudad').value = v;
+            if (v === 'Otra'){
+              ciudad.poner('Otra ciudad');
+              otra.fila.hidden = false;
+              if (!tactil) otra.focus();
+            } else {
+              ciudad.poner(v);
+              otra.fila.hidden = true; otra.value = ''; $('ciudadOtra').value = '';
+            }
+          } });
+      });
+      otra = texto(c, null, 'text', 'Escribe tu ciudad', '');
+
+      /* la lista de ciudades depende del pais; sin lista se escribe a mano */
+      function ciudades(){
+        if (window.__pintarCiudades) window.__pintarCiudades();
+        var l = CIUDADES[$('pais').value] || [];
+        ciudad.quitar();
+        ciudad.fila.hidden = !l.length;
+        otra.fila.hidden = !!l.length;
+        otra.value = '';
+      }
+      ciudades();
+
+      var lugar = texto(c, 'Lugar (opcional)', 'text', 'Opcional', $('lugar').value);
+
+      pie(c, function(){
+        if (!$('fechaHora').value) return fallo(c, 'Elige una fecha estimada.', fecha.nodo);
+        if (!$('pais').value) return fallo(c, 'Elige el país.', pais.nodo);
+        if (!otra.fila.hidden){
+          var t = otra.value.trim();
+          if (!t) return fallo(c, 'Escribe tu ciudad.', otra);
+          fijarCiudadTexto(t);
+        } else if (!$('ciudad').value || $('ciudad').value === 'Otra'){
+          return fallo(c, 'Elige la ciudad.', ciudad.nodo);
+        }
+        $('lugar').value = lugar.value.trim();
+        alElegirFecha = null;
+        var r = [$('fechaValor').textContent, valorCiudad() + ', ' + $('pais').value];
+        if ($('lugar').value) r.push($('lugar').value);
+        listo(c, r.join('\n'), resumen);
+      });
+    });
   }
-  send.addEventListener('click', alEscribir);
-  input.addEventListener('keydown', function(e){ if (e.key === 'Enter'){ e.preventDefault(); alEscribir(); } });
 
   /* la fecha se elige con el calendario de siempre */
   $('dpDone').addEventListener('click', function(){
-    if (!esperando || esperando.q.tipo !== 'fecha' || !$('fechaHora').value) return;
-    burbuja($('fechaValor').textContent, true);
-    siguiente();
+    if (alElegirFecha && $('fechaHora').value) alElegirFecha();
   });
 
-  /* prefijo del telefono */
-  pref.addEventListener('click', function(){
-    abrirSheet({ title:'Código de país', search:true, selected:prefIso,
-      items: PAISES.map(function(p){ return { value:p[1], label:p[0] + '  ' + p[2] }; }),
-      onPick: function(iso){
-        PAISES.forEach(function(p){
-          if (p[1] !== iso) return;
-          $('prefijoPais').value = p[2];
-          pref.textContent = p[1] + ' ' + p[2];
-          prefIso = iso;
-        });
-        $('prefijoPais').dispatchEvent(new Event('change', { bubbles:true }));
-      } });
-  });
+  /* ---------- resumen y envio ---------- */
+  var BLOQUES = [bloqueContacto, bloquePerfil, bloqueSesion, bloqueAgenda];
 
-  var CAMPO_PASO = { nombre:0, telefono:1, correo:2, categoria:5, categoriaOtro:5, produccion:6, produccionOtro:6,
-                     entorno:7, entornoOtro:7, fechaTrigger:8, pais:9, ciudad:10, ciudadOtra:10 };
-  function terminar(){
+  function resumen(){
     for (var s = 1; s <= 4; s++){
       var p = revisarPaso(s);
-      if (p){
-        var i = p.el && CAMPO_PASO[p.el.id] !== undefined ? CAMPO_PASO[p.el.id] : 0;
-        bot([p.msg], function(){ paso = i; esperar(PREGUNTAS[i], null); });
-        return;
-      }
+      if (p){ bot([p.msg], BLOQUES[s - 1]); return; }
     }
     function elegido(sel, otro){ return $(sel).value === 'Otro' ? $(otro).value.trim() : $(sel).value; }
-    var lineas = [
+    var l = [
       'Nombre: ' + $('nombre').value.trim(),
       'Teléfono: ' + $('prefijoPais').value + ' ' + $('telefono').value.trim(),
-      'Correo: ' + $('correo').value.trim()
+      'Correo: ' + $('correo').value.trim(),
+      'Representa: ' + elegido('categoria', 'categoriaOtro')
     ];
-    if ($('marca').value.trim()) lineas.push('Marca: ' + $('marca').value.trim());
-    if ($('redes').value.trim()) lineas.push('Redes: ' + $('redes').value.trim());
-    lineas.push('Categoría: ' + elegido('categoria', 'categoriaOtro'),
-                'Producción: ' + elegido('produccion', 'produccionOtro'),
-                'Entorno: ' + elegido('entorno', 'entornoOtro'),
-                'Fecha estimada: ' + $('fechaValor').textContent,
-                'Ubicación: ' + valorCiudad() + ', ' + $('pais').value);
-    if ($('lugar').value.trim()) lineas.push('Lugar: ' + $('lugar').value.trim());
-    bot(['¡Listo, ' + primerNombre() + '! Este es el resumen de tu solicitud:',
-         lineas.join('\n'),
-         'Pulsa “Enviar por WhatsApp” para mandármelo y coordinamos los detalles.'], function(){
-      modo('fin');
-      chip('Empezar de nuevo', function(){ preguntar(0); }, true);
+    if ($('marca').value.trim()) l.push(($('categoria').value === 'Empresa' ? 'Empresa: ' : 'Marca: ') + $('marca').value.trim());
+    if ($('redes').value.trim()) l.push('Redes: ' + $('redes').value.trim());
+    l.push('Producción: ' + elegido('produccion', 'produccionOtro'),
+           'Entorno: ' + elegido('entorno', 'entornoOtro'),
+           'Fecha: ' + $('fechaValor').textContent,
+           'Ubicación: ' + valorCiudad() + ', ' + $('pais').value);
+    if ($('lugar').value.trim()) l.push('Lugar: ' + $('lugar').value.trim());
+    var nombre = $('nombre').value.trim().split(/\s+/)[0];
+    bot(['¡Listo, ' + nombre + '! Revisa tu solicitud:', l.join('\n'), 'Si todo está bien, envíamelo por WhatsApp.'], function(){
+      fin.hidden = false;
     });
   }
 
@@ -1791,7 +1895,16 @@
   $('waFinish').addEventListener('click', function(){
     $('briefForm').dispatchEvent(new Event('submit', { cancelable:true, bubbles:true }));
   });
+  /* empezar de nuevo: los campos ya escritos se mantienen para corregir rapido */
+  $('waRestart').addEventListener('click', function(){
+    fin.hidden = true;
+    lista.innerHTML = '';
+    tipeo = null;
+    alElegirFecha = null;
+    bloqueContacto();
+  });
 
+  /* ---------- abrir y cerrar ---------- */
   /* En iPhone el teclado tapa la parte de abajo: el chat se ajusta al alto visible */
   function ajustar(){
     var vv = window.visualViewport;
@@ -1808,7 +1921,7 @@
     ajustar();
     chat.hidden = false;
     document.documentElement.classList.add('wa-abierto');
-    if (!iniciado){ iniciado = true; preguntar(0); }
+    if (!iniciado){ iniciado = true; bloqueContacto(); }
   }
   function cerrarChat(){
     chat.hidden = true;
