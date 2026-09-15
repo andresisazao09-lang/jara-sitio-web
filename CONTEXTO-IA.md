@@ -14,7 +14,7 @@ repositorio para entenderlo.
 | Qué | Dónde |
 |---|---|
 | Carpeta de trabajo | `C:\Users\ANDRES ISAZA\Downloads\JARA\SITIO WEB` |
-| Landing (portada + encuesta a WhatsApp) | `index.html` |
+| Landing (cabecera + portada con 2 botones + pie; chat de cotización) | `index.html` |
 | Portafolio (4 colecciones) | `portafolio.html` |
 | Fotos del sitio (~259 archivos, 36 MB) | `img/` |
 | Documentación del sitio | `LEEME.txt`, `README.md` |
@@ -54,6 +54,10 @@ app móvil de GitHub, y la web publicada se actualiza sola 1–2 minutos despué
   `@media (min-width:761px)` = escritorio.
 - **El encabezado (`.top-bar`) debe ser IDÉNTICO en los dos archivos**: un estilo
   para escritorio y otro para móvil. Si tocas uno, toca el otro igual.
+- **Landing (16-09-2026):** solo `.top-bar` → `.hero` (logo + botones "Cotiza tu sesión
+  fotográfica" y "Ver portafolio") → `footer`, más el botón flotante de WhatsApp y el de
+  paleta. La sección de abajo ("EMPECEMOS", 2 fotos, botón verde) se quitó; la parte de
+  abajo se hará más adelante.
 - Estructura del portafolio, en orden:
   `.top-bar` → `.p-hero` → `.idx` (colecciones) → `.nav-rail` (barra de categorías)
   → 4 × `.col-section` → `.p-cta` → `footer` → `.to-top` → `.wa-fab` → `.lb` (visor)
@@ -68,7 +72,7 @@ app móvil de GitHub, y la web publicada se actualiza sola 1–2 minutos despué
 - **Visor de fotos (`.lb`):** una sola `<img id="lbImg">` que cambia de `src`.
   Se navega con flechas, teclado y deslizando el dedo.
 
-- **Cotización = chat "Agente de Jara" (16-09-2026)** en `index.html`: ventana estilo WhatsApp
+- **Cotización = chat "Agente de Jara"** en `index.html`: ventana estilo WhatsApp
   (`#waChat`) en **4 bloques**, cada uno una tarjeta con sus campos: 1) contacto (nombre
   simple, teléfono, correo); 2) ¿a quién representas? (Persona natural / Empresa / Marca
   personal / Influencer o creador / Otro; según la respuesta cambian los campos: persona
@@ -76,13 +80,18 @@ app móvil de GitHub, y la web publicada se actualiza sola 1–2 minutos despué
   que va al mensaje como "Ocasión"); 3) sesión (tipo de producción + entorno); 4) agenda
   (fecha, país, ciudad, lugar). Saludo: "Te haré unas preguntas rápidas…" (le gustó).
   Foto de perfil: logo "Jara" completo, pequeño (no recortar). Fondo del chat: dibujos
-  propios estilo WhatsApp (SVG), no la imagen de WhatsApp (es de Meta).
-  El mensaje de WhatsApp lleva los títulos en negrita (`*Título:*`). Se abre con el
-  botón del hero, el botón verde de la sección "Empecemos", el botón flotante `.wa-fab` y al
-  llegar con `index.html#form` (enlaces del portafolio). **El `<form id="briefForm">` sigue en
-  la página oculto (`hidden`)**: el chat guarda cada respuesta en sus campos y el botón final
-  "Enviar por WhatsApp" dispara su `submit`, que arma el mensaje y abre `wa.me`. No borres el
-  formulario ni sus selectores (país, ciudad, prefijo, calendario): el chat los usa.
+  propios estilo WhatsApp (SVG), no la imagen de WhatsApp (es de Meta). Verde del chat:
+  `#25D366` (el del icono de WhatsApp). El mensaje de WhatsApp lleva los títulos en
+  negrita (`*Título:*`).
+- **El chat solo se abre al pulsar un botón** (nunca solo al abrir el link): botón del hero,
+  botón flotante `.wa-fab` y botones "Cotiza" del portafolio. Estos llevan
+  `href="index.html" data-abrir-chat` y dejan un aviso de una vez en `sessionStorage`
+  (`jara-abrir-chat`) que la portada consume. No volver a usar `index.html#form`.
+  Al volver con "atrás" el chat se cierra.
+- **El `<form id="briefForm">` sigue en la página, oculto (`<div hidden>`)**: el chat guarda
+  cada respuesta en sus campos y el botón final "Enviar por WhatsApp" dispara su `submit`,
+  que arma el mensaje y abre `wa.me`. No borres el formulario ni sus selectores (país,
+  ciudad, prefijo, calendario): el chat los usa.
 
 ## 5. Limitaciones del entorno (esto te ahorra tiempo)
 
@@ -119,25 +128,25 @@ app móvil de GitHub, y la web publicada se actualiza sola 1–2 minutos despué
    no un emoji. Los emoji de bandera no se dibujan en Windows. Las 8 estrellas
    forman un arco **hacia arriba** (∩). Hace de separador:
    `Maluma [bandera] 2024`, sin puntos.
-7. **Botón flotante de WhatsApp** (`.wa-fab`) con el logo oficial, lleva a
-   `index.html#form`. La landing recoloca el salto al terminar de cargar las fotos.
+7. **Botón flotante de WhatsApp** (`.wa-fab`): logo oficial (bocadillo verde en degradado
+   con borde blanco y sombra), sin círculo verde de fondo. En los dos archivos.
+8. **Logo de TikTok** (cabecera y pie, los dos archivos): SVG redondo incrustado en base64
+   (círculo negro + nota blanca con sombras cian/rosa). No usar el PNG cuadrado.
+9. **Barras de Safari:** Safari las tiñe con el fondo de `html`/`body`. En los dos archivos
+   `html` es `#111110` (blanco en Blanco total), `body` transparente y el fondo va en
+   `body::before`. No lo cambies.
+10. **Portada del portafolio:** el fundido hacia el fondo es `.p-hero::after` (curva suave, sin línea).
 
 ## 7. Cosas que ya probamos y NO quiero repetir
 
-- ✅ **Paletas de muestra para el cliente** (reactivadas el 15-09-2026, solo en
-  `portafolio.html`): al entrar pregunta "¿Cómo prefieres verlo?" con 3 opciones —
-  **Oscuro** (predeterminado), **Beige** (870 V MADERA) y **Blanco** (cabecera oscura
-  de siempre + fondo blanco) y **Blanco total** (`data-theme="total"`: cabecera, barra
-  de categorías y fondo en blanco, logo invertido a negro, barra de Safari blanca). **Modo Transparente eliminado (16-09-2026)**, no volver a ponerlo.
-  Icono de WhatsApp flotante: logo oficial (bocadillo verde en degradado con borde blanco
-  grueso y sombra), sin círculo verde de fondo.
-  **Beige quitado de la pregunta y del botón (16-09-2026)**; su CSS `[data-theme="light"]` sigue en el archivo.
-  Nombres visibles: **Oscuro, Blanco/Negro, Blanco total, Transparente**.
-  Logo de TikTok (cabecera y pie, los dos archivos): SVG redondo oficial incrustado en base64
-  (círculo negro + nota blanca con sombras cian/rosa). No usar el PNG cuadrado. Se recuerda en el navegador (`localStorage` `jara-paleta`)
-  y se cambia con el botón redondo **encima del de WhatsApp**, del mismo tamaño.
-  Safari tiñe sus barras con el fondo de `html`/`body`: en **los dos archivos** `html` es `#111110`, `body` transparente y el fondo va en `body::before`. No lo cambies.
-  El fundido de la portada del portafolio hacia el fondo es `.p-hero::after` (curva suave, sin línea).
+- ✅ **Paletas** en **las dos páginas y sincronizadas** (misma elección en portada y
+  portafolio: `localStorage` `jara-paleta`, se repasa con los eventos `storage` y
+  `pageshow`): **Oscuro** (predeterminado), **Blanco/Negro** (fondo blanco, cabecera
+  oscura) y **Blanco total** (`data-theme="total"`: todo blanco, logo invertido a negro).
+  Se cambian con el botón redondo **encima del de WhatsApp**, del mismo tamaño. En la
+  portada la zona de fotos conserva sus colores; la cabecera y el pie cambian.
+- ❌ **Pregunta "¿Cómo prefieres verlo?"** al entrar → quitada dos veces (última 16-09-2026).
+- ❌ **Paleta Beige** y **modo Transparente** (cabecera sobre las fotos) → quitados.
 - ❌ **Menú desplegable de subcategorías en la barra de categorías** (al pasar el
   cursor o al tocar) → no me gustó, se revirtió.
 - ✅ **Los títulos grandes de cada categoría** (CONCIERTOS, RETRATOS…) **se quedan.**
@@ -145,6 +154,10 @@ app móvil de GitHub, y la web publicada se actualiza sola 1–2 minutos despué
 
 ## 8. Pendientes / a tener en cuenta
 
+- **Botón verde "Cotiza tu sesión por WhatsApp" guardado** para usarlo en otro sitio si lo
+  pido: su CSS (`.chat-cta`, `.chat-cta-btn`) sigue en `index.html`; el HTML está en el
+  commit `f0c8171` (`<div class="chat-cta">`). Abre el chat con `abrirChat()`.
+- La parte de abajo de la portada (antes "EMPECEMOS") está pendiente de rehacer.
 - El número de WhatsApp de la encuesta está en `index.html`, variable
   `WHATSAPP_NUMBER = "584129071347"`. Falta que yo lo confirme.
 - `portafolio-beige2.html` ya no sirve (era la prueba del modo claro). Se puede borrar.

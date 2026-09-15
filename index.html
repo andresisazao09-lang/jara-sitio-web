@@ -572,7 +572,7 @@
     text-align:left;color:#111b21;text-transform:none;letter-spacing:0;
   }
   .wa-card button,.wa-card input{font-family:inherit;}
-  .wa-head{display:flex;align-items:center;gap:11px;padding:12px 8px 12px 14px;background:#075E54;color:#fff;flex-shrink:0;}
+  .wa-head{display:flex;align-items:center;gap:11px;padding:12px 8px 12px 14px;background:#25D366;color:#fff;flex-shrink:0;}
   .wa-avatar{width:44px;height:44px;border-radius:50%;background:#111110;display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0;}
   /* el logo "Jara" completo aunque se vea pequeno; el trazo se engrosa un poco para que se lea */
   .wa-avatar img{width:38px;max-width:none;height:auto;display:block;filter:drop-shadow(0 0 .5px #fff) drop-shadow(0 0 .5px #fff);}
@@ -621,7 +621,7 @@
     border:1px solid #d1d7db;border-radius:10px;background:#fff;color:#111b21;box-shadow:none;outline:none;
     padding:0 12px;font-size:16px;text-align:left;text-transform:none;letter-spacing:0;
   }
-  .wa-card .wa-f input:focus{border-color:#00a884;}
+  .wa-card .wa-f input:focus{border-color:#25D366;}
   .wa-card .wa-f input::placeholder{color:#8696a0;opacity:1;text-transform:none;}
   .wa-card .wa-f input:disabled{background:#f5f6f6;color:#54656f;}
   .wa-f-row{display:flex;gap:6px;}
@@ -636,13 +636,13 @@
   .wa-f-btn::after{content:"\203A";margin-left:8px;color:#8696a0;font-size:20px;line-height:1;}
   .wa-f-chips{display:flex;flex-wrap:wrap;gap:6px;border:1px solid transparent;border-radius:12px;}
   .wa-chip{
-    border:1px solid #00a884;background:#fff;color:#008069;border-radius:18px;
+    border:1px solid #25D366;background:#fff;color:#128c3e;border-radius:18px;
     padding:7px 12px;font-size:13.5px;line-height:1.25;cursor:pointer;text-align:center;
   }
-  .wa-chip.is-on{background:#00a884;border-color:#00a884;color:#fff;}
+  .wa-chip.is-on{background:#25D366;border-color:#25D366;color:#fff;}
   .wa-card .is-bad{border-color:#e5484d !important;box-shadow:0 0 0 2px rgba(229,72,77,0.15);}
   .wa-f-err{margin:0 0 9px;color:#d93025;font-size:13px;line-height:1.3;}
-  .wa-f-ok{width:100%;height:44px;border:0;border-radius:22px;background:#075E54;color:#fff;font-size:15px;font-weight:600;cursor:pointer;}
+  .wa-f-ok{width:100%;height:44px;border:0;border-radius:22px;background:#25D366;color:#fff;font-size:15px;font-weight:600;cursor:pointer;}
   .wa-form.is-done{opacity:.8;}
   .wa-form.is-done .wa-f-ok,.wa-form.is-done .wa-f-err{display:none;}
 
@@ -676,7 +676,76 @@
   .wa-fab:active{transform:scale(.96);}
   @media (max-width:760px){ .wa-fab{width:48px;height:48px;right:14px;bottom:14px;} }
   html.wa-abierto .wa-fab{display:none;}
+
+  /* ============================================================
+     PALETAS, las mismas del portafolio y sincronizadas con el:
+     Oscuro (predeterminado), Blanco/Negro y Blanco total.
+     ============================================================ */
+  [data-theme="white"],[data-theme="total"]{
+    --bg:#ffffff;
+    --text:#1c1c1a;
+    --text-muted:#6b675f;
+    --border:rgba(28,28,26,0.14);
+    --border-strong:rgba(28,28,26,0.34);
+  }
+  [data-theme="total"]{--bg-deep:#ffffff;}
+  /* la portada va sobre fotos: conserva sus colores claros en todos los modos */
+  [data-theme] .hero{
+    --bg-deep:#111110;--text:#f3f1ea;--text-muted:#948f84;
+    --border:rgba(243,241,234,0.14);--border-strong:rgba(243,241,234,0.32);
+  }
+  /* el calendario y las listas de seleccion siguen oscuros */
+  [data-theme] .dp-backdrop,[data-theme] .sheet-backdrop{
+    --bg:#1c1c1a;--bg-deep:#111110;--text:#f3f1ea;--text-muted:#948f84;
+    --border:rgba(243,241,234,0.14);--border-strong:rgba(243,241,234,0.32);
+  }
+  /* Blanco/Negro: la cabecera sigue oscura */
+  [data-theme="white"] .top-bar{border-bottom-color:rgba(243,241,234,0.14);}
+  [data-theme="white"] .top-bar-role{color:#f3f1ea;}
+  [data-theme="white"] .top-bar-loc{color:rgba(243,241,234,0.60);}
+  /* Blanco total: cabecera blanca, logo en negro y barra de Safari blanca */
+  html[data-theme="total"]{background:#ffffff;}
+  [data-theme="total"] .top-bar{background:#ffffff;border-bottom-color:var(--border);}
+  [data-theme="total"] .top-bar-logo{filter:invert(1);}
+
+  /* boton para cambiar de paleta: encima del de WhatsApp y del mismo tamano */
+  .theme-toggle{
+    position:fixed;right:16px;bottom:80px;z-index:56;
+    width:52px;height:52px;border-radius:50%;
+    border:1px solid var(--border-strong);background:rgba(17,17,16,0.92);
+    color:var(--text);cursor:pointer;
+    display:flex;align-items:center;justify-content:center;
+  }
+  [data-theme] .theme-toggle{background:var(--bg);}
+  .theme-toggle-ico{
+    width:21px;height:21px;border-radius:50%;
+    border:1.5px solid currentColor;
+    background:linear-gradient(90deg,currentColor 0 50%,transparent 50% 100%);
+  }
+  .theme-label{
+    position:fixed;right:80px;bottom:94px;z-index:56;
+    padding:5px 12px;border-radius:999px;
+    background:rgba(17,17,16,0.92);color:#f3f1ea;
+    font-family:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    font-size:10.5px;letter-spacing:0.16em;text-transform:uppercase;
+    opacity:0;pointer-events:none;transition:opacity .25s ease;
+  }
+  .theme-label.is-on{opacity:1;}
+  html.wa-abierto .theme-toggle,html.wa-abierto .theme-label{display:none;}
+  @media (max-width:760px){
+    .theme-toggle{width:48px;height:48px;right:14px;bottom:72px;}
+    .theme-label{right:72px;bottom:84px;}
+  }
 </style>
+<script>
+  /* Se aplica la paleta guardada antes de pintar, para que no haya un
+     parpadeo de color al abrir. Es la misma en la portada y el portafolio. */
+  (function(){
+    var t = null;
+    try { t = localStorage.getItem('jara-paleta'); } catch(e){}
+    if (t === 'white' || t === 'total') document.documentElement.setAttribute('data-theme', t);
+  })();
+</script>
 </head>
 <body>
 <header class="top-bar">
@@ -714,25 +783,8 @@
   </div>
 </section>
 
-<section class="lead-section" id="form">
-  <div class="lead-bg" aria-hidden="true">
-    <img style="object-position:50% 35%" src="img/landing/form-1.jpg" alt="" loading="lazy" decoding="async">
-    <img style="object-position:50% 28%" src="img/landing/form-2.jpg" alt="" loading="lazy" decoding="async">
-  </div>
-  <div class="lead-bg-overlay"></div>
-  <div class="section-head">
-    <h2 class="section-title section-title-xl">EMPECEMOS</h2>
-    <p class="section-sub">Chatea con el Agente de Jara: te hará unas preguntas rápidas y al final podrás enviarme tus datos por WhatsApp para coordinar los detalles.</p>
-  </div>
-
-  <div class="chat-cta">
-    <button type="button" class="chat-cta-btn" id="abrirChatBtn">
-      <svg viewBox="0 0 24 24" fill="#fff" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
-      Cotiza tu sesión por WhatsApp
-    </button>
-  </div>
-
-  <!-- El formulario sigue aqui, oculto: el chat guarda las respuestas en sus campos y usa su envio. -->
+<!-- Formulario original, oculto: el chat "Agente de Jara" guarda las respuestas en sus campos y usa su envio. No borrar. -->
+<div hidden>
   <form id="briefForm" novalidate hidden>
     <div class="step-label-wrap"><span class="step-badge" id="stepLabel">Paso 1 de 4</span></div>
     <div class="progress" aria-hidden="true"><span id="progressBar"></span></div>
@@ -879,7 +931,7 @@
       </button>
     </div>
   </form>
-</section>
+</div>
 
 <footer>
   <nav class="icon-row" aria-label="Redes sociales">
@@ -901,6 +953,11 @@
     <path fill="#fff" d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347Z"/>
   </svg>
 </button>
+
+<button type="button" class="theme-toggle" id="themeToggle" aria-label="Cambiar paleta de colores" title="Cambiar paleta de colores">
+  <span class="theme-toggle-ico" aria-hidden="true"></span>
+</button>
+<span class="theme-label" id="themeLabel" aria-live="polite"></span>
 
 <div class="wa-chat" id="waChat" hidden>
   <div class="wa-card" role="dialog" aria-modal="true" aria-label="Chat con el Agente de Jara">
@@ -998,17 +1055,6 @@
     medir();
     window.addEventListener('resize', medir);
     window.addEventListener('load', medir);
-  })();
-
-  /* Si se llega desde el boton de WhatsApp del portafolio (index.html#form),
-     se recoloca el salto cuando ya han cargado las fotos: si no, el navegador
-     salta con las medidas de antes y el formulario queda descuadrado. */
-  (function(){
-    if (location.hash !== '#form') return;
-    window.addEventListener('load', function(){
-      var f = document.getElementById('form');
-      if (f) f.scrollIntoView({ block: 'start' });
-    });
   })();
 
   document.getElementById('scrollToForm').addEventListener('click', function(){
@@ -1700,6 +1746,7 @@
     bot(['¡Hola! Soy el Agente de Jara.', 'Te haré unas preguntas rápidas para preparar tu cotización. Al final podrás enviarme tus datos por WhatsApp.', 'Empecemos con tus datos de contacto:'], function(){
       var c = tarjeta();
       var nombre = texto(c, 'Nombre', 'text', 'Tu nombre', $('nombre').value);
+      nombre.setAttribute('autocapitalize', 'words');
 
       var ft = fila(c, 'Teléfono'), r = el('div', 'wa-f-row');
       var pb = el('button', 'wa-f-pick', prefIso + ' ' + $('prefijoPais').value);
@@ -1712,6 +1759,8 @@
 
       pie(c, function(){
         var n = nombre.value.trim(), t = tel.value.trim(), m = correo.value.trim(), d = t.replace(/\D/g, '');
+        /* nombre con mayuscula inicial en cada palabra: "jara" pasa a "Jara" */
+        n = n.replace(/(^|\s)(\S)/g, function(x, a, b){ return a + b.toUpperCase(); });
         if (!n) return fallo(c, 'Escribe tu nombre.', nombre);
         if (!d) return fallo(c, 'Escribe tu teléfono.', tel);
         if (d.length < 7) return fallo(c, 'Ese número parece incompleto.', tel);
@@ -1968,11 +2017,51 @@
   document.addEventListener('keydown', function(e){
     if (e.key === 'Escape' && !chat.hidden && $('sheetBackdrop').hidden && $('dpBackdrop').hidden) cerrarChat();
   });
-  $('abrirChatBtn').addEventListener('click', abrirChat);
   $('waFab').addEventListener('click', abrirChat);
 
-  /* desde el portafolio se llega con index.html#form: se abre el chat directamente */
-  if (location.hash === '#form' || location.hash === '#cotizar') abrirChat();
+  /* El chat solo se abre al pulsar un boton. Desde el portafolio, su boton deja
+     un aviso de una sola vez en esta pestana (sessionStorage) y aqui se consume. */
+  try {
+    if (sessionStorage.getItem('jara-abrir-chat')){
+      sessionStorage.removeItem('jara-abrir-chat');
+      abrirChat();
+    }
+  } catch(e){}
+  /* al volver con "atras" (por ejemplo desde WhatsApp) el chat no se queda abierto */
+  window.addEventListener('pageshow', function(e){ if (e.persisted) cerrarChat(); });
+})();
+</script>
+<script>
+/* Paletas: Oscuro (predeterminado), Blanco/Negro y Blanco total. Es la misma
+   en la portada y en el portafolio: se guarda en este navegador y se cambia
+   con el boton redondo que esta encima del de WhatsApp. */
+(function(){
+  "use strict";
+  var CLAVE   = 'jara-paleta';
+  var ORDEN   = ['dark', 'white', 'total'];
+  var NOMBRES = { dark:'Oscuro', white:'Blanco/Negro', total:'Blanco total' };
+  var raiz  = document.documentElement;
+  var label = document.getElementById('themeLabel');
+  var timer;
+  function poner(t){
+    if (t === 'white' || t === 'total') raiz.setAttribute('data-theme', t);
+    else raiz.removeAttribute('data-theme');
+  }
+  function guardada(){ try { return localStorage.getItem(CLAVE); } catch(e){ return null; } }
+  var tg = document.getElementById('themeToggle');
+  if (tg) tg.addEventListener('click', function(){
+    var t = ORDEN[(ORDEN.indexOf(raiz.getAttribute('data-theme') || 'dark') + 1) % ORDEN.length];
+    poner(t);
+    try { localStorage.setItem(CLAVE, t); } catch(e){}
+    label.textContent = NOMBRES[t];
+    label.classList.add('is-on');
+    clearTimeout(timer);
+    timer = setTimeout(function(){ label.classList.remove('is-on'); }, 1600);
+  });
+  /* si la otra pagina esta abierta en otra pestana, cambia a la vez */
+  window.addEventListener('storage', function(e){ if (e.key === CLAVE) poner(e.newValue); });
+  /* al volver con "atras" el navegador muestra la pagina guardada: se repasa la paleta */
+  window.addEventListener('pageshow', function(){ poner(guardada()); });
 })();
 </script>
 </body>
