@@ -81,8 +81,11 @@ app móvil de GitHub, y la web publicada se actualiza sola 1–2 minutos despué
   (fecha, país, ciudad, lugar). Saludo: "Te haré unas preguntas rápidas…" (le gustó).
   Foto de perfil: logo "Jara" completo, pequeño (no recortar). Fondo del chat: dibujos
   propios estilo WhatsApp (SVG), no la imagen de WhatsApp (es de Meta). Verde del chat:
-  `#25D366` (el del icono de WhatsApp). El mensaje de WhatsApp lleva los títulos en
-  negrita (`*Título:*`).
+  `#16985D` (punto medio entre el verde oscuro del principio y el del icono); el botón
+  "Enviar por WhatsApp" y el flotante sí llevan el verde oficial `#25D366`. El mensaje de
+  WhatsApp lleva los títulos en negrita (`*Título:*`).
+  Cada tarjeta es un `<form>` de verdad con `autocomplete` (`name`, `tel-national`, `email`)
+  para que Safari y Chrome puedan autorrellenar; la tecla Intro equivale a "Continuar".
 - **El chat solo se abre al pulsar un botón** (nunca solo al abrir el link): botón del hero,
   botón flotante `.wa-fab` y botones "Cotiza" del portafolio. Estos llevan
   `href="index.html" data-abrir-chat` y dejan un aviso de una vez en `sessionStorage`
@@ -143,8 +146,11 @@ app móvil de GitHub, y la web publicada se actualiza sola 1–2 minutos despué
   portafolio: `localStorage` `jara-paleta`, se repasa con los eventos `storage` y
   `pageshow`): **Oscuro** (predeterminado), **Blanco/Negro** (fondo blanco, cabecera
   oscura) y **Blanco total** (`data-theme="total"`: todo blanco, logo invertido a negro).
-  Se cambian con el botón redondo **encima del de WhatsApp**, del mismo tamaño. En la
-  portada la zona de fotos conserva sus colores; la cabecera y el pie cambian.
+  **Predeterminado temporal: Blanco total** mientras el cliente prueba (cuando no hay nada
+  guardado). En la portada la zona de fotos conserva sus colores; la cabecera y el pie
+  cambian. El calendario y las listas de país/ciudad también siguen la paleta.
+  Botones flotantes en las dos páginas, en la parte alta (`62svh`): **WhatsApp arriba y el
+  de paleta justo debajo**, del mismo tamaño.
 - ❌ **Pregunta "¿Cómo prefieres verlo?"** al entrar → quitada dos veces (última 16-09-2026).
 - ❌ **Paleta Beige** y **modo Transparente** (cabecera sobre las fotos) → quitados.
 - ❌ **Menú desplegable de subcategorías en la barra de categorías** (al pasar el
@@ -154,9 +160,10 @@ app móvil de GitHub, y la web publicada se actualiza sola 1–2 minutos despué
 
 ## 8. Pendientes / a tener en cuenta
 
-- **Botón verde "Cotiza tu sesión por WhatsApp" guardado** para usarlo en otro sitio si lo
-  pido: su CSS (`.chat-cta`, `.chat-cta-btn`) sigue en `index.html`; el HTML está en el
-  commit `f0c8171` (`<div class="chat-cta">`). Abre el chat con `abrirChat()`.
+- **Botón verde "Cotiza tu sesión por WhatsApp"**: ya está puesto en el `.p-cta` del
+  portafolio (sustituyó a "¿Trabajamos juntos?" y a "Cotiza Ya Su Sesión"; queda ese botón
+  y "Página principal"). Su CSS `.chat-cta-btn` está en los dos archivos y en la portada
+  sigue guardado por si lo pido en otro sitio.
 - La parte de abajo de la portada (antes "EMPECEMOS") está pendiente de rehacer.
 - El número de WhatsApp de la encuesta está en `index.html`, variable
   `WHATSAPP_NUMBER = "584129071347"`. Falta que yo lo confirme.
