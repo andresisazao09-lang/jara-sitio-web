@@ -68,6 +68,14 @@ app móvil de GitHub, y la web publicada se actualiza sola 1–2 minutos despué
 - **Visor de fotos (`.lb`):** una sola `<img id="lbImg">` que cambia de `src`.
   Se navega con flechas, teclado y deslizando el dedo.
 
+- **Cotización = chat "Jara agente" (16-09-2026)** en `index.html`: ventana estilo WhatsApp
+  (`#waChat`) que hace las mismas preguntas del formulario, en el mismo orden. Se abre con el
+  botón del hero, el botón verde de la sección "Empecemos", el botón flotante `.wa-fab` y al
+  llegar con `index.html#form` (enlaces del portafolio). **El `<form id="briefForm">` sigue en
+  la página oculto (`hidden`)**: el chat guarda cada respuesta en sus campos y el botón final
+  "Enviar por WhatsApp" dispara su `submit`, que arma el mensaje y abre `wa.me`. No borres el
+  formulario ni sus selectores (país, ciudad, prefijo, calendario): el chat los usa.
+
 ## 5. Limitaciones del entorno (esto te ahorra tiempo)
 
 - Windows 11. Hay **PowerShell** y **Git Bash**. **No hay Python ni Node/npm.**

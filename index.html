@@ -553,6 +553,111 @@
     text-transform:uppercase;
     letter-spacing:0.01em;
   }
+
+  /* ============================================================
+     CHAT "JARA AGENTE": la encuesta como conversacion de WhatsApp
+     ============================================================ */
+  html.wa-abierto, html.wa-abierto body{overflow:hidden;}
+  .wa-chat{
+    position:fixed;left:0;right:0;top:var(--vvt,0px);height:var(--vvh,100%);z-index:900;
+    display:flex;align-items:center;justify-content:center;
+    padding:12px;background:rgba(8,8,7,0.55);
+  }
+  .wa-card{
+    position:relative;display:flex;flex-direction:column;
+    width:100%;max-width:420px;height:100%;max-height:720px;
+    border-radius:22px;overflow:hidden;background:#efeae2;
+    box-shadow:0 24px 60px rgba(0,0,0,0.5);
+    font-family:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    text-align:left;color:#111b21;text-transform:none;letter-spacing:0;
+  }
+  .wa-card button,.wa-card input{font-family:inherit;}
+  .wa-head{display:flex;align-items:center;gap:11px;padding:12px 8px 12px 14px;background:#075E54;color:#fff;flex-shrink:0;}
+  .wa-avatar{width:42px;height:42px;border-radius:50%;background:#111110;display:flex;align-items:center;justify-content:flex-start;overflow:hidden;flex-shrink:0;}
+  /* del logo "Jara" solo cabe la J: se recorta y se engrosa un poco el trazo */
+  .wa-avatar img{width:auto;max-width:none;height:34px;margin-left:5px;display:block;filter:drop-shadow(0 0 .6px #fff) drop-shadow(0 0 .6px #fff);}
+  .wa-who{flex:1;min-width:0;display:flex;flex-direction:column;line-height:1.2;}
+  .wa-who b{font-size:16.5px;font-weight:600;}
+  .wa-who i{font-style:normal;font-size:12.5px;opacity:.85;margin-top:2px;}
+  .wa-close{width:42px;height:42px;border:0;background:none;color:#fff;font-size:30px;line-height:1;cursor:pointer;border-radius:50%;}
+  .wa-body{
+    flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;
+    display:flex;flex-direction:column-reverse;
+    background-color:#efeae2;
+    background-image:radial-gradient(rgba(17,27,33,0.07) 1px, transparent 1.4px);
+    background-size:16px 16px;
+  }
+  .wa-list{display:flex;flex-direction:column;padding:14px 14px 10px;}
+  .wa-msg{
+    position:relative;max-width:82%;margin-top:10px;padding:7px 9px 7px 10px;border-radius:9px;
+    font-size:15px;line-height:1.38;box-shadow:0 1px 0.5px rgba(11,20,26,0.13);
+    white-space:pre-line;overflow-wrap:anywhere;animation:waIn .22s ease;
+  }
+  .wa-msg.wa-cont{margin-top:3px;}
+  .wa-in{align-self:flex-start;background:#fff;border-top-left-radius:0;}
+  .wa-out{align-self:flex-end;background:#d9fdd3;border-top-right-radius:0;}
+  .wa-in::before,.wa-out::before{content:"";position:absolute;top:0;width:8px;height:12px;}
+  .wa-in::before{left:-8px;background:#fff;clip-path:polygon(0 0,100% 0,100% 100%);}
+  .wa-out::before{right:-8px;background:#d9fdd3;clip-path:polygon(0 0,100% 0,0 100%);}
+  .wa-cont.wa-in{border-top-left-radius:9px;}
+  .wa-cont.wa-out{border-top-right-radius:9px;}
+  .wa-cont::before{display:none;}
+  .wa-meta{float:right;margin:7px 0 -5px 12px;font-size:11px;color:#667781;line-height:1;white-space:nowrap;}
+  .wa-check{margin-left:4px;color:#53bdeb;letter-spacing:-3px;}
+  .wa-typing{display:flex;gap:4px;align-items:center;padding:13px 14px;}
+  .wa-typing span{width:7px;height:7px;border-radius:50%;background:#8696a0;animation:waDot 1.2s infinite ease-in-out;}
+  .wa-typing span:nth-child(2){animation-delay:.15s;}
+  .wa-typing span:nth-child(3){animation-delay:.3s;}
+  @keyframes waDot{0%,60%,100%{transform:translateY(0);opacity:.45;}30%{transform:translateY(-4px);opacity:1;}}
+  @keyframes waIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:none;}}
+  .wa-opts{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:7px;padding:4px 12px 10px;max-height:42%;overflow-y:auto;flex-shrink:0;}
+  .wa-opts:empty{display:none;}
+  .wa-chip{
+    border:1px solid #00a884;background:#fff;color:#008069;border-radius:18px;
+    padding:8px 14px;font-size:14px;line-height:1.25;cursor:pointer;text-align:center;
+    box-shadow:0 1px 0.5px rgba(11,20,26,0.1);
+  }
+  .wa-chip:active{background:#e7f8f2;}
+  .wa-chip-soft{border-color:#c5ced3;color:#54656f;}
+  .wa-bar{display:flex;align-items:center;gap:8px;padding:8px 10px 10px;background:#f0f2f5;flex-shrink:0;}
+  .wa-pref{flex-shrink:0;border:0;background:#fff;color:#111b21;border-radius:23px;height:46px;padding:0 12px;font-size:14px;cursor:pointer;}
+  .wa-input{flex:1;min-width:0;height:46px;border:0;border-radius:23px;background:#fff;padding:0 16px;font-size:16px;color:#111b21;outline:none;}
+  .wa-input:disabled{background:#e9edef;}
+  /* la pagina tiene estilos generales para campos: aqui se imponen los del chat */
+  .wa-card .wa-input{-webkit-appearance:none;appearance:none;margin:0;border:0;box-shadow:none;background:#fff;color:#111b21;text-align:left;text-transform:none;letter-spacing:0;padding:0 16px;height:46px;border-radius:23px;font-size:16px;}
+  .wa-card .wa-input:disabled{background:#e9edef;}
+  .wa-card .wa-input::placeholder{color:#8696a0;text-transform:none;opacity:1;}
+  .wa-send{flex-shrink:0;width:46px;height:46px;border-radius:50%;border:0;background:#075E54;display:flex;align-items:center;justify-content:center;cursor:pointer;}
+  .wa-send:disabled{opacity:.45;cursor:default;}
+  .wa-end{padding:10px 12px 12px;background:#f0f2f5;flex-shrink:0;}
+  .wa-finish{
+    width:100%;display:flex;align-items:center;justify-content:center;gap:10px;height:50px;
+    border:0;border-radius:25px;background:#25D366;color:#fff;font-size:15px;font-weight:600;cursor:pointer;
+  }
+  .wa-finish svg{width:22px;height:22px;}
+  @media (max-width:760px){ .wa-chat{padding:10px;} .wa-card{max-height:none;border-radius:18px;} }
+
+  /* boton de la seccion y boton flotante que abren el chat */
+  .chat-cta{position:relative;z-index:2;display:flex;justify-content:center;padding:0 6vw;}
+  .chat-cta-btn{
+    display:inline-flex;align-items:center;gap:12px;padding:17px 30px;border:0;border-radius:999px;
+    background:#25D366;color:#fff;cursor:pointer;
+    font-family:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    font-size:14px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;
+    box-shadow:0 10px 26px rgba(0,0,0,0.35);transition:transform .18s ease;
+  }
+  .chat-cta-btn svg{width:22px;height:22px;flex-shrink:0;}
+  @media (hover:hover) and (pointer:fine){ .chat-cta-btn:hover{transform:translateY(-2px);} }
+  .wa-fab{
+    position:fixed;right:16px;bottom:16px;z-index:56;
+    width:52px;height:52px;border:0;padding:0;background:none;cursor:pointer;
+    filter:drop-shadow(0 4px 10px rgba(0,0,0,0.35));transition:transform .18s ease;
+  }
+  .wa-fab svg{width:100%;height:100%;display:block;overflow:visible;}
+  @media (hover:hover) and (pointer:fine){ .wa-fab:hover{transform:scale(1.06);} }
+  .wa-fab:active{transform:scale(.96);}
+  @media (max-width:760px){ .wa-fab{width:48px;height:48px;right:14px;bottom:14px;} }
+  html.wa-abierto .wa-fab{display:none;}
 </style>
 </head>
 <body>
@@ -599,10 +704,18 @@
   <div class="lead-bg-overlay"></div>
   <div class="section-head">
     <h2 class="section-title section-title-xl">EMPECEMOS</h2>
-    <p class="section-sub">Al finalizar esta encuesta podrás enviarme estos datos por WhatsApp y así podremos coordinar los detalles.</p>
+    <p class="section-sub">Chatea con Jara agente: te hará unas preguntas rápidas y al final podrás enviarme tus datos por WhatsApp para coordinar los detalles.</p>
   </div>
 
-  <form id="briefForm" novalidate>
+  <div class="chat-cta">
+    <button type="button" class="chat-cta-btn" id="abrirChatBtn">
+      <svg viewBox="0 0 24 24" fill="#fff" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
+      Cotiza tu sesión por WhatsApp
+    </button>
+  </div>
+
+  <!-- El formulario sigue aqui, oculto: el chat guarda las respuestas en sus campos y usa su envio. -->
+  <form id="briefForm" novalidate hidden>
     <div class="step-label-wrap"><span class="step-badge" id="stepLabel">Paso 1 de 4</span></div>
     <div class="progress" aria-hidden="true"><span id="progressBar"></span></div>
 
@@ -759,6 +872,40 @@
   <p>Jara | Todos los derechos reservados | 2026</p>
 </footer>
 
+<button type="button" class="wa-fab" id="waFab" aria-label="Cotiza tu sesión por WhatsApp" title="Cotiza tu sesión">
+  <svg viewBox="-1.2 -1.2 26.4 26.4" aria-hidden="true">
+    <defs><linearGradient id="waG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#60D66A"/><stop offset="1" stop-color="#1FAF38"/></linearGradient></defs>
+    <path fill="#fff" stroke="#fff" stroke-width="1.2" stroke-linejoin="round" d="M20.464 3.488A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/>
+    <path fill="url(#waG)" d="M12.051 21.785h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884Z"/>
+    <path fill="#fff" d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347Z"/>
+  </svg>
+</button>
+
+<div class="wa-chat" id="waChat" hidden>
+  <div class="wa-card" role="dialog" aria-modal="true" aria-label="Chat con Jara agente">
+    <div class="wa-head">
+      <span class="wa-avatar"><img id="waAvatar" alt=""></span>
+      <span class="wa-who"><b>Jara agente</b><i id="waStatus">en línea</i></span>
+      <button type="button" class="wa-close" id="waClose" aria-label="Cerrar">&times;</button>
+    </div>
+    <div class="wa-body"><div class="wa-list" id="waMsgs" aria-live="polite"></div></div>
+    <div class="wa-opts" id="waOpts"></div>
+    <div class="wa-bar" id="waBar">
+      <button type="button" class="wa-pref" id="waPref" hidden>VE +58</button>
+      <input type="text" class="wa-input" id="waInput" placeholder="Escribe un mensaje" autocomplete="off" enterkeyhint="send">
+      <button type="button" class="wa-send" id="waSend" aria-label="Enviar">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="#fff" aria-hidden="true"><path d="M2.01 21 23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+      </button>
+    </div>
+    <div class="wa-end" id="waEnd" hidden>
+      <button type="button" class="wa-finish" id="waFinish">
+        <svg viewBox="0 0 24 24" fill="#fff" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
+        Enviar por WhatsApp
+      </button>
+    </div>
+  </div>
+</div>
+
 <div class="dp-backdrop" id="dpBackdrop" hidden>
   <div class="dp" role="dialog" aria-modal="true" aria-label="Selecciona fecha y hora">
     <div class="dp-head">
@@ -851,7 +998,7 @@
   })();
 
   document.getElementById('scrollToForm').addEventListener('click', function(){
-    document.getElementById('form').scrollIntoView({behavior:'smooth', block:'start'});
+    window.abrirChat();
   });
 
   const stepLabels = [
@@ -1351,5 +1498,334 @@
   showStep(1);
 </script>
 
+<script>
+/* ===== Chat "Jara agente" =====
+   La encuesta como conversacion de WhatsApp: hace las mismas preguntas y en el
+   mismo orden que el formulario, que sigue oculto en la pagina. Cada respuesta
+   se guarda en su campo y el boton final usa el mismo envio de siempre, asi el
+   mensaje que llega a WhatsApp sale igual que antes. */
+(function(){
+  "use strict";
+  function $(id){ return document.getElementById(id); }
+  var chat = $('waChat'), lista = $('waMsgs'), opts = $('waOpts'), bar = $('waBar'),
+      input = $('waInput'), send = $('waSend'), pref = $('waPref'),
+      estado = $('waStatus'), fin = $('waEnd');
+  var logo = document.querySelector('.top-bar-logo');
+  if (logo) $('waAvatar').src = logo.src;
+
+  var iniciado = false, paso = -1, esperando = null, tipeo = null, prefIso = 'VE';
+  var tactil = window.matchMedia && !window.matchMedia('(pointer:fine)').matches;
+
+  function dos(n){ return (n < 10 ? '0' : '') + n; }
+  function ahora(){ var d = new Date(); return dos(d.getHours()) + ':' + dos(d.getMinutes()); }
+  function primerNombre(){ return $('nombre').value.trim().split(/\s+/)[0] || ''; }
+
+  function burbuja(texto, mia){
+    var lado = mia ? 'wa-out' : 'wa-in';
+    var ultimo = lista.lastElementChild;
+    var b = document.createElement('div');
+    b.className = 'wa-msg ' + lado;
+    if (ultimo && ultimo.classList.contains(lado)) b.classList.add('wa-cont');
+    var t = document.createElement('span'); t.textContent = texto;
+    var m = document.createElement('span'); m.className = 'wa-meta'; m.textContent = ahora();
+    if (mia){ var c = document.createElement('span'); c.className = 'wa-check'; c.textContent = '✓✓'; m.appendChild(c); }
+    b.appendChild(t); b.appendChild(m);
+    lista.appendChild(b);
+  }
+
+  function escribiendo(si){
+    if (si && !tipeo){
+      tipeo = document.createElement('div');
+      tipeo.className = 'wa-msg wa-in wa-typing';
+      var ultimo = lista.lastElementChild;
+      if (ultimo && ultimo.classList.contains('wa-in')) tipeo.classList.add('wa-cont');
+      tipeo.innerHTML = '<span></span><span></span><span></span>';
+      lista.appendChild(tipeo);
+    } else if (!si && tipeo){ tipeo.remove(); tipeo = null; }
+    estado.textContent = si ? 'escribiendo…' : 'en línea';
+  }
+
+  /* el agente escribe sus mensajes uno a uno, con "escribiendo..." antes */
+  function bot(textos, luego){
+    var i = 0;
+    (function sig(){
+      if (i >= textos.length){ if (luego) luego(); return; }
+      var texto = textos[i++];
+      escribiendo(true);
+      setTimeout(function(){
+        escribiendo(false);
+        burbuja(texto, false);
+        setTimeout(sig, 260);
+      }, 520 + Math.min(900, texto.length * 14));
+    })();
+  }
+
+  /* barra de abajo segun lo que se esta preguntando */
+  function modo(tipo, q){
+    opts.innerHTML = '';
+    if (!tipo) return;
+    pref.hidden = tipo !== 'tel';
+    fin.hidden = tipo !== 'fin';
+    bar.hidden = tipo === 'fin';
+    var escribe = tipo === 'texto' || tipo === 'tel' || tipo === 'email' || tipo === 'ciudad';
+    input.disabled = !escribe;
+    send.disabled = !escribe;
+    input.type = tipo === 'email' ? 'email' : (tipo === 'tel' ? 'tel' : 'text');
+    input.inputMode = tipo === 'tel' ? 'numeric' : (tipo === 'email' ? 'email' : 'text');
+    input.placeholder = escribe ? ((q && q.ph) || 'Escribe un mensaje') : 'Elige una opción';
+    if (escribe && !tactil) input.focus();
+  }
+
+  function chip(texto, fn, suave){
+    var b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'wa-chip' + (suave ? ' wa-chip-soft' : '');
+    b.textContent = texto;
+    b.addEventListener('click', fn);
+    opts.appendChild(b);
+  }
+
+  function textoOk(msg){ return function(v){ return v ? null : msg; }; }
+
+  /* mismas preguntas y mismo orden que el formulario */
+  var PREGUNTAS = [
+    { tipo:'texto', ph:'Nombre completo', ok:textoOk('Escribe tu nombre completo.'),
+      guardar:function(v){ $('nombre').value = v; },
+      q:function(){ return ['¡Hola! Soy Jara agente.',
+        'Te haré unas preguntas rápidas para preparar tu cotización. Al final podrás enviarme tus datos por WhatsApp.',
+        'Empecemos con tus datos de contacto. ¿Cuál es tu nombre completo?']; } },
+    { tipo:'tel', ph:'412 1234567',
+      ok:function(v){ var d = v.replace(/\D/g, ''); if (!d) return 'Escribe tu número telefónico.'; if (d.length < 7) return 'Ese número parece incompleto.'; return null; },
+      guardar:function(v){ $('telefono').value = v; },
+      eco:function(v){ return $('prefijoPais').value + ' ' + v; },
+      q:function(){ return ['Mucho gusto, ' + primerNombre() + '. ¿Cuál es tu número de teléfono?']; } },
+    { tipo:'email', ph:'tu@correo.com',
+      ok:function(v){ if (!v) return 'Escribe tu correo electrónico.'; return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v) ? null : 'Revisa tu correo, parece tener un error.'; },
+      guardar:function(v){ $('correo').value = v; },
+      q:function(){ return ['¿Cuál es tu correo electrónico?']; } },
+    { tipo:'texto', ph:'Marca', opcional:true, campo:'marca',
+      q:function(){ return ['Ahora, sobre ti. ¿Tienes una marca? Si no, pulsa “Omitir”.']; } },
+    { tipo:'texto', ph:'@usuario o enlace', opcional:true, campo:'redes',
+      q:function(){ return ['¿Cuáles son tus redes? Tu perfil me ayuda a entender tu estilo.']; } },
+    { tipo:'opciones', select:'categoria', otro:'categoriaOtro', otroQ:'¿Cuál es tu categoría?',
+      q:function(){ return ['¿Qué categoría te describe mejor?']; } },
+    { tipo:'opciones', select:'produccion', otro:'produccionOtro', otroQ:'Cuéntame qué tipo de producción necesitas.',
+      q:function(){ return ['¿Qué tipo de producción deseas?']; } },
+    { tipo:'opciones', select:'entorno', otro:'entornoOtro', otroQ:'¿Qué entorno tienes en mente?',
+      q:function(){ return ['¿Qué entorno fotográfico prefieres?']; } },
+    { tipo:'fecha',
+      q:function(){ return ['¿Cuál es la fecha estimada de la sesión fotográfica?']; } },
+    { tipo:'pais',
+      q:function(){ return ['¿En dónde será la sesión fotográfica? Elige el país.']; } },
+    { tipo:'ciudad', ph:'Escribe tu ciudad',
+      q:function(){ return ['¿En qué ciudad?']; } },
+    { tipo:'texto', ph:'Lugar', opcional:true, campo:'lugar',
+      q:function(){ return ['¿Tienes un lugar concreto en mente? Si no, pulsa “Omitir”.']; } }
+  ];
+
+  function preguntar(i){
+    paso = i;
+    esperando = null;
+    modo(null);
+    if (i >= PREGUNTAS.length){ terminar(); return; }
+    var q = PREGUNTAS[i];
+    bot(q.q(), function(){ esperar(q, null); });
+  }
+
+  function esperar(q, sub){
+    esperando = { q:q, sub:sub };
+    if (sub){ modo('texto', { ph: sub === 'ciudadOtra' ? 'Escribe tu ciudad' : 'Especifica' }); return; }
+    var eleccion = q.tipo === 'opciones' || q.tipo === 'fecha' || q.tipo === 'pais';
+    modo(eleccion ? 'elige' : q.tipo, q);
+    if (q.opcional) chip('Omitir', function(){
+      if (!esperando) return;
+      burbuja('Omitir', true); $(q.campo).value = ''; siguiente();
+    }, true);
+    if (q.tipo === 'opciones'){
+      Array.prototype.forEach.call($(q.select).options, function(o){
+        if (o.value) chip(o.textContent, function(){ elegirOpcion(q, o.value, o.textContent); });
+      });
+    }
+    if (q.tipo === 'fecha') chip('Elegir fecha', function(){ $('fechaTrigger').click(); });
+    if (q.tipo === 'pais'){
+      chip('Venezuela', function(){ fijarPais('Venezuela'); });
+      chip('Otro país', function(){
+        abrirSheet({ title:'País', search:true, selected:$('pais').value,
+          items: PAISES.map(function(p){ return { value:p[0], label:p[0] }; }),
+          onPick: fijarPais });
+      }, true);
+    }
+    if (q.tipo === 'ciudad'){
+      var ciudades = CIUDADES[$('pais').value] || [];
+      if (ciudades.length) chip('Elegir ciudad', function(){
+        abrirSheet({ title:'Ciudad', search: ciudades.length > 8, selected:$('ciudad').value,
+          items: ciudades.map(function(c){ return { value:c, label:c }; }).concat([{ value:'Otra', label:'Otra ciudad' }]),
+          onPick: function(v){
+            if (!esperando) return;
+            if (v === 'Otra'){
+              esperando = null; modo(null);
+              bot(['Escribe el nombre de tu ciudad.'], function(){ esperar(q, 'ciudadOtra'); });
+              return;
+            }
+            burbuja(v, true); $('ciudad').value = v; $('ciudadOtra').value = ''; siguiente();
+          } });
+      });
+    }
+  }
+
+  function siguiente(){
+    esperando = null; modo(null);
+    setTimeout(function(){ preguntar(paso + 1); }, 200);
+  }
+
+  function repetir(msg){
+    var e = esperando; esperando = null; modo(null);
+    bot([msg], function(){ esperar(e.q, e.sub); });
+  }
+
+  function elegirOpcion(q, valor, etiqueta){
+    if (!esperando) return;
+    burbuja(etiqueta, true);
+    var sel = $(q.select);
+    sel.value = valor;
+    sel.dispatchEvent(new Event('change', { bubbles:true }));
+    if (valor === 'Otro'){
+      esperando = null; modo(null);
+      bot([q.otroQ], function(){ esperar(q, 'otro'); });
+      return;
+    }
+    $(q.otro).value = '';
+    siguiente();
+  }
+
+  function fijarPais(nombre){
+    if (!esperando) return;
+    var sel = $('pais');
+    sel.value = nombre;
+    sel.dispatchEvent(new Event('change', { bubbles:true }));
+    burbuja(nombre, true);
+    siguiente();
+  }
+
+  /* ciudad escrita a mano: si esta en la lista se usa esa, si no va como "Otra" */
+  function fijarCiudadTexto(v){
+    var igual = null;
+    (CIUDADES[$('pais').value] || []).forEach(function(c){ if (c.toLowerCase() === v.toLowerCase()) igual = c; });
+    $('ciudad').value = igual || 'Otra';
+    $('ciudadOtra').value = igual ? '' : v;
+  }
+
+  function alEscribir(){
+    if (!esperando || input.disabled) return;
+    var v = input.value.trim();
+    if (!v) return;
+    input.value = '';
+    var q = esperando.q, sub = esperando.sub;
+    if (sub === 'otro'){ burbuja(v, true); $(q.otro).value = v; siguiente(); return; }
+    if (sub === 'ciudadOtra' || q.tipo === 'ciudad'){ burbuja(v, true); fijarCiudadTexto(v); siguiente(); return; }
+    burbuja(q.eco ? q.eco(v) : v, true);
+    var problema = q.ok ? q.ok(v) : null;
+    if (problema){ repetir(problema); return; }
+    if (q.guardar) q.guardar(v); else $(q.campo).value = v;
+    siguiente();
+  }
+  send.addEventListener('click', alEscribir);
+  input.addEventListener('keydown', function(e){ if (e.key === 'Enter'){ e.preventDefault(); alEscribir(); } });
+
+  /* la fecha se elige con el calendario de siempre */
+  $('dpDone').addEventListener('click', function(){
+    if (!esperando || esperando.q.tipo !== 'fecha' || !$('fechaHora').value) return;
+    burbuja($('fechaValor').textContent, true);
+    siguiente();
+  });
+
+  /* prefijo del telefono */
+  pref.addEventListener('click', function(){
+    abrirSheet({ title:'Código de país', search:true, selected:prefIso,
+      items: PAISES.map(function(p){ return { value:p[1], label:p[0] + '  ' + p[2] }; }),
+      onPick: function(iso){
+        PAISES.forEach(function(p){
+          if (p[1] !== iso) return;
+          $('prefijoPais').value = p[2];
+          pref.textContent = p[1] + ' ' + p[2];
+          prefIso = iso;
+        });
+        $('prefijoPais').dispatchEvent(new Event('change', { bubbles:true }));
+      } });
+  });
+
+  var CAMPO_PASO = { nombre:0, telefono:1, correo:2, categoria:5, categoriaOtro:5, produccion:6, produccionOtro:6,
+                     entorno:7, entornoOtro:7, fechaTrigger:8, pais:9, ciudad:10, ciudadOtra:10 };
+  function terminar(){
+    for (var s = 1; s <= 4; s++){
+      var p = revisarPaso(s);
+      if (p){
+        var i = p.el && CAMPO_PASO[p.el.id] !== undefined ? CAMPO_PASO[p.el.id] : 0;
+        bot([p.msg], function(){ paso = i; esperar(PREGUNTAS[i], null); });
+        return;
+      }
+    }
+    function elegido(sel, otro){ return $(sel).value === 'Otro' ? $(otro).value.trim() : $(sel).value; }
+    var lineas = [
+      'Nombre: ' + $('nombre').value.trim(),
+      'Teléfono: ' + $('prefijoPais').value + ' ' + $('telefono').value.trim(),
+      'Correo: ' + $('correo').value.trim()
+    ];
+    if ($('marca').value.trim()) lineas.push('Marca: ' + $('marca').value.trim());
+    if ($('redes').value.trim()) lineas.push('Redes: ' + $('redes').value.trim());
+    lineas.push('Categoría: ' + elegido('categoria', 'categoriaOtro'),
+                'Producción: ' + elegido('produccion', 'produccionOtro'),
+                'Entorno: ' + elegido('entorno', 'entornoOtro'),
+                'Fecha estimada: ' + $('fechaValor').textContent,
+                'Ubicación: ' + valorCiudad() + ', ' + $('pais').value);
+    if ($('lugar').value.trim()) lineas.push('Lugar: ' + $('lugar').value.trim());
+    bot(['¡Listo, ' + primerNombre() + '! Este es el resumen de tu solicitud:',
+         lineas.join('\n'),
+         'Pulsa “Enviar por WhatsApp” para mandármelo y coordinamos los detalles.'], function(){
+      modo('fin');
+      chip('Empezar de nuevo', function(){ preguntar(0); }, true);
+    });
+  }
+
+  /* el ultimo boton abre el WhatsApp de verdad con el mensaje de siempre */
+  $('waFinish').addEventListener('click', function(){
+    $('briefForm').dispatchEvent(new Event('submit', { cancelable:true, bubbles:true }));
+  });
+
+  /* En iPhone el teclado tapa la parte de abajo: el chat se ajusta al alto visible */
+  function ajustar(){
+    var vv = window.visualViewport;
+    if (!vv) return;
+    chat.style.setProperty('--vvh', vv.height + 'px');
+    chat.style.setProperty('--vvt', vv.offsetTop + 'px');
+  }
+  if (window.visualViewport){
+    window.visualViewport.addEventListener('resize', ajustar);
+    window.visualViewport.addEventListener('scroll', ajustar);
+  }
+
+  function abrirChat(){
+    ajustar();
+    chat.hidden = false;
+    document.documentElement.classList.add('wa-abierto');
+    if (!iniciado){ iniciado = true; preguntar(0); }
+  }
+  function cerrarChat(){
+    chat.hidden = true;
+    document.documentElement.classList.remove('wa-abierto');
+  }
+  window.abrirChat = abrirChat;
+  $('waClose').addEventListener('click', cerrarChat);
+  chat.addEventListener('click', function(e){ if (e.target === chat) cerrarChat(); });
+  document.addEventListener('keydown', function(e){
+    if (e.key === 'Escape' && !chat.hidden && $('sheetBackdrop').hidden && $('dpBackdrop').hidden) cerrarChat();
+  });
+  $('abrirChatBtn').addEventListener('click', abrirChat);
+  $('waFab').addEventListener('click', abrirChat);
+
+  /* desde el portafolio se llega con index.html#form: se abre el chat directamente */
+  if (location.hash === '#form' || location.hash === '#cotizar') abrirChat();
+})();
+</script>
 </body>
 </html>
