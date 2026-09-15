@@ -35,7 +35,10 @@ app móvil de GitHub, y la web publicada se actualiza sola 1–2 minutos despué
 
 ## 3. Cómo quiero que me respondas
 
-- En **español**, y lo **más corto posible**. Tablas para resumir qué se hizo.
+- **Respuestas lo más cortas posible. Actúa y arregla los errores sin gastar
+  tokens en explicaciones largas.** Yo reviso al final si los cambios quedaron
+  bien; no leo explicaciones extensas. Basta una tabla mínima de qué se hizo.
+- En **español**.
 - No soy técnico: explícame en palabras normales, no en jerga.
 - Te doy listas numeradas de tareas; respóndeme en el mismo orden.
 - **No inventes datos** (fechas, países, nombres, números). Si te faltan, pídemelos.
@@ -108,8 +111,9 @@ app móvil de GitHub, y la web publicada se actualiza sola 1–2 minutos despué
 - ✅ **Paletas de muestra para el cliente** (reactivadas el 15-09-2026, solo en
   `portafolio.html`): al entrar pregunta "¿Cómo prefieres verlo?" con 3 opciones —
   **Oscuro** (predeterminado), **Beige** (870 V MADERA) y **Blanco** (cabecera oscura
-  de siempre + fondo blanco). Se recuerda en el navegador (`localStorage` `jara-tema`)
-  y se cambia con el botón redondo de abajo a la izquierda.
+  de siempre + fondo blanco). Se recuerda en el navegador (`localStorage` `jara-paleta`)
+  y se cambia con el botón redondo **encima del de WhatsApp**, del mismo tamaño.
+  `html` tiene fondo fijo `#111110` para que la franja superior de Safari no cambie de color.
 - ❌ **Menú desplegable de subcategorías en la barra de categorías** (al pasar el
   cursor o al tocar) → no me gustó, se revirtió.
 - ✅ **Los títulos grandes de cada categoría** (CONCIERTOS, RETRATOS…) **se quedan.**

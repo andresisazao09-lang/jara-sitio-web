@@ -25,7 +25,7 @@
     --ease:cubic-bezier(.22,.61,.36,1);
   }
   *{box-sizing:border-box;}
-  html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;}
+  html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;background:#111110;}
   body{
     margin:0;
     background:var(--bg);
@@ -442,8 +442,8 @@
 
   /* ---------- cambiar de paleta en cualquier momento ---------- */
   .theme-toggle{
-    position:fixed;left:16px;bottom:16px;z-index:55;
-    width:42px;height:42px;border-radius:50%;
+    position:fixed;right:16px;bottom:128px;z-index:56;
+    width:52px;height:52px;border-radius:50%;
     border:1px solid var(--border-strong);background:rgba(17,17,16,0.92);
     color:var(--text);cursor:pointer;
     display:flex;align-items:center;justify-content:center;
@@ -451,12 +451,12 @@
   [data-theme] .theme-toggle{background:var(--bg);}
   html.sin-tema .theme-toggle{display:none;}
   .theme-toggle-ico{
-    width:17px;height:17px;border-radius:50%;
+    width:21px;height:21px;border-radius:50%;
     border:1.5px solid currentColor;
     background:linear-gradient(90deg,currentColor 0 50%,transparent 50% 100%);
   }
   .theme-label{
-    position:fixed;left:66px;bottom:24px;z-index:55;
+    position:fixed;right:80px;bottom:143px;z-index:56;
     padding:5px 12px;border-radius:999px;
     background:rgba(17,17,16,0.92);color:#f3f1ea;
     font-size:10.5px;letter-spacing:0.16em;text-transform:uppercase;
@@ -464,8 +464,8 @@
   }
   .theme-label.is-on{opacity:1;}
   @media (max-width:760px){
-    .theme-toggle{left:14px;bottom:14px;}
-    .theme-label{left:62px;bottom:22px;}
+    .theme-toggle{width:48px;height:48px;right:14px;bottom:120px;}
+    .theme-label{right:72px;bottom:134px;}
   }
 </style>
 <script>
@@ -474,7 +474,7 @@
      con "sin-tema" y se muestra la pregunta. */
   (function(){
     var t = null;
-    try { t = localStorage.getItem('jara-tema'); } catch(e){}
+    try { t = localStorage.getItem('jara-paleta'); } catch(e){}
     var r = document.documentElement;
     if (t === 'light' || t === 'white') r.setAttribute('data-theme', t);
     else if (t !== 'dark') r.classList.add('sin-tema');
@@ -1510,7 +1510,7 @@
    pasa de una a otra con el boton redondo de abajo a la izquierda. */
 (function(){
   "use strict";
-  var CLAVE   = 'jara-tema';
+  var CLAVE   = 'jara-paleta';
   var ORDEN   = ['dark', 'light', 'white'];
   var NOMBRES = { dark:'Oscuro', light:'Beige', white:'Blanco' };
   var raiz  = document.documentElement;
