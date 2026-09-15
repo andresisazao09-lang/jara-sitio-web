@@ -28,7 +28,7 @@
   html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;background:#111110;}
   body{
     margin:0;
-    background:var(--bg);
+    background:transparent;position:relative;
     color:var(--text);
     font-family:Georgia,'Times New Roman',serif;
     line-height:1.6;
@@ -36,6 +36,9 @@
     overflow-x:hidden;
     -webkit-font-smoothing:antialiased;
   }
+  /* Safari tine sus barras con el fondo de html/body: estos se quedan siempre
+     oscuros y el color de la paleta va en una capa detras del contenido. */
+  body::before{content:"";position:absolute;inset:0;z-index:-1;background:var(--bg);}
   a{color:inherit;text-decoration:none;}
   img,svg{display:block;}
   ::selection{background:var(--text);color:var(--bg-deep);}
@@ -360,7 +363,7 @@
     --border-strong:rgba(28,28,26,0.34);
     --sombra:20,20,18;
   }
-  [data-theme] body{background:var(--bg);color:var(--text);}
+  [data-theme] body{color:var(--text);}
   [data-theme] ::selection{background:var(--text);color:var(--bg);}
   /* cabecera y selector: siguen oscuros, su texto en claro */
   [data-theme] .top-bar,
