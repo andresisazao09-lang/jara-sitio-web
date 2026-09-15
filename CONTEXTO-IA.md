@@ -116,7 +116,9 @@ app móvil de GitHub, y la web publicada se actualiza sola 1–2 minutos despué
   `data-header="clear"`: fondo blanco, cabecera sin fondo ni línea flotando sobre las
   fotos de la portada, portada más alta para bajar el encuadre).
   **Beige quitado de la pregunta y del botón (16-09-2026)**; su CSS `[data-theme="light"]` sigue en el archivo.
-  Logo de TikTok redondo en los dos archivos: `a[href*="tiktok.com"] img{border-radius:50%}`. Se recuerda en el navegador (`localStorage` `jara-paleta`)
+  Nombres visibles: **Oscuro, Blanco/Negro, Blanco total, Transparente**.
+  Logo de TikTok (cabecera y pie, los dos archivos): SVG redondo oficial incrustado en base64
+  (círculo negro + nota blanca con sombras cian/rosa). No usar el PNG cuadrado. Se recuerda en el navegador (`localStorage` `jara-paleta`)
   y se cambia con el botón redondo **encima del de WhatsApp**, del mismo tamaño.
   Safari tiñe sus barras con el fondo de `html`/`body`: en **los dos archivos** `html` es `#111110`, `body` transparente y el fondo va en `body::before`. No lo cambies.
   El fundido de la portada del portafolio hacia el fondo es `.p-hero::after` (curva suave, sin línea).
