@@ -111,7 +111,8 @@ app móvil de GitHub, y la web publicada se actualiza sola 1–2 minutos despué
 - ✅ **Paletas de muestra para el cliente** (reactivadas el 15-09-2026, solo en
   `portafolio.html`): al entrar pregunta "¿Cómo prefieres verlo?" con 3 opciones —
   **Oscuro** (predeterminado), **Beige** (870 V MADERA) y **Blanco** (cabecera oscura
-  de siempre + fondo blanco). Se recuerda en el navegador (`localStorage` `jara-paleta`)
+  de siempre + fondo blanco) y **Blanco total** (`data-theme="total"`: cabecera, barra
+  de categorías y fondo en blanco, logo invertido a negro, barra de Safari blanca). Se recuerda en el navegador (`localStorage` `jara-paleta`)
   y se cambia con el botón redondo **encima del de WhatsApp**, del mismo tamaño.
   Safari tiñe sus barras con el fondo de `html`/`body`: en **los dos archivos** `html` es `#111110`, `body` transparente y el fondo va en `body::before`. No lo cambies.
   El fundido de la portada del portafolio hacia el fondo es `.p-hero::after` (curva suave, sin línea).

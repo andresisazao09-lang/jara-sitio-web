@@ -425,6 +425,28 @@
   [data-theme] .lb-ser,
   [data-theme] .lb-counter{color:rgba(243,241,234,0.6);}
 
+  /* 4) Blanco total: tambien la cabecera y la barra de categorias en blanco */
+  [data-theme="total"]{
+    --bg:#ffffff;
+    --bg-deep:#ffffff;
+    --text:#1c1c1a;
+    --text-muted:#6b675f;
+    --border:rgba(28,28,26,0.14);
+    --border-strong:rgba(28,28,26,0.34);
+    --sombra:20,20,18;
+  }
+  html[data-theme="total"]{background:#ffffff;}
+  [data-theme="total"] .top-bar,
+  [data-theme="total"] .nav-rail{background:#ffffff;border-bottom-color:var(--border);}
+  [data-theme="total"] .top-bar-logo{filter:invert(1);}
+  [data-theme="total"] .top-bar-role{color:var(--text);}
+  [data-theme="total"] .top-bar-loc{color:var(--text-muted);}
+  [data-theme="total"] .nav-link{color:var(--text-muted);}
+  [data-theme="total"] .nav-link.is-active,
+  [data-theme="total"] .nav-back{color:var(--text);}
+  [data-theme="total"] .nav-link.is-active::after{background:var(--text);}
+  @media (hover:hover) and (pointer:fine){ [data-theme="total"] .nav-link:hover{color:var(--text);} }
+
   /* ---------- pregunta al entrar ---------- */
   .theme-gate{
     position:fixed;inset:0;z-index:1000;
@@ -433,10 +455,10 @@
   }
   html.sin-tema .theme-gate{display:flex;}
   .theme-gate.is-out{opacity:0;pointer-events:none;transition:opacity .3s ease;}
-  .theme-gate-inner{width:100%;max-width:640px;}
+  .theme-gate-inner{width:100%;max-width:760px;}
   .theme-gate-kicker{margin:0 0 14px;font-size:10.5px;letter-spacing:0.3em;text-transform:uppercase;color:#8d8779;}
   .theme-gate-q{margin:0 0 34px;font-size:clamp(21px,4.4vw,32px);line-height:1.15;letter-spacing:0.02em;text-transform:uppercase;color:#f3f1ea;}
-  .theme-gate-actions{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+  .theme-gate-actions{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;}
   .theme-opt{
     display:flex;flex-direction:column;align-items:center;gap:14px;
     padding:20px 16px;cursor:pointer;font-family:inherit;
@@ -453,8 +475,9 @@
   .theme-swatch-dark{background:linear-gradient(160deg,#242422 0%,#111110 100%);}
   .theme-swatch-light{background:linear-gradient(180deg,#111110 0 24%,#E9DCC0 24% 100%);}
   .theme-swatch-white{background:linear-gradient(180deg,#111110 0 24%,#ffffff 24% 100%);}
+  .theme-swatch-total{background:linear-gradient(180deg,#ffffff 0 24%,#d9d6cf 24% 25.5%,#ffffff 25.5% 100%);}
   @media (max-width:760px){
-    .theme-gate-actions{gap:8px;}
+    .theme-gate-actions{grid-template-columns:repeat(2,1fr);gap:10px;}
     .theme-opt{padding:14px 6px;gap:10px;font-size:9.5px;letter-spacing:0.1em;}
     .theme-swatch{height:52px;}
   }
@@ -495,7 +518,7 @@
     var t = null;
     try { t = localStorage.getItem('jara-paleta'); } catch(e){}
     var r = document.documentElement;
-    if (t === 'light' || t === 'white') r.setAttribute('data-theme', t);
+    if (t === 'light' || t === 'white' || t === 'total') r.setAttribute('data-theme', t);
     else if (t !== 'dark') r.classList.add('sin-tema');
   })();
 </script>
@@ -517,6 +540,10 @@
       <button type="button" class="theme-opt meta" data-theme-pick="white">
         <span class="theme-swatch theme-swatch-white" aria-hidden="true"></span>
         <span>Blanco</span>
+      </button>
+      <button type="button" class="theme-opt meta" data-theme-pick="total">
+        <span class="theme-swatch theme-swatch-total" aria-hidden="true"></span>
+        <span>Blanco total</span>
       </button>
     </div>
   </div>
@@ -1530,15 +1557,15 @@
 (function(){
   "use strict";
   var CLAVE   = 'jara-paleta';
-  var ORDEN   = ['dark', 'light', 'white'];
-  var NOMBRES = { dark:'Oscuro', light:'Beige', white:'Blanco' };
+  var ORDEN   = ['dark', 'light', 'white', 'total'];
+  var NOMBRES = { dark:'Oscuro', light:'Beige', white:'Blanco', total:'Blanco total' };
   var raiz  = document.documentElement;
   var gate  = document.getElementById('themeGate');
   var label = document.getElementById('themeLabel');
   var timer;
   function actual(){ return raiz.getAttribute('data-theme') || 'dark'; }
   function aplicar(t){
-    if (t === 'light' || t === 'white') raiz.setAttribute('data-theme', t);
+    if (t === 'light' || t === 'white' || t === 'total') raiz.setAttribute('data-theme', t);
     else raiz.removeAttribute('data-theme');
     try { localStorage.setItem(CLAVE, t); } catch(e){}
   }
