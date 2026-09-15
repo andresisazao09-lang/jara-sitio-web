@@ -342,7 +342,7 @@
 
   /* ---------- boton flotante de WhatsApp ---------- */
   .wa-fab{
-    position:fixed;right:16px;bottom:62vh;bottom:62svh;z-index:56;
+    position:fixed;right:16px;bottom:128px;z-index:56;
     width:52px;height:52px;border-radius:50%;
     background:none;color:#fff;
     display:flex;align-items:center;justify-content:center;
@@ -355,7 +355,7 @@
   }
   .wa-fab:active{transform:scale(.96);}
   @media (max-width:760px){
-    .wa-fab{width:48px;height:48px;right:14px;bottom:62svh;}
+    .wa-fab{width:48px;height:48px;right:14px;bottom:120px;}
   }
   /* ============================================================
      PALETAS DE MUESTRA PARA EL CLIENTE
@@ -449,7 +449,7 @@
 
   /* ---------- cambiar de paleta en cualquier momento ---------- */
   .theme-toggle{
-    position:fixed;right:16px;bottom:calc(62vh - 62px);bottom:calc(62svh - 62px);z-index:56;
+    position:fixed;right:16px;bottom:66px;z-index:56;
     width:52px;height:52px;border-radius:50%;
     border:1px solid var(--border-strong);background:rgba(17,17,16,0.92);
     color:var(--text);cursor:pointer;
@@ -462,7 +462,7 @@
     background:linear-gradient(90deg,currentColor 0 50%,transparent 50% 100%);
   }
   .theme-label{
-    position:fixed;right:80px;bottom:calc(62vh - 48px);bottom:calc(62svh - 48px);z-index:56;
+    position:fixed;right:80px;bottom:80px;z-index:56;
     padding:5px 12px;border-radius:999px;
     background:rgba(17,17,16,0.92);color:#f3f1ea;
     font-size:10.5px;letter-spacing:0.16em;text-transform:uppercase;
@@ -470,8 +470,8 @@
   }
   .theme-label.is-on{opacity:1;}
   @media (max-width:760px){
-    .theme-toggle{width:48px;height:48px;right:14px;bottom:calc(62svh - 58px);}
-    .theme-label{right:72px;bottom:calc(62svh - 46px);}
+    .theme-toggle{width:48px;height:48px;right:14px;bottom:62px;}
+    .theme-label{right:72px;bottom:74px;}
   }
 
   /* boton verde de WhatsApp (el guardado de la portada): abre el chat en index.html */

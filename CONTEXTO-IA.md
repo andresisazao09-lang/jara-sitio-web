@@ -81,8 +81,9 @@ app móvil de GitHub, y la web publicada se actualiza sola 1–2 minutos despué
   (fecha, país, ciudad, lugar). Saludo: "Te haré unas preguntas rápidas…" (le gustó).
   Foto de perfil: logo "Jara" completo, pequeño (no recortar). Fondo del chat: dibujos
   propios estilo WhatsApp (SVG), no la imagen de WhatsApp (es de Meta). Verde del chat:
-  `#16985D` (punto medio entre el verde oscuro del principio y el del icono); el botón
-  "Enviar por WhatsApp" y el flotante sí llevan el verde oficial `#25D366`. El mensaje de
+  `#075E54` (el oscuro del principio; probamos el del icono y un punto medio y no
+  gustaron, no los vuelvas a proponer); el botón "Enviar por WhatsApp" y el flotante sí
+  llevan el verde oficial `#25D366`. El mensaje de
   WhatsApp lleva los títulos en negrita (`*Título:*`).
   Cada tarjeta es un `<form>` de verdad con `autocomplete` (`name`, `tel-national`, `email`)
   para que Safari y Chrome puedan autorrellenar; la tecla Intro equivale a "Continuar".
@@ -149,8 +150,9 @@ app móvil de GitHub, y la web publicada se actualiza sola 1–2 minutos despué
   **Predeterminado temporal: Blanco total** mientras el cliente prueba (cuando no hay nada
   guardado). En la portada la zona de fotos conserva sus colores; la cabecera y el pie
   cambian. El calendario y las listas de país/ciudad también siguen la paleta.
-  Botones flotantes en las dos páginas, en la parte alta (`62svh`): **WhatsApp arriba y el
-  de paleta justo debajo**, del mismo tamaño.
+  Botones flotantes abajo a la derecha (subirlos a media pantalla no gustó), **WhatsApp
+  arriba y el de paleta debajo**, del mismo tamaño: portada 80 y 16 px; portafolio 128 y
+  66 px, encima del de "volver arriba".
 - ❌ **Pregunta "¿Cómo prefieres verlo?"** al entrar → quitada dos veces (última 16-09-2026).
 - ❌ **Paleta Beige** y **modo Transparente** (cabecera sobre las fotos) → quitados.
 - ❌ **Menú desplegable de subcategorías en la barra de categorías** (al pasar el
