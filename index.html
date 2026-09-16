@@ -1679,6 +1679,8 @@
   var NATURAL = 'Persona natural';
   var SIN_FOTOS  = 'Ninguna';
   var SIN_VIDEOS = 'Ninguno';
+  /* ocasiones de persona natural que son un evento con horas que cubrir */
+  var OCASIONES_EVENTO = ['Boda', '15 años', 'Graduación'];
 
   /* ---------- ayudas para escribir las condiciones ---------- */
   function es(id, valor){ return function(r){ return r[id] === valor; }; }
@@ -1714,7 +1716,39 @@
     { id:'perfil_tipo', bloque:'B', tipo:'select', etiquetaWA:'Perfil',
       pregunta:'¿Cómo te presentas?',
       opciones:[AGENCIA, EMPRESA, MARCA, MODELO, NATURAL] },
-    /* marca y redes comparten pantalla; si es Modelo solo queda el campo de redes */
+
+    /* ---- "¿de qué tipo?" antes de "¿cómo te llamas?" ----
+       Una conversación normal primero entiende QUÉ es el cliente y luego pide
+       el nombre. Cada rama de perfil_tipo tiene aquí su pregunta de categoría
+       (agencia → tipo de agencia, empresa → rubro, marca → a qué se dedica,
+       persona natural → ocasión). Modelo no lleva: lo que necesita saber Jara
+       de un modelo es qué tipo de producción busca, y eso lo pregunta el
+       bloque C justo después.
+       REGLA: si agregas una opción nueva a perfil_tipo, pregúntate primero
+       qué preguntaría un humano justo después de oírla, y agrégala aquí. */
+    { id:'agencia_tipo', bloque:'B', tipo:'select', etiquetaWA:'Tipo de agencia',
+      pregunta:'¿Qué tipo de agencia?',
+      opciones:['Marketing o publicidad', 'Inmobiliaria', 'Automotriz', 'Viajes o turismo',
+                'Modelaje o talento', 'Eventos', 'Otra'],
+      showIf:es('perfil_tipo', AGENCIA) },
+    { id:'empresa_rubro', bloque:'B', tipo:'select', etiquetaWA:'Rubro',
+      pregunta:'¿En qué rubro estás?',
+      opciones:['Moda o ropa', 'Gastronomía', 'Belleza o estética', 'Joyería o accesorios',
+                'Inmobiliaria', 'Salud', 'Tecnología', 'Educación', 'Eventos', 'Otro'],
+      showIf:es('perfil_tipo', EMPRESA) },
+    { id:'marca_dedica', bloque:'B', tipo:'select', etiquetaWA:'Se dedica a',
+      pregunta:'¿A qué te dedicas?',
+      opciones:['Moda o belleza', 'Negocios o educación', 'Fitness o salud', 'Gastronomía',
+                'Viajes', 'Entretenimiento', 'Otro'],
+      showIf:es('perfil_tipo', MARCA) },
+    /* orden de ocasion: de la mas grande/elaborada a la mas sencilla */
+    { id:'natural_ocasion', bloque:'B', tipo:'select', etiquetaWA:'Ocasión',
+      pregunta:'¿Cuál es la ocasión?',
+      opciones:['Boda', '15 años', 'Graduación', 'Embarazo', 'Sesión fotográfica', 'Otro'],
+      showIf:es('perfil_tipo', NATURAL) },
+
+    /* nombre y redes van DESPUES de saber de qué tipo es; comparten pantalla.
+       Si es Modelo solo queda el campo de redes. */
     { id:'marca_nombre', bloque:'B', grupo:'marca', tipo:'text', etiquetaWA:'Marca',
       preguntaPantalla:function(r){
         if (r.perfil_tipo === AGENCIA) return 'Cuéntame de tu agencia:';
@@ -1737,24 +1771,23 @@
       ph:'@tuusuario',
       ayuda:'Ver el perfil me ahorra media conversación entendiendo tu estilo.',
       showIf:noEs('perfil_tipo', NATURAL) },
-    /* solo para Empresa: una agencia representa clientes de rubros distintos,
-       no tiene un rubro propio que preguntarle */
-    { id:'empresa_rubro', bloque:'B', tipo:'select', etiquetaWA:'Rubro',
-      pregunta:'¿En qué rubro estás?',
-      opciones:['Moda o ropa', 'Gastronomía', 'Belleza o estética', 'Joyería o accesorios',
-                'Inmobiliaria', 'Salud', 'Tecnología', 'Educación', 'Eventos', 'Otro'],
-      showIf:es('perfil_tipo', EMPRESA) },
-    /* orden de ocasion: de la mas grande/elaborada a la mas sencilla */
-    { id:'natural_ocasion', bloque:'B', tipo:'select', etiquetaWA:'Ocasión',
-      pregunta:'¿Cuál es la ocasión?',
-      opciones:['Boda', '15 años', 'Graduación', 'Embarazo', 'Sesión fotográfica', 'Otro'],
-      showIf:es('perfil_tipo', NATURAL) },
 
-    /* ---------- BLOQUE C · que necesitas ---------- */
+    /* ---------- BLOQUE C · que necesitas ----------
+       produccion_tipo no se le pregunta a una persona natural: su ocasión
+       (boda, 15 años, embarazo…) ya dice qué es, y ofrecerle opciones como
+       "contenido comercial o publicitario" suena fuera de lugar. A un modelo
+       se le agrega "book o portafolio", que es lo que realmente pide. */
     { id:'produccion_tipo', bloque:'C', tipo:'select', etiquetaWA:'Producción',
       pregunta:'¿Qué tipo de producción buscas?',
-      opciones:['Contenido comercial o publicitario', 'Evento, curso o lanzamiento',
-                'Retrato personal o video de presentación', 'Contenido para reels o TikToks', 'Otro'] },
+      opciones:function(r){
+        if (r.perfil_tipo === MODELO){
+          return ['Contenido comercial o publicitario', 'Book o portafolio de modelo',
+                  'Retrato personal o video de presentación', 'Contenido para reels o TikToks', 'Otro'];
+        }
+        return ['Contenido comercial o publicitario', 'Evento, curso o lanzamiento',
+                'Retrato personal o video de presentación', 'Contenido para reels o TikToks', 'Otro'];
+      },
+      showIf:noEs('perfil_tipo', NATURAL) },
     /* fotos y videos en una sola pantalla; el "formato" se deduce de las dos.
        Orden de cada selector: de mas cantidad a menos, "Ninguna/o" casi al
        final y "No sé" siempre de ultimo. */
@@ -1770,10 +1803,16 @@
     { id:'cantidad_videos', bloque:'C', grupo:'cantidad', tipo:'opcion', etiquetaWA:'Videos',
       pregunta:'¿Cuántos videos?',
       opciones:['Más de 6', '4 a 6', '2 a 3', '1', SIN_VIDEOS, 'No sé, que lo proponga Jara'] },
+    /* las horas de cobertura aplican a un evento… venga por donde venga: por
+       produccion_tipo (agencia/empresa/marca/modelo) o por la ocasión de una
+       persona natural (una boda tambien es un evento que hay que cubrir) */
     { id:'evento_horas', bloque:'C', tipo:'select', etiquetaWA:'Cobertura',
       pregunta:'¿Cuántas horas de cobertura necesitas?',
       opciones:['Varios días', 'Más de 8 horas', '5 a 8 horas', '3 a 4 horas', '1 a 2 horas'],
-      showIf:es('produccion_tipo', 'Evento, curso o lanzamiento') },
+      showIf:function(r){
+        return r.produccion_tipo === 'Evento, curso o lanzamiento' ||
+               (r.perfil_tipo === NATURAL && OCASIONES_EVENTO.indexOf(r.natural_ocasion) !== -1);
+      } },
     /* el corazon del formulario: sustituye a una quincena de sub-preguntas */
     { id:'brief_libre', bloque:'C', tipo:'textarea', etiquetaWA:'Lo que tiene en mente', grande:true,
       pregunta:'Cuéntame con tus palabras qué tienes en mente.',
@@ -2118,7 +2157,8 @@
   /* un puñado de datos ya conocidos (sin telefono ni correo) para que la IA
      tenga contexto sin que le lleguen datos de contacto */
   function contextoParaIA(){
-    var claves = ['perfil_tipo', 'marca_nombre', 'empresa_rubro', 'natural_ocasion', 'produccion_tipo'];
+    var claves = ['perfil_tipo', 'agencia_tipo', 'empresa_rubro', 'marca_dedica',
+                  'marca_nombre', 'natural_ocasion', 'produccion_tipo'];
     var out = [];
     claves.forEach(function(id){
       var q = porId(id);
@@ -2442,6 +2482,32 @@
     '15 años':'una fiesta de 15 años', 'Sesión fotográfica':'una sesión fotográfica',
     'Otro':'una ocasión especial'
   };
+  /* "un evento" lleva articulo, "contenido comercial" no */
+  var PRODUCCION_FRASE = {
+    'Contenido comercial o publicitario':'contenido comercial o publicitario',
+    'Evento, curso o lanzamiento':'un evento, curso o lanzamiento',
+    'Retrato personal o video de presentación':'un retrato personal o video de presentación',
+    'Contenido para reels o TikToks':'contenido para reels o TikToks',
+    'Book o portafolio de modelo':'un book o portafolio de modelo'
+  };
+  /* las cantidades se escriben como las diria una persona ("más de 50
+     fotografías", "1 video"), no pegando el valor crudo del selector */
+  var FOTOS_FRASE = {
+    'Más de 50':'más de 50 fotografías', '26 a 50':'entre 26 y 50 fotografías',
+    '11 a 25':'entre 11 y 25 fotografías', '5 a 10':'entre 5 y 10 fotografías',
+    'No sé, que lo proponga Jara':'las fotografías que tú propongas'
+  };
+  var VIDEOS_FRASE = {
+    'Más de 6':'más de 6 videos', '4 a 6':'entre 4 y 6 videos',
+    '2 a 3':'entre 2 y 3 videos', '1':'1 video',
+    'No sé, que lo proponga Jara':'los videos que tú propongas'
+  };
+  /* "agencia inmobiliaria" va sin "de", "agencia de marketing" va con "de" */
+  var AGENCIA_FRASE = {
+    'Marketing o publicidad':'de marketing o publicidad', 'Inmobiliaria':'inmobiliaria',
+    'Automotriz':'automotriz', 'Viajes o turismo':'de viajes o turismo',
+    'Modelaje o talento':'de modelaje o talento', 'Eventos':'de eventos'
+  };
   var ENTREGA_FRASE = {
     'Mismo día':'el mismo día', 'En 48 horas':'en 48 horas', 'En una semana':'en una semana',
     'En dos semanas':'en dos semanas', 'Sin apuro':'sin apuro, cuando puedas'
@@ -2463,6 +2529,7 @@
       quien.push('Trabajo como modelo' + (r.redes ? ', mi Instagram o TikTok es ' + r.redes : '') + '.');
     } else if (r.perfil_tipo === AGENCIA){
       var ag = 'Te escribo en representación de una agencia';
+      if (AGENCIA_FRASE[r.agencia_tipo]) ag += ' ' + AGENCIA_FRASE[r.agencia_tipo];
       if (r.marca_nombre) ag += ' llamada ' + r.marca_nombre;
       quien.push(ag + '.');
       if (r.redes) quien.push('El Instagram o TikTok de la agencia es ' + r.redes + '.');
@@ -2475,6 +2542,7 @@
     } else if (r.perfil_tipo === MARCA){
       var m = 'Soy una marca personal o creador de contenido';
       if (r.marca_nombre) m += ' llamada ' + r.marca_nombre;
+      if (r.marca_dedica && r.marca_dedica !== 'Otro') m += ', me dedico a ' + minus(r.marca_dedica);
       quien.push(m + '.');
       if (r.redes) quien.push('Mi Instagram o TikTok es ' + r.redes + '.');
     }
@@ -2483,13 +2551,14 @@
     if (r.produccion_tipo === 'Otro'){
       necesita.push('Tengo un proyecto que no encaja en las categorías usuales.');
     } else if (r.produccion_tipo){
-      necesita.push('Se trata de ' + minus(r.produccion_tipo) + '.');
+      necesita.push('Se trata de ' + (PRODUCCION_FRASE[r.produccion_tipo] || minus(r.produccion_tipo)) + '.');
     }
     var fotos  = (r.cantidad_fotos  && r.cantidad_fotos  !== SIN_FOTOS)  ? r.cantidad_fotos  : '';
     var videos = (r.cantidad_videos && r.cantidad_videos !== SIN_VIDEOS) ? r.cantidad_videos : '';
-    if (fotos && videos) necesita.push('En cantidad, calculo unas ' + fotos + ' fotografías y ' + videos + ' videos.');
-    else if (fotos) necesita.push('En cantidad, calculo unas ' + fotos + ' fotografías.');
-    else if (videos) necesita.push('En cantidad, calculo unos ' + videos + ' videos.');
+    var cuantos = [];
+    if (fotos) cuantos.push(FOTOS_FRASE[fotos] || fotos + ' fotografías');
+    if (videos) cuantos.push(VIDEOS_FRASE[videos] || videos + ' videos');
+    if (cuantos.length) necesita.push('Necesito ' + cuantos.join(' y ') + '.');
     if (r.evento_horas) necesita.push('La cobertura del evento sería de ' + minus(r.evento_horas) + '.');
     if (r.brief_libre) necesita.push('Esto es lo que tengo en mente: "' + r.brief_libre + '".');
 
