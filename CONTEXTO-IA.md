@@ -72,13 +72,20 @@ app móvil de GitHub, y la web publicada se actualiza sola 1–2 minutos despué
 - **Visor de fotos (`.lb`):** una sola `<img id="lbImg">` que cambia de `src`.
   Se navega con flechas, teclado y deslizando el dedo.
 
-- **Cotización = chat "Agente de Jara"** en `index.html`: ventana estilo WhatsApp
-  (`#waChat`) en **4 bloques**, cada uno una tarjeta con sus campos: 1) contacto (nombre
-  simple, teléfono, correo); 2) ¿a quién representas? (Persona natural / Empresa / Marca
-  personal / Influencer o creador / Otro; según la respuesta cambian los campos: persona
-  natural elige ocasión — Cumpleaños, Retrato personal, Pareja, Familia, Graduación, Otra —
-  que va al mensaje como "Ocasión"); 3) sesión (tipo de producción + entorno); 4) agenda
-  (fecha, país, ciudad, lugar). Saludo: "Te haré unas preguntas rápidas…" (le gustó).
+- **Cotización = chat "Agente de Jara"** en `index.html`: ventana estilo WhatsApp (`#waChat`)
+  con un **motor de preguntas ramificado (16-09-2026)**. Todo el cuestionario vive en el array
+  `PREGUNTAS`: cada objeto es `{id, bloque, tipo, pregunta, ayuda, opciones, showIf, etiquetaWA}`.
+  **Para añadir o cambiar una pregunta se edita ese array, nunca el HTML.**
+  - Una pregunta por pantalla; los `select` avanzan solos, el resto lleva botón "Continuar".
+  - Bloques: A contacto (los 3 datos juntos) · B perfil · C proyecto · D entregables ·
+    E producción · F estilo · G logística · H presupuesto · I cierre.
+  - `showIf` decide la ruta; si cambias una respuesta anterior, las preguntas hijas que ya no
+    aplican se borran solas. Barra de progreso sobre las preguntas de **tu** ruta.
+  - Botón "‹" para volver, "editar" en cada línea del resumen y, desde el bloque E, el enlace
+    discreto "Ya quiero enviar lo que llevo".
+  - Las respuestas viven solo en memoria (objeto `respuestas`), no se guardan en el navegador.
+  - El mensaje de WhatsApp se arma agrupado por bloque con los títulos en negrita y **solo con
+    lo respondido**. Saludo: "Te haré unas preguntas rápidas…" (le gustó).
   Foto de perfil: logo "Jara" completo, pequeño (no recortar). Fondo del chat: dibujos
   propios estilo WhatsApp (SVG), no la imagen de WhatsApp (es de Meta). Verde del chat:
   `#075E54` (el oscuro del principio; probamos el del icono y un punto medio y no
@@ -92,10 +99,9 @@ app móvil de GitHub, y la web publicada se actualiza sola 1–2 minutos despué
   `href="index.html" data-abrir-chat` y dejan un aviso de una vez en `sessionStorage`
   (`jara-abrir-chat`) que la portada consume. No volver a usar `index.html#form`.
   Al volver con "atrás" el chat se cierra.
-- **El `<form id="briefForm">` sigue en la página, oculto (`<div hidden>`)**: el chat guarda
-  cada respuesta en sus campos y el botón final "Enviar por WhatsApp" dispara su `submit`,
-  que arma el mensaje y abre `wa.me`. No borres el formulario ni sus selectores (país,
-  ciudad, prefijo, calendario): el chat los usa.
+- **El `<form id="briefForm">` sigue en la página, oculto (`<div hidden>`)**: ya no guarda las
+  respuestas, pero el chat **usa sus selectores** (calendario `#fechaTrigger`, listas de país y
+  ciudad con `abrirSheet`, prefijo `#prefijoPais`). No lo borres.
 
 ## 5. Limitaciones del entorno (esto te ahorra tiempo)
 
@@ -169,6 +175,12 @@ app móvil de GitHub, y la web publicada se actualiza sola 1–2 minutos despué
   Una vez los quitamos y los volví a pedir.
 
 ## 8. Pendientes / a tener en cuenta
+
+- **Punto de retorno (16-09-2026):** el formulario por bloques A–I (`PROMPT_FORMULARIO_JARA.md`,
+  guardado en el repo) se construyó sobre el commit `7a586ae`. Si no convence, se vuelve a esa
+  versión revirtiendo lo posterior.
+- La pregunta `traslado` sale siempre: no sé cuál es la ciudad base de Jara. Dímela y solo
+  aparecerá cuando la sesión sea en otra ciudad.
 
 - **Botón verde "Cotiza tu sesión por WhatsApp"**: ya está puesto en el `.p-cta` del
   portafolio (sustituyó a "¿Trabajamos juntos?" y a "Cotiza Ya Su Sesión"; queda ese botón
