@@ -73,44 +73,63 @@ app móvil de GitHub, y la web publicada se actualiza sola 1–2 minutos despué
   Se navega con flechas, teclado y deslizando el dedo.
 
 - **Cotización = chat "Agente de Jara"** en `index.html`: ventana estilo WhatsApp (`#waChat`)
-  con un **motor de preguntas ramificado (versión corta v4, 16-09-2026)**. Todo el cuestionario
-  vive en el array `PREGUNTAS`: **17 entradas** repartidas en **9 a 11 pantallas**, cada objeto
+  con un **motor de preguntas ramificado (16-09-2026, ajustes post-v4)**. Todo el cuestionario
+  vive en el array `PREGUNTAS`: **16 entradas** repartidas en **9 a 10 pantallas**, cada objeto
   es `{id, bloque, grupo, tipo, pregunta, ayuda, opciones, showIf, etiquetaWA}`.
   **Para añadir o cambiar una pregunta se edita ese array, nunca el HTML.**
-  - Los `select` avanzan solos; el resto lleva botón "Continuar".
+  - Las preguntas de opción única (`tipo:'select'`) se pintan como una **lista vertical de
+    botones del mismo ancho** (clases `wa-opt-list`/`wa-opt`), todos alineados a la izquierda,
+    en vez de los chips envueltos de antes (dejaban filas irregulares). Avanzan solas al tocar
+    una opción, el resto lleva botón "Continuar".
+  - **Orden de las opciones: de mayor a menor alcance/tamaño de proyecto**, siempre — es un
+    criterio interno, el cliente nunca lo ve como tal, solo ve una lista prolija y consistente.
+    Ejemplos ya aplicados: `perfil_tipo` → Empresa o Agencia, Marca personal o creador, Modelo,
+    Persona natural. `natural_ocasion` → Boda, 15 años, Graduación, Embarazo, Sesión
+    fotográfica, Otro. `cantidad_fotos`/`cantidad_videos`/`evento_horas` → de la cantidad más
+    alta a la más baja, con "Ninguna/o" casi al final y "No sé, que lo proponga Jara" siempre
+    de último. Si se agrega una pregunta nueva con opciones, ordenarla con el mismo criterio.
   - Bloques: A contacto (los 3 datos juntos) · B quién es · C qué necesita · D cuándo y dónde.
-    **No hay bloque de alcance ni de presupuesto y no deben volver:** en este mercado preguntar
-    por precio hace abandonar el formulario, y `modalidad`/`apoyo_equipo` se probaron y se
-    quitaron por alargar de más. Tampoco hay pregunta de "por dónde prefieres que te contacte".
-  - Ninguna ruta pasa de **11 pantallas** (empresa+evento 11, empresa 10, persona natural /
+    **No hay bloque de alcance, de presupuesto, de preferencia de contacto ni de entorno de la
+    sesión, y no deben volver:** en este mercado preguntar por precio hace abandonar el
+    formulario; `modalidad`/`apoyo_equipo` y "¿en qué entorno?" se probaron y se quitaron por
+    alargar de más sin aportar algo que Jara no resuelva en un mensaje de WhatsApp.
+  - Ninguna ruta pasa de **10 pantallas** (empresa+evento 10, empresa 9, persona natural /
     marca personal / modelo 9, +1 si eligen evento). Si una pregunta nueva rompe ese techo, sobra.
   - Regla de oro para podar: si Jara puede resolverlo en una frase de WhatsApp con el lead ya
     caliente, no va en el formulario.
   - `brief_libre` (textarea grande, bloque C) es el corazón: sustituye a ~15 sub-preguntas de
     estilo, referencias, guion y edición. No recortarlo.
   - `grupo` junta varias entradas en una sola pantalla: `contacto` (nombre+teléfono+correo),
-    `marca` (nombre de marca + redes; si el perfil es Modelo queda solo redes),
-    `cantidad` (fotos + videos) y `lugar` (país+ciudad+zona+entorno). El historial guarda la
-    clave del grupo, no la del campo, para que siga cuadrando aunque cambie la ruta.
+    `marca` (nombre de marca + redes; si el perfil es Modelo queda solo redes) y
+    `cantidad` (fotos + videos). El historial guarda la clave del grupo, no la del campo, para
+    que siga cuadrando aunque cambie la ruta.
+  - `ubicacion` (bloque D) ya **no es un grupo**: es una sola pregunta tipo `'ubicacion'` con
+    país (selector de siempre, Venezuela por defecto), ciudad y zona. **La ciudad es un campo
+    de texto libre con "Caracas" precargado** (no hay botón "Elegir de la lista"): si el
+    cliente quiere otra, borra y escribe la suya; al enfocar el campo se selecciona todo el
+    texto para que sea un solo gesto reemplazarlo. Si cambia de país, la ciudad se vacía.
   - `pregunta` y `preguntaPantalla` pueden ser funciones de las respuestas: así el enunciado de
     marca y el de redes cambian según `perfil_tipo` (empresa vs. persona).
   - **No existe una pregunta de `formato`** (fotos/video/ambos): se deduce de `cantidad_fotos` y
     `cantidad_videos` solo para el mensaje de WhatsApp. No se puede avanzar si ambos quedan en
     "Ninguna"/"Ninguno".
-  - `ubicacion_ciudad` viene con **Caracas** puesta (y Venezuela como país); si cambian de país
-    se borra la ciudad.
   - `showIf` decide la ruta; si cambias una respuesta anterior, las preguntas hijas que ya no
     aplican —y las respuestas cuya opción desapareció— se borran solas. Barra de progreso y
     contador "Pregunta X de Y" sobre las pantallas de **tu** ruta.
   - Botón "‹" para volver y "editar" en cada línea del resumen. **Sin escape temprano:** el
     enlace "Ya quiero enviar lo que llevo" se quitó a propósito, no lo vuelvas a poner.
   - Las respuestas viven solo en memoria (objeto `respuestas`), no se guardan en el navegador.
-  - El mensaje de WhatsApp es compacto y **solo con lo respondido**: encabezados de bloque en
-    negrita, datos cortos unidos con `·` y el `brief_libre` entre comillas en su propio párrafo,
-    que es lo primero que Jara debe leer. Si el perfil es `Modelo`, el bloque "Quién es" solo
-    lleva la línea de Instagram/TikTok (lo pidió el v4).
-  - La intro dice que serán **unas 15 preguntas** (texto pedido en el v4, aunque las pantallas
-    reales sean 9-11 porque varias preguntas van juntas).
+  - **El mensaje que se envía por WhatsApp es un párrafo natural, no una lista de campos**
+    (función `mensaje()`): se arma como si el cliente se lo escribiera a Jara con sus propias
+    palabras — "Hola, mi nombre es X. Te escribo en representación de..., Se trata de...,
+    Esto es lo que tengo en mente: "...". Para cerrar, la sesión sería el... en...". Solo entran
+    frases de lo que sí se respondió, nunca una línea de precio. La pantalla de resumen
+    **muestra este mismo párrafo** bajo el encabezado "Así se lo escribiré a Jara" (bloque
+    `.wa-res-msg`/`.wa-res-parrafo`), además de la lista de campos con "editar" de siempre —
+    el cliente ve exactamente lo que se va a enviar antes de tocar "Enviar por WhatsApp". Si el
+    perfil es `Modelo`, el párrafo solo menciona su Instagram/TikTok, no una "marca".
+  - La intro dice **"unas 10 preguntas rápidas para preparar tu cotización"** (frase corta,
+    sin mencionar que Jara "no preguntará nada más" — sonaba brusco).
   - Tras enviar, una burbuja breve confirma que Jara responde por WhatsApp; no se pide nada más.
   Foto de perfil: logo "Jara" completo, pequeño (no recortar). Fondo del chat: dibujos
   propios estilo WhatsApp (SVG), no la imagen de WhatsApp (es de Meta). Verde del chat:

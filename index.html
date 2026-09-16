@@ -651,9 +651,21 @@
     padding:7px 12px;font-size:13.5px;line-height:1.25;cursor:pointer;text-align:center;
   }
   .wa-chip.is-on{background:#00a884;border-color:#00a884;color:#fff;}
-  /* chips secundarios: "Omitir" y "Elegir de la lista" */
+  /* chips secundarios: "Omitir" */
   .wa-chip-soft{border-color:#c9d2d7;color:#54656f;}
   .wa-chip-soft.is-on{background:#54656f;border-color:#54656f;color:#fff;}
+  /* opciones de una pregunta de eleccion unica: lista vertical, mismo ancho y
+     misma alineacion siempre (a la izquierda), sin importar cuantas opciones
+     haya ni que tan largo sea el texto de cada una. El orden en que se listan
+     va de la opcion de mayor alcance a la de menor, pero eso el cliente no lo
+     percibe: solo ve una lista prolija. */
+  .wa-opt-list{display:flex;flex-direction:column;gap:8px;}
+  .wa-opt{
+    display:block;width:100%;text-align:left;
+    border:1px solid #00a884;border-radius:10px;background:#fff;color:#008069;
+    padding:11px 14px;font-size:14.5px;line-height:1.32;cursor:pointer;
+  }
+  .wa-opt:disabled{opacity:.6;}
   .wa-card .is-bad{border-color:#e5484d !important;box-shadow:0 0 0 2px rgba(229,72,77,0.15);}
   .wa-f-err{margin:0 0 9px;color:#d93025;font-size:13px;line-height:1.3;}
   .wa-f-ok{width:100%;height:44px;border:0;border-radius:22px;background:#075E54;color:#fff;font-size:15px;font-weight:600;cursor:pointer;}
@@ -805,6 +817,12 @@
   .wa-res-editar{
     flex-shrink:0;border:0;background:none;color:#075E54;font-size:12.5px;
     cursor:pointer;text-decoration:underline;padding:2px 0;
+  }
+  /* vista previa del mensaje que se enviara por WhatsApp: parrafo, no lista */
+  .wa-res-msg{margin-top:14px;padding-top:12px;border-top:1px solid rgba(17,27,33,0.09);}
+  .wa-res-parrafo{
+    margin:6px 0 0;font-size:13.5px;line-height:1.55;color:#3b4a51;
+    font-style:italic;white-space:pre-line;
   }
 </style>
 <script>
@@ -1639,10 +1657,16 @@
    Formulario conversacional progresivo: una pantalla por vez, estilo chat.
    Todo el cuestionario vive en el array PREGUNTAS. Varias entradas pueden
    compartir pantalla con la propiedad `grupo` (contacto, marca+redes,
-   fotos+videos, ubicacion+entorno), asi que ninguna ruta pasa de 11 pantallas.
+   fotos+videos), asi que ninguna ruta pasa de 11 pantallas.
+   Las preguntas de opcion unica se pintan como una lista vertical de botones
+   del mismo ancho (wa-opt-list/wa-opt), siempre alineados igual. El orden de
+   las opciones va de la que implica mayor alcance a la que implica menor
+   (el cliente no ve ese criterio, solo ve una lista prolija y en el mismo
+   orden en toda la conversacion).
    Para anadir o quitar una pregunta solo hay que tocar ese array, nunca el HTML.
    Las respuestas viven en memoria (objeto "respuestas"), no se guarda nada en el
-   navegador. Al final se arma un mensaje de texto y se abre WhatsApp. */
+   navegador. Al final se arma un mensaje en forma de parrafo (no de lista) y
+   se abre WhatsApp con ese mismo texto. */
 (function(){
   "use strict";
   function $(id){ return document.getElementById(id); }
@@ -1684,10 +1708,13 @@
     { id:'correo', bloque:'A', grupo:'contacto', tipo:'email', etiquetaWA:'Correo',
       pregunta:'¿Tu correo?' },
 
-    /* ---------- BLOQUE B · quien eres ---------- */
+    /* ---------- BLOQUE B · quien eres ----------
+       Orden de perfil_tipo: de mayor a menor alcance tipico del proyecto
+       (Empresa/Agencia primero, Persona natural al final). No es un dato que
+       el cliente perciba, solo el orden en que ve las opciones. */
     { id:'perfil_tipo', bloque:'B', tipo:'select', etiquetaWA:'Perfil',
-      pregunta:'¿Cómo te describes?',
-      opciones:[NATURAL, EMPRESA, MARCA, MODELO] },
+      pregunta:'¿Cómo te presentas?',
+      opciones:[EMPRESA, MARCA, MODELO, NATURAL] },
     /* marca y redes comparten pantalla; si es Modelo solo queda el campo de redes */
     { id:'marca_nombre', bloque:'B', grupo:'marca', tipo:'text', etiquetaWA:'Marca',
       preguntaPantalla:function(r){
@@ -1714,9 +1741,10 @@
       opciones:['Moda o ropa', 'Gastronomía', 'Belleza o estética', 'Joyería o accesorios',
                 'Inmobiliaria', 'Salud', 'Tecnología', 'Educación', 'Eventos', 'Otro'],
       showIf:es('perfil_tipo', EMPRESA) },
+    /* orden de ocasion: de la mas grande/elaborada a la mas sencilla */
     { id:'natural_ocasion', bloque:'B', tipo:'select', etiquetaWA:'Ocasión',
       pregunta:'¿Cuál es la ocasión?',
-      opciones:['Boda', 'Embarazo', 'Graduación', '15 años', 'Sesión fotográfica', 'Otro'],
+      opciones:['Boda', '15 años', 'Graduación', 'Embarazo', 'Sesión fotográfica', 'Otro'],
       showIf:es('perfil_tipo', NATURAL) },
 
     /* ---------- BLOQUE C · que necesitas ---------- */
@@ -1724,11 +1752,13 @@
       pregunta:'¿Qué tipo de producción buscas?',
       opciones:['Contenido comercial o publicitario', 'Evento, curso o lanzamiento',
                 'Retrato personal o video de presentación', 'Contenido para reels o TikToks', 'Otro'] },
-    /* fotos y videos en una sola pantalla; el "formato" se deduce de las dos */
+    /* fotos y videos en una sola pantalla; el "formato" se deduce de las dos.
+       Orden de cada selector: de mas cantidad a menos, "Ninguna/o" casi al
+       final y "No sé" siempre de ultimo. */
     { id:'cantidad_fotos', bloque:'C', grupo:'cantidad', tipo:'opcion', etiquetaWA:'Fotografías',
       preguntaPantalla:'¿Cuántas fotografías y cuántos videos necesitas?',
       pregunta:'¿Cuántas fotografías?',
-      opciones:[SIN_FOTOS, '5 a 10', '11 a 25', '26 a 50', 'Más de 50', 'No sé, que lo proponga Jara'],
+      opciones:['Más de 50', '26 a 50', '11 a 25', '5 a 10', SIN_FOTOS, 'No sé, que lo proponga Jara'],
       validarGrupo:function(v){
         if (v.cantidad_fotos === SIN_FOTOS && v.cantidad_videos === SIN_VIDEOS)
           return { texto:'Elige al menos fotografías o videos.', id:'cantidad_fotos' };
@@ -1736,10 +1766,10 @@
       } },
     { id:'cantidad_videos', bloque:'C', grupo:'cantidad', tipo:'opcion', etiquetaWA:'Videos',
       pregunta:'¿Cuántos videos?',
-      opciones:[SIN_VIDEOS, '1', '2 a 3', '4 a 6', 'Más de 6', 'No sé, que lo proponga Jara'] },
+      opciones:['Más de 6', '4 a 6', '2 a 3', '1', SIN_VIDEOS, 'No sé, que lo proponga Jara'] },
     { id:'evento_horas', bloque:'C', tipo:'select', etiquetaWA:'Cobertura',
       pregunta:'¿Cuántas horas de cobertura necesitas?',
-      opciones:['1 a 2 horas', '3 a 4 horas', '5 a 8 horas', 'Más de 8 horas', 'Varios días'],
+      opciones:['Varios días', 'Más de 8 horas', '5 a 8 horas', '3 a 4 horas', '1 a 2 horas'],
       showIf:es('produccion_tipo', 'Evento, curso o lanzamiento') },
     /* el corazon del formulario: sustituye a una quincena de sub-preguntas */
     { id:'brief_libre', bloque:'C', tipo:'textarea', etiquetaWA:'Lo que tiene en mente', grande:true,
@@ -1750,12 +1780,9 @@
     /* ---------- BLOQUE D · donde y cuando (3 pantallas para todos) ---------- */
     { id:'fecha_estimada', bloque:'D', tipo:'fecha', etiquetaWA:'Fecha',
       pregunta:'¿Qué fecha tienes en mente?' },
-    { id:'ubicacion', bloque:'D', grupo:'lugar', tipo:'ubicacion', etiquetaWA:'Lugar',
-      preguntaPantalla:'¿Dónde sería la sesión?',
+    /* pais + ciudad (texto libre, Caracas precargada) + zona, todo junto */
+    { id:'ubicacion', bloque:'D', tipo:'ubicacion', etiquetaWA:'Lugar',
       pregunta:'¿Dónde sería la sesión?' },
-    { id:'entorno', bloque:'D', grupo:'lugar', tipo:'opcion', etiquetaWA:'Entorno',
-      pregunta:'¿En qué entorno?',
-      opciones:['Estudio', 'Exteriores', 'En mi local o casa', 'No sé, que lo proponga Jara'] },
     { id:'deadline_entrega', bloque:'D', tipo:'select', etiquetaWA:'Entrega',
       pregunta:'¿Para cuándo necesitas el material listo?',
       opciones:['Mismo día', 'En 48 horas', 'En una semana', 'En dos semanas', 'Sin apuro'] }
@@ -2002,6 +2029,22 @@
     g.appendChild(b);
     return b;
   }
+  /* lista vertical de opciones de eleccion unica: mismo ancho, misma
+     alineacion (izquierda) y mismo orden siempre, sin importar el numero de
+     opciones ni el largo del texto. Reemplaza a los chips envueltos, que
+     dejaban filas irregulares segun cuantas cabian por linea. */
+  function listaOpciones(contenedor){
+    var g = el('div', 'wa-opt-list');
+    contenedor.appendChild(g);
+    return g;
+  }
+  function opcionBoton(g, texto, alPulsar){
+    var b = el('button', 'wa-opt', texto);
+    b.type = 'button';
+    b.addEventListener('click', alPulsar);
+    g.appendChild(b);
+    return b;
+  }
 
   /* ---------- muestra una pantalla ---------- */
   function preguntar(q, conAnimacion){
@@ -2040,16 +2083,18 @@
     var previo = respuestas[q.id];
 
     if (q.grupo === 'contacto'){ controlContacto(q); pintarProgreso(); return; }
-    if (q.grupo === 'lugar'){ controlLugar(q); pintarProgreso(); return; }
     if (q.grupo){ controlGrupo(q); pintarProgreso(); return; }
 
     if (q.tipo === 'select'){
       var c1 = tarjeta();
-      var g = chips(fila(c1, null));
+      var g = listaOpciones(fila(c1, null));
       opcionesDe(q).forEach(function(op){
-        chip(g, op, function(){ cerrarTarjeta(c1); guardar(q, op); });
+        opcionBoton(g, op, function(){ cerrarTarjeta(c1); guardar(q, op); });
       });
-      if (q.opcional) chip(g, 'Omitir', function(){ cerrarTarjeta(c1); guardar(q, '', 'Omitir'); }, true);
+      if (q.opcional){
+        var gOmitir = chips(fila(c1, null));
+        chip(gOmitir, 'Omitir', function(){ cerrarTarjeta(c1); guardar(q, '', 'Omitir'); }, true);
+      }
       pintarProgreso(); return;
     }
 
@@ -2089,6 +2134,8 @@
       });
       pintarProgreso(); return;
     }
+
+    if (q.tipo === 'ubicacion'){ controlUbicacion(q); pintarProgreso(); return; }
   }
 
   /* ---------- pantalla con varios campos: marca+redes, fotos+videos ---------- */
@@ -2184,64 +2231,46 @@
     if (!tactil) nombre.focus();
   }
 
-  /* ---------- bloque D: pais, ciudad, lugar y entorno en una sola pantalla ---------- */
-  function controlLugar(q){
+  /* ---------- bloque D: pais, ciudad y zona en una sola pantalla ----------
+     La ciudad ya no se elige de una lista: es un campo de texto con "Caracas"
+     precargado (la ciudad de la mayoria de los clientes). Si el cliente
+     quiere otra, borra la palabra y escribe la suya; al enfocar el campo se
+     selecciona todo el texto para que sea un solo gesto reemplazarlo. */
+  function controlUbicacion(q){
     var c = tarjeta();
-    var qEntorno = porId('entorno');
 
     var bPais = el('button', 'wa-f-btn', respuestas.ubicacion_pais || 'Venezuela');
     bPais.type = 'button';
     fila(c, 'País').appendChild(bPais);
 
-    var fc = fila(c, 'Ciudad');
-    /* Caracas viene puesta: es la ciudad de la mayoria de los clientes */
     var ciudadPrevia = respuestas.ubicacion_ciudad;
-    if (ciudadPrevia === undefined && bPais.textContent === 'Venezuela') ciudadPrevia = 'Caracas';
+    if (ciudadPrevia === undefined) ciudadPrevia = (bPais.textContent === 'Venezuela') ? 'Caracas' : '';
     var iCiudad = campo('text', 'Escribe tu ciudad', ciudadPrevia);
-    var gc = el('div', 'wa-f-chips');
-    fc.appendChild(iCiudad);
-    fc.appendChild(gc);
+    iCiudad.addEventListener('focus', function(){ iCiudad.select(); });
+    fila(c, 'Ciudad').appendChild(iCiudad);
 
-    function pintarCiudades(){
-      gc.innerHTML = '';
-      var cs = CIUDADES[bPais.textContent] || [];
-      if (!cs.length) return;
-      chip(gc, 'Elegir de la lista', function(){
-        abrirSheet({ title:'Ciudad', search: cs.length > 8, selected: iCiudad.value,
-          items: cs.map(function(x){ return { value:x, label:x }; }),
-          onPick: function(v){ iCiudad.value = v; iCiudad.classList.remove('is-bad'); } });
-      }, true);
-    }
     bPais.addEventListener('click', function(){
       abrirSheet({ title:'País', search:true, selected:bPais.textContent,
         items: PAISES.map(function(p){ return { value:p[0], label:p[0] }; }),
         onPick: function(v){
           bPais.textContent = v;
           iCiudad.value = (v === 'Venezuela') ? 'Caracas' : '';
-          pintarCiudades();
         } });
     });
-    pintarCiudades();
 
     var iLugar = campo('text', 'Zona o nombre del lugar', respuestas.ubicacion_lugar);
     fila(c, 'Zona o lugar (opcional)').appendChild(iLugar);
 
-    var bEntorno = campoOpcion(qEntorno, respuestas.entorno);
-    fila(c, etiquetaCampo(qEntorno)).appendChild(bEntorno);
-
     pie(c, 'Continuar', function(){
       var ciudad = iCiudad.value.trim();
-      if (!ciudad) return fallo(c, 'Escribe o elige tu ciudad.', iCiudad);
-      if (!bEntorno._valor) return fallo(c, 'Elige el entorno de la sesión.', bEntorno);
+      if (!ciudad) return fallo(c, 'Escribe tu ciudad.', iCiudad);
       respuestas.ubicacion_pais   = bPais.textContent;
       respuestas.ubicacion_ciudad = ciudad;
       respuestas.ubicacion_lugar  = iLugar.value.trim();
       var texto = ciudad + ', ' + respuestas.ubicacion_pais;
       if (respuestas.ubicacion_lugar) texto += ' — ' + respuestas.ubicacion_lugar;
-      respuestas.ubicacion = texto;
-      respuestas.entorno = bEntorno._valor;
       cerrarTarjeta(c);
-      guardarGrupo(q);
+      guardar(q, texto);
     });
   }
 
@@ -2341,6 +2370,11 @@
           c.appendChild(fila_);
         });
       });
+      /* vista previa del mensaje real que se enviara por WhatsApp */
+      var msg = el('div', 'wa-res-msg');
+      msg.appendChild(el('h4', null, 'Así se lo escribiré a Jara'));
+      msg.appendChild(el('p', 'wa-res-parrafo', mensaje()));
+      c.appendChild(msg);
       lista.appendChild(c);
       fin.hidden = false;
       pintarProgreso();
@@ -2348,70 +2382,76 @@
   }
 
   /* ---------- mensaje de WhatsApp ----------
-     compacto, solo con lo respondido y sin una sola linea de precio. */
-  var CORTO = {
-    'Contenido comercial o publicitario':'Contenido comercial',
-    'Evento, curso o lanzamiento':'Evento o lanzamiento',
-    'Retrato personal o video de presentación':'Retrato o video de presentación',
-    'Contenido para reels o TikToks':'Reels o TikToks',
-    'En mi local o casa':'su local o casa',
-    'No sé, que lo proponga Jara':'que lo proponga Jara'
-  };
-  function corto(v){ return CORTO[v] || v; }
+     un parrafo natural, como si el cliente se lo escribiera a Jara con sus
+     propias palabras — no una lista de campos. Cada oracion solo entra si el
+     dato correspondiente fue respondido, y nunca hay una linea de precio. */
   function minus(v){ return v ? v.charAt(0).toLowerCase() + v.slice(1) : v; }
-  function unir(partes, sep){
-    return partes.filter(function(x){ return !!x; }).join(sep);
-  }
+  var OCASION_FRASE = {
+    'Boda':'una boda', 'Embarazo':'un embarazo', 'Graduación':'una graduación',
+    '15 años':'una fiesta de 15 años', 'Sesión fotográfica':'una sesión fotográfica',
+    'Otro':'una ocasión especial'
+  };
+  var ENTREGA_FRASE = {
+    'Mismo día':'el mismo día', 'En 48 horas':'en 48 horas', 'En una semana':'en una semana',
+    'En dos semanas':'en dos semanas', 'Sin apuro':'sin apuro, cuando puedas'
+  };
 
   function mensaje(){
-    var r = respuestas, out = ['*NUEVA SOLICITUD — vía web*'];
-    function bloque(titulo, filas){
-      var f = filas.filter(function(x){ return !!x; });
-      if (!f.length) return;
-      out.push('');
-      out.push('*' + titulo + '*');
-      out = out.concat(f);
-    }
+    var r = respuestas;
 
-    bloque('Contacto', [unir([r.nombre, r.telefono], ' · '), r.correo]);
+    var saludo = ['Hola, mi nombre es ' + r.nombre + '.'];
+    var datos = [];
+    if (r.telefono) datos.push('mi teléfono es ' + r.telefono);
+    if (r.correo) datos.push('mi correo es ' + r.correo);
+    if (datos.length) saludo.push('Te dejo mis datos: ' + datos.join(' y ') + '.');
 
     var quien = [];
     if (r.perfil_tipo === NATURAL){
-      quien.push(unir([NATURAL, minus(r.natural_ocasion)], ' · '));
-    } else if (r.perfil_tipo && r.perfil_tipo !== MODELO){
-      var l = r.perfil_tipo + (r.marca_nombre ? ': ' + r.marca_nombre : '');
-      if (r.empresa_rubro) l += ' (' + r.empresa_rubro + ')';
-      quien.push(l);
+      quien.push('Soy un cliente particular, y la ocasión es ' + (OCASION_FRASE[r.natural_ocasion] || 'una ocasión especial') + '.');
+    } else if (r.perfil_tipo === MODELO){
+      quien.push('Trabajo como modelo' + (r.redes ? ', mi Instagram o TikTok es ' + r.redes : '') + '.');
+    } else if (r.perfil_tipo === EMPRESA){
+      var e = 'Te escribo en representación de una empresa o agencia';
+      if (r.marca_nombre) e += ' llamada ' + r.marca_nombre;
+      if (r.empresa_rubro) e += ', en el rubro de ' + minus(r.empresa_rubro);
+      quien.push(e + '.');
+      if (r.redes) quien.push('El Instagram o TikTok de la empresa es ' + r.redes + '.');
+    } else if (r.perfil_tipo === MARCA){
+      var m = 'Soy una marca personal o creador de contenido';
+      if (r.marca_nombre) m += ' llamada ' + r.marca_nombre;
+      quien.push(m + '.');
+      if (r.redes) quien.push('Mi Instagram o TikTok es ' + r.redes + '.');
     }
-    if (r.redes){
-      quien.push((r.perfil_tipo === EMPRESA ? 'Instagram/TikTok de la empresa' : 'Instagram/TikTok') + ': ' + r.redes);
-    }
-    bloque('Quién es', quien);
 
-    /* el "formato" se deduce de las dos cantidades, no es una pregunta */
+    var necesita = [];
+    if (r.produccion_tipo === 'Otro'){
+      necesita.push('Tengo un proyecto que no encaja en las categorías usuales.');
+    } else if (r.produccion_tipo){
+      necesita.push('Se trata de ' + minus(r.produccion_tipo) + '.');
+    }
     var fotos  = (r.cantidad_fotos  && r.cantidad_fotos  !== SIN_FOTOS)  ? r.cantidad_fotos  : '';
     var videos = (r.cantidad_videos && r.cantidad_videos !== SIN_VIDEOS) ? r.cantidad_videos : '';
-    var formato = (fotos && videos) ? 'Fotos y video' : (fotos ? 'Solo fotos' : (videos ? 'Solo video' : ''));
-    bloque('Qué necesita', [
-      unir([corto(r.produccion_tipo), formato], ' · '),
-      unir([fotos ? 'Fotografías: ' + corto(fotos) : '', videos ? 'Videos: ' + corto(videos) : ''], ' · '),
-      r.evento_horas ? 'Cobertura: ' + minus(r.evento_horas) : ''
-    ]);
+    if (fotos && videos) necesita.push('En cantidad, calculo unas ' + fotos + ' fotografías y ' + videos + ' videos.');
+    else if (fotos) necesita.push('En cantidad, calculo unas ' + fotos + ' fotografías.');
+    else if (videos) necesita.push('En cantidad, calculo unos ' + videos + ' videos.');
+    if (r.evento_horas) necesita.push('La cobertura del evento sería de ' + minus(r.evento_horas) + '.');
+    if (r.brief_libre) necesita.push('Esto es lo que tengo en mente: "' + r.brief_libre + '".');
 
-    /* lo primero que Jara debe leer: en su propio parrafo y entre comillas */
-    if (r.brief_libre){
-      out.push('');
-      out.push('"' + r.brief_libre + '"');
+    var piezasCuando = [];
+    if (r.fecha_estimada) piezasCuando.push('el ' + r.fecha_estimada);
+    if (r.ubicacion_ciudad){
+      var lug = 'en ' + r.ubicacion_ciudad + (r.ubicacion_pais ? ', ' + r.ubicacion_pais : '');
+      if (r.ubicacion_lugar) lug += ', en la zona de ' + r.ubicacion_lugar;
+      piezasCuando.push(lug);
     }
+    var cuando = [];
+    if (piezasCuando.length) cuando.push('Para cerrar, la sesión sería ' + piezasCuando.join(' ') + '.');
+    if (r.deadline_entrega) cuando.push('Quisiera tener el material listo ' + (ENTREGA_FRASE[r.deadline_entrega] || minus(r.deadline_entrega)) + '.');
 
-    bloque('Cuándo y dónde', [
-      r.fecha_estimada,
-      r.ubicacion,
-      r.entorno ? 'Entorno: ' + minus(corto(r.entorno)) : '',
-      r.deadline_entrega ? 'Entrega: ' + minus(r.deadline_entrega) : ''
-    ]);
-
-    return out.join('\n');
+    return [saludo, quien, necesita, cuando]
+      .map(function(grupo){ return grupo.join(' '); })
+      .filter(function(p){ return !!p; })
+      .join('\n\n');
   }
   window.__jaraMensaje = mensaje;   /* para comprobar el mensaje en pruebas */
 
@@ -2452,7 +2492,7 @@
   function arrancar(){
     pintarProgreso();
     bot('¡Hola! Soy el Agente de Jara.', null, function(){
-      bot('Voy a hacerte unas 15 preguntas rápidas para armarte una propuesta a la medida. Así Jara no tiene que preguntarte nada más por WhatsApp: solo confirmar y cotizar.', null, function(){
+      bot('Voy a hacerte unas 10 preguntas rápidas para preparar tu cotización.', null, function(){
         preguntar(PREGUNTAS[0]);
       });
     });
