@@ -73,19 +73,45 @@ app móvil de GitHub, y la web publicada se actualiza sola 1–2 minutos despué
   Se navega con flechas, teclado y deslizando el dedo.
 
 - **Cotización = chat "Agente de Jara"** en `index.html`: ventana estilo WhatsApp (`#waChat`)
-  con un **motor de preguntas ramificado (16-09-2026)**. Todo el cuestionario vive en el array
-  `PREGUNTAS`: cada objeto es `{id, bloque, tipo, pregunta, ayuda, opciones, showIf, etiquetaWA}`.
+  con un **motor de preguntas ramificado (versión corta v4, 16-09-2026)**. Todo el cuestionario
+  vive en el array `PREGUNTAS`: **17 entradas** repartidas en **9 a 11 pantallas**, cada objeto
+  es `{id, bloque, grupo, tipo, pregunta, ayuda, opciones, showIf, etiquetaWA}`.
   **Para añadir o cambiar una pregunta se edita ese array, nunca el HTML.**
-  - Una pregunta por pantalla; los `select` avanzan solos, el resto lleva botón "Continuar".
-  - Bloques: A contacto (los 3 datos juntos) · B perfil · C proyecto · D entregables ·
-    E producción · F estilo · G logística · H presupuesto · I cierre.
+  - Los `select` avanzan solos; el resto lleva botón "Continuar".
+  - Bloques: A contacto (los 3 datos juntos) · B quién es · C qué necesita · D cuándo y dónde.
+    **No hay bloque de alcance ni de presupuesto y no deben volver:** en este mercado preguntar
+    por precio hace abandonar el formulario, y `modalidad`/`apoyo_equipo` se probaron y se
+    quitaron por alargar de más. Tampoco hay pregunta de "por dónde prefieres que te contacte".
+  - Ninguna ruta pasa de **11 pantallas** (empresa+evento 11, empresa 10, persona natural /
+    marca personal / modelo 9, +1 si eligen evento). Si una pregunta nueva rompe ese techo, sobra.
+  - Regla de oro para podar: si Jara puede resolverlo en una frase de WhatsApp con el lead ya
+    caliente, no va en el formulario.
+  - `brief_libre` (textarea grande, bloque C) es el corazón: sustituye a ~15 sub-preguntas de
+    estilo, referencias, guion y edición. No recortarlo.
+  - `grupo` junta varias entradas en una sola pantalla: `contacto` (nombre+teléfono+correo),
+    `marca` (nombre de marca + redes; si el perfil es Modelo queda solo redes),
+    `cantidad` (fotos + videos) y `lugar` (país+ciudad+zona+entorno). El historial guarda la
+    clave del grupo, no la del campo, para que siga cuadrando aunque cambie la ruta.
+  - `pregunta` y `preguntaPantalla` pueden ser funciones de las respuestas: así el enunciado de
+    marca y el de redes cambian según `perfil_tipo` (empresa vs. persona).
+  - **No existe una pregunta de `formato`** (fotos/video/ambos): se deduce de `cantidad_fotos` y
+    `cantidad_videos` solo para el mensaje de WhatsApp. No se puede avanzar si ambos quedan en
+    "Ninguna"/"Ninguno".
+  - `ubicacion_ciudad` viene con **Caracas** puesta (y Venezuela como país); si cambian de país
+    se borra la ciudad.
   - `showIf` decide la ruta; si cambias una respuesta anterior, las preguntas hijas que ya no
-    aplican se borran solas. Barra de progreso sobre las preguntas de **tu** ruta.
-  - Botón "‹" para volver, "editar" en cada línea del resumen y, desde el bloque E, el enlace
-    discreto "Ya quiero enviar lo que llevo".
+    aplican —y las respuestas cuya opción desapareció— se borran solas. Barra de progreso y
+    contador "Pregunta X de Y" sobre las pantallas de **tu** ruta.
+  - Botón "‹" para volver y "editar" en cada línea del resumen. **Sin escape temprano:** el
+    enlace "Ya quiero enviar lo que llevo" se quitó a propósito, no lo vuelvas a poner.
   - Las respuestas viven solo en memoria (objeto `respuestas`), no se guardan en el navegador.
-  - El mensaje de WhatsApp se arma agrupado por bloque con los títulos en negrita y **solo con
-    lo respondido**. Saludo: "Te haré unas preguntas rápidas…" (le gustó).
+  - El mensaje de WhatsApp es compacto y **solo con lo respondido**: encabezados de bloque en
+    negrita, datos cortos unidos con `·` y el `brief_libre` entre comillas en su propio párrafo,
+    que es lo primero que Jara debe leer. Si el perfil es `Modelo`, el bloque "Quién es" solo
+    lleva la línea de Instagram/TikTok (lo pidió el v4).
+  - La intro dice que serán **unas 15 preguntas** (texto pedido en el v4, aunque las pantallas
+    reales sean 9-11 porque varias preguntas van juntas).
+  - Tras enviar, una burbuja breve confirma que Jara responde por WhatsApp; no se pide nada más.
   Foto de perfil: logo "Jara" completo, pequeño (no recortar). Fondo del chat: dibujos
   propios estilo WhatsApp (SVG), no la imagen de WhatsApp (es de Meta). Verde del chat:
   `#075E54` (el oscuro del principio; probamos el del icono y un punto medio y no
@@ -176,11 +202,14 @@ app móvil de GitHub, y la web publicada se actualiza sola 1–2 minutos despué
 
 ## 8. Pendientes / a tener en cuenta
 
-- **Punto de retorno (16-09-2026):** el formulario por bloques A–I (`PROMPT_FORMULARIO_JARA.md`,
-  guardado en el repo) se construyó sobre el commit `7a586ae`. Si no convence, se vuelve a esa
-  versión revirtiendo lo posterior.
-- La pregunta `traslado` sale siempre: no sé cuál es la ciudad base de Jara. Dímela y solo
-  aparecerá cuando la sesión sea en otra ciudad.
+- **Punto de retorno (16-09-2026):** el formulario largo por bloques A–I
+  (`PROMPT_FORMULARIO_JARA.md`, guardado en el repo) se construyó sobre el commit `7a586ae`.
+  Quedó demasiado largo (rutas de 35+ pantallas). Se recortó a 20 preguntas / 17 pantallas con
+  `PROMPT_FORMULARIO_JARA_V3.md` y después a las **9-11 pantallas actuales** con
+  `PROMPT_FORMULARIO_JARA_V4.md` (los tres prompts están guardados en el repo). Si hiciera
+  falta volver atrás, cada uno describe entera su versión.
+- El formulario ya no pregunta la ciudad base de Jara ni el traslado: si la sesión es fuera de
+  su ciudad, se ve en `ubicacion` y se conversa por WhatsApp.
 
 - **Botón verde "Cotiza tu sesión por WhatsApp"**: ya está puesto en el `.p-cta` del
   portafolio (sustituyó a "¿Trabajamos juntos?" y a "Cotiza Ya Su Sesión"; queda ese botón

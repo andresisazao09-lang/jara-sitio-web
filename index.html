@@ -571,7 +571,7 @@
     font-family:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
     text-align:left;color:#111b21;text-transform:none;letter-spacing:0;
   }
-  .wa-card button,.wa-card input{font-family:inherit;}
+  .wa-card button,.wa-card input,.wa-card textarea{font-family:inherit;}
   .wa-head{display:flex;align-items:center;gap:11px;padding:12px 8px 12px 14px;background:#075E54;color:#fff;flex-shrink:0;}
   .wa-avatar{width:44px;height:44px;border-radius:50%;background:#111110;display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0;}
   /* el logo "Jara" completo aunque se vea pequeno; el trazo se engrosa un poco para que se lea */
@@ -621,9 +621,19 @@
     border:1px solid #d1d7db;border-radius:10px;background:#fff;color:#111b21;box-shadow:none;outline:none;
     padding:0 12px;font-size:16px;text-align:left;text-transform:none;letter-spacing:0;
   }
-  .wa-card .wa-f input:focus{border-color:#00a884;}
-  .wa-card .wa-f input::placeholder{color:#8696a0;opacity:1;text-transform:none;}
-  .wa-card .wa-f input:disabled{background:#f5f6f6;color:#54656f;}
+  /* el textarea del brief: mismo estilo que los campos, pero con aire de sobra */
+  .wa-card .wa-f textarea{
+    -webkit-appearance:none;appearance:none;display:block;width:100%;margin:0;
+    border:1px solid #d1d7db;border-radius:10px;background:#fff;color:#111b21;box-shadow:none;outline:none;
+    padding:10px 12px;font-size:16px;line-height:1.4;text-align:left;text-transform:none;letter-spacing:0;
+    min-height:112px;resize:vertical;
+  }
+  .wa-form-grande .wa-f textarea{min-height:140px;}
+  .wa-card .wa-f input:focus,.wa-card .wa-f textarea:focus{border-color:#00a884;}
+  .wa-card .wa-f input::placeholder,.wa-card .wa-f textarea::placeholder{color:#8696a0;opacity:1;text-transform:none;}
+  .wa-card .wa-f input:disabled,.wa-card .wa-f textarea:disabled{background:#f5f6f6;color:#54656f;}
+  /* los chips que acompanan a un campo (elegir ciudad) respiran un poco */
+  .wa-f input + .wa-f-chips,.wa-f textarea + .wa-f-chips{margin-top:6px;}
   .wa-f-row{display:flex;gap:6px;}
   .wa-f-row input{flex:1;min-width:0;}
   .wa-f-pick{flex-shrink:0;height:42px;border:1px solid #d1d7db;border-radius:10px;background:#f7f8fa;color:#111b21;padding:0 10px;font-size:14px;cursor:pointer;}
@@ -633,6 +643,7 @@
     padding:0 12px;font-size:15px;text-align:left;cursor:pointer;
   }
   .wa-f-btn.is-empty{color:#8696a0;}
+  .wa-card .wa-f-btn:disabled,.wa-card .wa-f-pick:disabled{background:#f5f6f6;color:#54656f;}
   .wa-f-btn::after{content:"\203A";margin-left:8px;color:#8696a0;font-size:20px;line-height:1;}
   .wa-f-chips{display:flex;flex-wrap:wrap;gap:6px;border:1px solid transparent;border-radius:12px;}
   .wa-chip{
@@ -640,6 +651,9 @@
     padding:7px 12px;font-size:13.5px;line-height:1.25;cursor:pointer;text-align:center;
   }
   .wa-chip.is-on{background:#00a884;border-color:#00a884;color:#fff;}
+  /* chips secundarios: "Omitir" y "Elegir de la lista" */
+  .wa-chip-soft{border-color:#c9d2d7;color:#54656f;}
+  .wa-chip-soft.is-on{background:#54656f;border-color:#54656f;color:#fff;}
   .wa-card .is-bad{border-color:#e5484d !important;box-shadow:0 0 0 2px rgba(229,72,77,0.15);}
   .wa-f-err{margin:0 0 9px;color:#d93025;font-size:13px;line-height:1.3;}
   .wa-f-ok{width:100%;height:44px;border:0;border-radius:22px;background:#075E54;color:#fff;font-size:15px;font-weight:600;cursor:pointer;}
@@ -770,9 +784,11 @@
   .wa-prog{height:3px;background:rgba(17,27,33,0.10);flex-shrink:0;}
   .wa-prog span{display:block;height:100%;width:0;background:#075E54;transition:width .35s ease;}
   .wa-ayuda{display:block;margin-top:5px;font-size:12.5px;line-height:1.35;color:#667781;}
-  .wa-salir{
-    display:block;margin:2px auto 8px;border:0;background:none;color:#54656f;
-    font-size:12.5px;text-decoration:underline;cursor:pointer;
+  /* contador en texto: ver un numero bajo y concreto reduce el abandono */
+  .wa-prog-txt{
+    margin:0;padding:6px 14px 5px;flex-shrink:0;
+    background:#efeae2;border-bottom:1px solid rgba(17,27,33,0.06);
+    color:#54656f;font-size:11.5px;letter-spacing:.05em;text-align:center;
   }
   .wa-res{width:92%;max-width:92%;white-space:normal;}
   .wa-res h4{
@@ -1023,6 +1039,7 @@
       <button type="button" class="wa-close" id="waClose" aria-label="Cerrar">&times;</button>
     </div>
     <div class="wa-prog" aria-hidden="true"><span id="waProgBar"></span></div>
+    <p class="wa-prog-txt" id="waProgTxt" aria-live="polite" hidden></p>
     <div class="wa-body"><div class="wa-list" id="waMsgs" aria-live="polite"></div></div>
     <div class="wa-end" id="waEnd" hidden>
       <button type="button" class="wa-finish" id="waFinish">
@@ -1619,456 +1636,190 @@
 
 <script>
 /* ===== Chat "Agente de Jara" — motor de preguntas =====
-   Formulario conversacional progresivo: una pregunta por pantalla, estilo chat.
-   Todo el arbol vive en el array PREGUNTAS: para anadir una pregunta nueva solo
-   hay que anadir un objeto ahi, nunca tocar el HTML.
+   Formulario conversacional progresivo: una pantalla por vez, estilo chat.
+   Todo el cuestionario vive en el array PREGUNTAS. Varias entradas pueden
+   compartir pantalla con la propiedad `grupo` (contacto, marca+redes,
+   fotos+videos, ubicacion+entorno), asi que ninguna ruta pasa de 11 pantallas.
+   Para anadir o quitar una pregunta solo hay que tocar ese array, nunca el HTML.
    Las respuestas viven en memoria (objeto "respuestas"), no se guarda nada en el
    navegador. Al final se arma un mensaje de texto y se abre WhatsApp. */
 (function(){
   "use strict";
   function $(id){ return document.getElementById(id); }
   var chat = $('waChat'), lista = $('waMsgs'), estado = $('waStatus'), fin = $('waEnd'),
-      barra = $('waProgBar'), botonAtras = $('waBack');
+      barra = $('waProgBar'), cuenta = $('waProgTxt'), botonAtras = $('waBack');
   var logo = document.querySelector('.top-bar-logo');
   if (logo) $('waAvatar').src = logo.src;
 
   var respuestas = {};   /* todo el estado del formulario, en memoria */
-  var historial  = [];   /* ids ya respondidos, en orden */
-  var actual     = null; /* pregunta en pantalla */
+  var historial  = [];   /* claves de pantalla ya respondidas, en orden */
+  var actual     = null; /* pantalla en curso */
   var enResumen  = false;
   var iniciado = false, tipeo = null, prefIso = 'VE', alElegirFecha = null;
   var tactil = window.matchMedia && !window.matchMedia('(pointer:fine)').matches;
   var EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
-  var NO_SE = 'No sé / que lo proponga Jara';
+
+  var EMPRESA = 'Empresa o Agencia';
+  var MARCA   = 'Marca personal o creador de contenido';
+  var MODELO  = 'Modelo';
+  var NATURAL = 'Persona natural';
+  var SIN_FOTOS  = 'Ninguna';
+  var SIN_VIDEOS = 'Ninguno';
 
   /* ---------- ayudas para escribir las condiciones ---------- */
   function es(id, valor){ return function(r){ return r[id] === valor; }; }
   function entre(id, valores){ return function(r){ return valores.indexOf(r[id]) !== -1; }; }
-  function tiene(id, valor){
-    return function(r){ var v = r[id]; return !!v && v.indexOf(valor) !== -1; };
-  }
-  function y(){
-    var fs = Array.prototype.slice.call(arguments);
-    return function(r){ for (var i = 0; i < fs.length; i++) if (!fs[i](r)) return false; return true; };
-  }
-  function o(){
-    var fs = Array.prototype.slice.call(arguments);
-    return function(r){ for (var i = 0; i < fs.length; i++) if (fs[i](r)) return true; return false; };
-  }
-  function formato(r){ return r.retrato_formato || r.entregable_formato || ''; }
-  function hayFotos(r){ return formato(r) === 'Solo fotos' || formato(r) === 'Fotos y video'; }
-  function hayVideo(r){ return formato(r) === 'Solo video' || formato(r) === 'Fotos y video'; }
-  function hayPersonas(r){ return !!r.personas_camara && r.personas_camara !== 'Ninguna, solo producto o espacio'; }
-  function sujetoConPersonas(r){
-    return entre('comercial_sujeto', ['Producto con modelo', 'Solo personas', 'Mezcla de todo'])(r);
-  }
-  function sujetoConProducto(r){
-    return entre('comercial_sujeto', ['Solo el producto', 'Producto con modelo', 'Mezcla de todo'])(r);
-  }
+  function noEs(id, valor){ return function(r){ return !!r[id] && r[id] !== valor; }; }
 
   /* =========================================================
      EL ARBOL DE PREGUNTAS
      ========================================================= */
   var PREGUNTAS = [
-    /* ---------- BLOQUE A · contacto ---------- */
-    { id:'contacto', bloque:'A', tipo:'contacto', pregunta:'Empecemos con tus datos de contacto:' },
-    { id:'contacto_pref', bloque:'A', tipo:'select', etiquetaWA:'Prefiere',
-      pregunta:'¿Por dónde prefieres que te responda?',
-      opciones:['WhatsApp', 'Llamada', 'Correo'] },
+    /* ---------- BLOQUE A · contacto (3 campos, UNA sola pantalla) ---------- */
+    { id:'nombre', bloque:'A', grupo:'contacto', tipo:'text', etiquetaWA:'Nombre',
+      preguntaPantalla:'Empecemos con tus datos de contacto:',
+      pregunta:'¿Cómo te llamas?' },
+    { id:'telefono', bloque:'A', grupo:'contacto', tipo:'tel', etiquetaWA:'Teléfono',
+      pregunta:'¿Tu teléfono?' },
+    { id:'correo', bloque:'A', grupo:'contacto', tipo:'email', etiquetaWA:'Correo',
+      pregunta:'¿Tu correo?' },
 
-    /* ---------- BLOQUE B · perfil ---------- */
-    { id:'perfil_tipo', bloque:'B', tipo:'select', etiquetaWA:'Tipo',
+    /* ---------- BLOQUE B · quien eres ---------- */
+    { id:'perfil_tipo', bloque:'B', tipo:'select', etiquetaWA:'Perfil',
       pregunta:'¿Cómo te describes?',
-      opciones:['Persona natural', 'Empresa o negocio', 'Marca personal', 'Influencer o creador de contenido', 'Modelo', 'Otro'] },
-
-    /* rama empresa */
-    { id:'empresa_nombre', bloque:'B', tipo:'text', etiquetaWA:'Empresa',
-      pregunta:'¿Cómo se llama tu empresa?', ph:'Nombre de la empresa',
-      showIf:es('perfil_tipo', 'Empresa o negocio') },
+      opciones:[NATURAL, EMPRESA, MARCA, MODELO] },
+    /* marca y redes comparten pantalla; si es Modelo solo queda el campo de redes */
+    { id:'marca_nombre', bloque:'B', grupo:'marca', tipo:'text', etiquetaWA:'Marca',
+      preguntaPantalla:function(r){
+        return r.perfil_tipo === EMPRESA ? 'Cuéntame de tu empresa o agencia:' : 'Cuéntame de tu marca:';
+      },
+      pregunta:function(r){
+        return r.perfil_tipo === EMPRESA
+          ? '¿Cómo se llama tu empresa o agencia?'
+          : '¿Cómo se llama tu marca? (o tu nombre, si trabajas bajo tu propio nombre)';
+      },
+      ph:'Nombre de la marca',
+      showIf:entre('perfil_tipo', [EMPRESA, MARCA]) },
+    { id:'redes', bloque:'B', grupo:'marca', tipo:'text', etiquetaWA:'Redes', opcional:true,
+      pregunta:function(r){
+        return r.perfil_tipo === EMPRESA
+          ? '¿Cuál es el Instagram o TikTok de tu empresa?'
+          : '¿Cuál es tu Instagram o TikTok?';
+      },
+      ph:'@tuusuario',
+      ayuda:'Ver el perfil me ahorra media conversación entendiendo tu estilo.',
+      showIf:noEs('perfil_tipo', NATURAL) },
     { id:'empresa_rubro', bloque:'B', tipo:'select', etiquetaWA:'Rubro',
-      pregunta:'¿En qué rubro está?',
-      ayuda:'Esto me ayuda a preparar referencias visuales de tu sector.',
-      opciones:['Moda o ropa', 'Gastronomía', 'Belleza o estética', 'Salud', 'Inmobiliaria', 'Tecnología', 'Educación', 'Eventos', 'Joyería o accesorios', 'Otro'],
-      showIf:es('perfil_tipo', 'Empresa o negocio') },
-    { id:'rubro_moda_que', bloque:'B', tipo:'multi', etiquetaWA:'A fotografiar',
-      pregunta:'¿Qué vamos a fotografiar?',
-      opciones:['Prendas', 'Calzado', 'Accesorios', 'Colección completa', 'Lookbook de temporada'],
-      showIf:es('empresa_rubro', 'Moda o ropa') },
-    { id:'rubro_food_que', bloque:'B', tipo:'multi', etiquetaWA:'A fotografiar',
-      pregunta:'¿Qué necesitas mostrar?',
-      opciones:['Platos', 'Bebidas o cócteles', 'El local o ambiente', 'El equipo cocinando', 'Menú completo'],
-      showIf:es('empresa_rubro', 'Gastronomía') },
-    { id:'rubro_belleza_que', bloque:'B', tipo:'multi', etiquetaWA:'A mostrar',
-      pregunta:'¿Qué vamos a mostrar?',
-      opciones:['Resultados antes/después', 'Productos', 'El espacio', 'Procedimientos en acción'],
-      showIf:es('empresa_rubro', 'Belleza o estética') },
-    { id:'rubro_inmo_que', bloque:'B', tipo:'select', etiquetaWA:'Inmueble',
-      pregunta:'¿Qué tipo de inmueble?',
-      opciones:['Apartamento', 'Casa', 'Local comercial', 'Terreno', 'Varios inmuebles'],
-      showIf:es('empresa_rubro', 'Inmobiliaria') },
-    { id:'rubro_joya_piezas', bloque:'B', tipo:'select', etiquetaWA:'Piezas',
-      pregunta:'¿Cuántas piezas aproximadamente?',
-      opciones:['1 a 10', '11 a 30', '31 a 80', 'Más de 80'],
-      showIf:es('empresa_rubro', 'Joyería o accesorios') },
-    { id:'empresa_marca_nivel', bloque:'B', tipo:'select', etiquetaWA:'Identidad visual',
-      pregunta:'¿Qué tan definida está tu identidad visual?',
-      opciones:['Tengo manual de marca completo', 'Tengo logo y colores', 'Solo tengo logo', 'Todavía nada definido'],
-      showIf:es('perfil_tipo', 'Empresa o negocio') },
-    { id:'empresa_marca_link', bloque:'B', tipo:'text', etiquetaWA:'Marca', opcional:true,
-      pregunta:'Pásame el enlace o dime dónde la veo.', ph:'Enlace o red social (opcional)',
-      showIf:entre('empresa_marca_nivel', ['Tengo manual de marca completo', 'Tengo logo y colores', 'Solo tengo logo']) },
-
-    /* rama influencer */
-    { id:'influencer_nicho', bloque:'B', tipo:'select', etiquetaWA:'Nicho',
-      pregunta:'¿Cuál es tu nicho?',
-      opciones:['Lifestyle', 'Moda', 'Fitness', 'Gastronomía', 'Viajes', 'Belleza', 'Humor o entretenimiento', 'Educativo', 'Otro'],
-      showIf:es('perfil_tipo', 'Influencer o creador de contenido') },
-    { id:'influencer_plataforma', bloque:'B', tipo:'select', etiquetaWA:'Plataforma',
-      pregunta:'¿Cuál es tu plataforma principal?',
-      opciones:['Instagram', 'TikTok', 'YouTube', 'Varias por igual'],
-      showIf:es('perfil_tipo', 'Influencer o creador de contenido') },
-    { id:'influencer_alcance', bloque:'B', tipo:'select', etiquetaWA:'Comunidad',
-      pregunta:'¿En qué rango está tu comunidad?',
-      opciones:['Menos de 5K', '5K a 20K', '20K a 100K', 'Más de 100K'],
-      showIf:es('perfil_tipo', 'Influencer o creador de contenido') },
-    { id:'influencer_marca_deal', bloque:'B', tipo:'select', etiquetaWA:'Contenido pagado',
-      pregunta:'¿Este contenido es para una marca que te contrató?',
-      opciones:['Sí, es contenido pagado', 'No, es para mi perfil'],
-      showIf:es('perfil_tipo', 'Influencer o creador de contenido') },
-    { id:'influencer_marca_nombre', bloque:'B', tipo:'text', etiquetaWA:'Marca',
-      pregunta:'¿Qué marca?', ph:'Nombre de la marca',
-      showIf:es('influencer_marca_deal', 'Sí, es contenido pagado') },
-    { id:'influencer_marca_exige', bloque:'B', tipo:'textarea', etiquetaWA:'Pide la marca',
-      pregunta:'¿La marca pide algo específico? (formato, duración, entregables)',
-      ph:'Cuéntame lo que te pidieron', permiteNoSe:true,
-      showIf:es('influencer_marca_deal', 'Sí, es contenido pagado') },
-
-    /* rama marca personal */
-    { id:'personal_a_que', bloque:'B', tipo:'text', etiquetaWA:'Se dedica a',
-      pregunta:'¿A qué te dedicas?', ph:'En una línea',
-      showIf:es('perfil_tipo', 'Marca personal') },
-    { id:'personal_vende', bloque:'B', tipo:'select', etiquetaWA:'Ofrece',
-      pregunta:'¿Qué ofreces?',
-      opciones:['Un servicio', 'Un producto', 'Ambos', 'Todavía estoy construyendo la marca'],
-      showIf:es('perfil_tipo', 'Marca personal') },
-    { id:'personal_redes', bloque:'B', tipo:'text', etiquetaWA:'Redes', opcional:true,
-      pregunta:'¿Tu usuario de Instagram o TikTok?', ph:'@tuusuario',
-      showIf:es('perfil_tipo', 'Marca personal') },
-
-    /* rama modelo */
-    { id:'modelo_objetivo', bloque:'B', tipo:'select', etiquetaWA:'Necesita',
-      pregunta:'¿Qué necesitas?',
-      opciones:['Book nuevo desde cero', 'Actualizar mi book', 'Fotos para un casting específico', 'Material para redes'],
-      showIf:es('perfil_tipo', 'Modelo') },
-    { id:'modelo_representacion', bloque:'B', tipo:'select', etiquetaWA:'Agencia',
-      pregunta:'¿Trabajas con agencia?',
-      opciones:['Sí', 'No, soy independiente'],
-      showIf:es('perfil_tipo', 'Modelo') },
-    { id:'modelo_experiencia', bloque:'B', tipo:'select', etiquetaWA:'Experiencia',
-      pregunta:'¿Has hecho sesiones antes?',
-      opciones:['Es mi primera vez', 'He hecho algunas', 'Trabajo en esto seguido'],
-      showIf:es('perfil_tipo', 'Modelo') },
-
-    /* rama persona natural */
+      pregunta:'¿En qué rubro estás?',
+      opciones:['Moda o ropa', 'Gastronomía', 'Belleza o estética', 'Joyería o accesorios',
+                'Inmobiliaria', 'Salud', 'Tecnología', 'Educación', 'Eventos', 'Otro'],
+      showIf:es('perfil_tipo', EMPRESA) },
     { id:'natural_ocasion', bloque:'B', tipo:'select', etiquetaWA:'Ocasión',
       pregunta:'¿Cuál es la ocasión?',
-      opciones:['Cumpleaños', 'Aniversario o pareja', 'Embarazo', 'Graduación', 'Familia', 'Solo porque quiero buenas fotos', 'Otra'],
-      showIf:es('perfil_tipo', 'Persona natural') },
-    { id:'natural_para_quien', bloque:'B', tipo:'select', etiquetaWA:'Para quién',
-      pregunta:'¿Es para ti o para alguien más?',
-      opciones:['Para mí', 'Para regalar', 'Para un grupo o familia'],
-      showIf:es('perfil_tipo', 'Persona natural') },
+      opciones:['Boda', 'Embarazo', 'Graduación', '15 años', 'Sesión fotográfica', 'Otro'],
+      showIf:es('perfil_tipo', NATURAL) },
 
-    /* rama otro */
-    { id:'perfil_otro_detalle', bloque:'B', tipo:'textarea', etiquetaWA:'Perfil',
-      pregunta:'Cuéntame en una línea quién eres.', ph:'Quién eres',
-      showIf:es('perfil_tipo', 'Otro') },
-
-    /* ---------- BLOQUE C · objetivo ---------- */
+    /* ---------- BLOQUE C · que necesitas ---------- */
     { id:'produccion_tipo', bloque:'C', tipo:'select', etiquetaWA:'Producción',
       pregunta:'¿Qué tipo de producción buscas?',
-      opciones:['Contenido comercial o publicitario', 'Evento, curso o lanzamiento', 'Retrato personal o video de presentación', 'Contenido orgánico para reels o TikToks', 'Otro'] },
-
-    /* rama comercial */
-    { id:'comercial_uso', bloque:'C', tipo:'multi', etiquetaWA:'Uso',
-      pregunta:'¿Dónde vas a usar este material?',
-      opciones:['Redes sociales', 'Pauta publicitaria', 'Página web o tienda online', 'Catálogo', 'Material impreso', 'Presentaciones o propuestas'],
-      showIf:es('produccion_tipo', 'Contenido comercial o publicitario') },
-    { id:'comercial_pauta_plataforma', bloque:'C', tipo:'multi', etiquetaWA:'Pauta en',
-      pregunta:'¿En qué plataformas pautas?',
-      opciones:['Meta (IG/FB)', 'TikTok', 'Google/YouTube', 'Otra'],
-      showIf:tiene('comercial_uso', 'Pauta publicitaria') },
-    { id:'comercial_ecommerce', bloque:'C', tipo:'select', etiquetaWA:'Fondo blanco',
-      pregunta:'¿Necesitas fondo blanco tipo catálogo?',
-      opciones:['Sí, fondo blanco', 'No, fotos de ambiente', 'Ambas cosas'],
-      showIf:tiene('comercial_uso', 'Página web o tienda online') },
-    { id:'comercial_sujeto', bloque:'C', tipo:'select', etiquetaWA:'Protagonista',
-      pregunta:'¿Qué protagoniza las imágenes?',
-      opciones:['Solo el producto', 'Producto con modelo', 'Solo personas', 'El espacio o local', 'Mezcla de todo'],
-      showIf:es('produccion_tipo', 'Contenido comercial o publicitario') },
-    { id:'modelo_quien', bloque:'C', tipo:'select', etiquetaWA:'Quién posa',
-      pregunta:'¿Quién va a posar?',
-      opciones:['Yo', 'Alguien de mi equipo', 'Ya tengo modelo contratado', 'Necesito que Jara consiga modelo'],
-      showIf:sujetoConPersonas },
-    { id:'modelo_perfil', bloque:'C', tipo:'textarea', etiquetaWA:'Perfil de modelo',
-      pregunta:'¿Qué perfil de modelo buscas? (edad, género, estilo)', ph:'Ej: femenina, 20-25, estilo urbano',
-      showIf:es('modelo_quien', 'Necesito que Jara consiga modelo') },
-    { id:'modelo_cantidad', bloque:'C', tipo:'select', etiquetaWA:'Modelos',
-      pregunta:'¿Cuántos modelos?', opciones:['1', '2', '3 o más'],
-      showIf:es('modelo_quien', 'Necesito que Jara consiga modelo') },
-    { id:'comercial_logistica_producto', bloque:'C', tipo:'select', etiquetaWA:'Producto llega',
-      pregunta:'¿Cómo llega el producto a la sesión?',
-      opciones:['Lo llevo yo', 'Lo envío antes', 'Se fotografía en mi local', 'Es un servicio, no hay producto físico'],
-      showIf:sujetoConProducto },
-
-    /* rama evento */
-    { id:'evento_tipo', bloque:'C', tipo:'select', etiquetaWA:'Evento',
-      pregunta:'¿Qué tipo de evento es?',
-      opciones:['Lanzamiento de producto o marca', 'Curso, taller o conferencia', 'Fiesta o celebración', 'Boda', 'Evento corporativo', 'Concierto o show', 'Otro'],
-      showIf:es('produccion_tipo', 'Evento, curso o lanzamiento') },
-    { id:'evento_nombre', bloque:'C', tipo:'text', etiquetaWA:'Nombre del evento',
-      pregunta:'¿Cómo se llama el evento?', ph:'Nombre',
-      showIf:es('produccion_tipo', 'Evento, curso o lanzamiento') },
-    { id:'evento_duracion', bloque:'C', tipo:'select', etiquetaWA:'Cobertura (horas)',
-      pregunta:'¿Cuántas horas necesitas cobertura?',
+      opciones:['Contenido comercial o publicitario', 'Evento, curso o lanzamiento',
+                'Retrato personal o video de presentación', 'Contenido para reels o TikToks', 'Otro'] },
+    /* fotos y videos en una sola pantalla; el "formato" se deduce de las dos */
+    { id:'cantidad_fotos', bloque:'C', grupo:'cantidad', tipo:'opcion', etiquetaWA:'Fotografías',
+      preguntaPantalla:'¿Cuántas fotografías y cuántos videos necesitas?',
+      pregunta:'¿Cuántas fotografías?',
+      opciones:[SIN_FOTOS, '5 a 10', '11 a 25', '26 a 50', 'Más de 50', 'No sé, que lo proponga Jara'],
+      validarGrupo:function(v){
+        if (v.cantidad_fotos === SIN_FOTOS && v.cantidad_videos === SIN_VIDEOS)
+          return { texto:'Elige al menos fotografías o videos.', id:'cantidad_fotos' };
+        return null;
+      } },
+    { id:'cantidad_videos', bloque:'C', grupo:'cantidad', tipo:'opcion', etiquetaWA:'Videos',
+      pregunta:'¿Cuántos videos?',
+      opciones:[SIN_VIDEOS, '1', '2 a 3', '4 a 6', 'Más de 6', 'No sé, que lo proponga Jara'] },
+    { id:'evento_horas', bloque:'C', tipo:'select', etiquetaWA:'Cobertura',
+      pregunta:'¿Cuántas horas de cobertura necesitas?',
       opciones:['1 a 2 horas', '3 a 4 horas', '5 a 8 horas', 'Más de 8 horas', 'Varios días'],
       showIf:es('produccion_tipo', 'Evento, curso o lanzamiento') },
-    { id:'evento_asistentes', bloque:'C', tipo:'select', etiquetaWA:'Asistentes',
-      pregunta:'¿Cuánta gente asiste aproximadamente?',
-      opciones:['Menos de 20', '20 a 50', '50 a 150', 'Más de 150'],
-      showIf:es('produccion_tipo', 'Evento, curso o lanzamiento') },
-    { id:'evento_cobertura', bloque:'C', tipo:'select', etiquetaWA:'Alcance',
-      pregunta:'¿Qué alcance necesitas?',
-      opciones:['Cobertura completa del evento', 'Solo momentos clave', 'Solo el montaje y detalles', 'Retratos a los asistentes'],
-      showIf:es('produccion_tipo', 'Evento, curso o lanzamiento') },
-    { id:'evento_entrega_rapida', bloque:'C', tipo:'select', etiquetaWA:'Material el mismo día',
-      pregunta:'¿Necesitas material el mismo día?',
-      opciones:['Sí, para publicar en vivo', 'No, puedo esperar la entrega normal'],
-      showIf:es('produccion_tipo', 'Evento, curso o lanzamiento') },
-    { id:'evento_speakers', bloque:'C', tipo:'select', etiquetaWA:'Retrato a ponentes',
-      pregunta:'¿Hay ponentes que requieran retrato aparte?', opciones:['Sí', 'No'],
-      showIf:entre('evento_tipo', ['Curso, taller o conferencia', 'Evento corporativo']) },
+    /* el corazon del formulario: sustituye a una quincena de sub-preguntas */
+    { id:'brief_libre', bloque:'C', tipo:'textarea', etiquetaWA:'Lo que tiene en mente', grande:true,
+      pregunta:'Cuéntame con tus palabras qué tienes en mente.',
+      ph:'Ej: quiero fotos para lanzar mi colección de verano, estilo natural y luminoso. Si tienes referencias, pega el enlace aquí.',
+      ayuda:'Mientras más me cuentes aquí, menos te voy a preguntar después.' },
 
-    /* rama retrato */
-    { id:'retrato_formato', bloque:'C', tipo:'select', etiquetaWA:'Formato',
-      pregunta:'¿Qué necesitas?', opciones:['Solo fotos', 'Solo video', 'Fotos y video'],
-      showIf:es('produccion_tipo', 'Retrato personal o video de presentación') },
-    { id:'retrato_uso', bloque:'C', tipo:'multi', etiquetaWA:'Uso',
-      pregunta:'¿Para qué lo vas a usar?',
-      opciones:['LinkedIn o perfil profesional', 'Web personal', 'Prensa o medios', 'Redes sociales', 'Uso personal'],
-      showIf:es('produccion_tipo', 'Retrato personal o video de presentación') },
-    { id:'retrato_vestuarios', bloque:'C', tipo:'select', etiquetaWA:'Cambios de vestuario',
-      pregunta:'¿Cuántos cambios de vestuario tienes en mente?',
-      opciones:['1', '2', '3', '4 o más', 'No sé, que me orienten'],
-      showIf:es('produccion_tipo', 'Retrato personal o video de presentación') },
-    { id:'retrato_video_tipo', bloque:'C', tipo:'select', etiquetaWA:'Tipo de video',
-      pregunta:'¿Qué tipo de video?',
-      opciones:['Hablando a cámara', 'Video de estilo documental', 'Solo imágenes con música', 'Entrevista'],
-      showIf:y(es('produccion_tipo', 'Retrato personal o video de presentación'), entre('retrato_formato', ['Solo video', 'Fotos y video'])) },
-    { id:'retrato_guion', bloque:'C', tipo:'select', etiquetaWA:'Guion',
-      pregunta:'¿Tienes el guion listo?',
-      opciones:['Sí, ya lo tengo', 'Tengo las ideas, falta ordenarlas', 'Necesito ayuda para escribirlo'],
-      showIf:entre('retrato_video_tipo', ['Hablando a cámara', 'Entrevista']) },
-    { id:'retrato_teleprompter', bloque:'C', tipo:'select', etiquetaWA:'Teleprompter',
-      pregunta:'¿Necesitas teleprompter?', opciones:['Sí', 'No', 'No sé qué es'],
-      showIf:entre('retrato_video_tipo', ['Hablando a cámara', 'Entrevista']) },
-
-    /* rama organico */
-    { id:'organico_cantidad', bloque:'C', tipo:'select', etiquetaWA:'Piezas',
-      pregunta:'¿Cuántas piezas necesitas?', opciones:['1 a 3', '4 a 8', '9 a 15', 'Más de 15'],
-      showIf:es('produccion_tipo', 'Contenido orgánico para reels o TikToks') },
-    { id:'organico_frecuencia', bloque:'C', tipo:'select', etiquetaWA:'Frecuencia',
-      pregunta:'¿Es algo puntual o recurrente?', opciones:['Una sola vez', 'Mensual', 'Quincenal', 'Semanal'],
-      showIf:es('produccion_tipo', 'Contenido orgánico para reels o TikToks') },
-    { id:'organico_meses', bloque:'C', tipo:'select', etiquetaWA:'Meses',
-      pregunta:'¿Por cuántos meses?', opciones:['1 a 3', '4 a 6', 'Más de 6', 'Indefinido'],
-      showIf:entre('organico_frecuencia', ['Mensual', 'Quincenal', 'Semanal']) },
-    { id:'organico_idea', bloque:'C', tipo:'select', etiquetaWA:'Ideas',
-      pregunta:'¿Ya tienes las ideas de los videos?',
-      opciones:['Sí, tengo el guion o concepto', 'Tengo ideas sueltas', 'Necesito que me propongan el concepto'],
-      showIf:es('produccion_tipo', 'Contenido orgánico para reels o TikToks') },
-    { id:'organico_edicion', bloque:'C', tipo:'multi', etiquetaWA:'Edición',
-      pregunta:'¿Qué necesitas en la edición?',
-      opciones:['Cortes dinámicos', 'Subtítulos', 'Música', 'Efectos o transiciones', 'Texto en pantalla', 'Solo el material crudo'],
-      showIf:es('produccion_tipo', 'Contenido orgánico para reels o TikToks') },
-
-    /* rama otro */
-    { id:'produccion_otro', bloque:'C', tipo:'textarea', etiquetaWA:'Necesita',
-      pregunta:'Descríbeme qué necesitas.', ph:'Cuéntame el proyecto',
-      showIf:es('produccion_tipo', 'Otro') },
-
-    { id:'objetivo_negocio', bloque:'C', tipo:'select', etiquetaWA:'Objetivo',
-      pregunta:'¿Qué quieres lograr con este material?',
-      opciones:['Vender más', 'Posicionar la marca', 'Lanzar algo nuevo', 'Crecer en redes', 'Tener material profesional guardado', 'Uso personal'] },
-
-    /* ---------- BLOQUE D · entregables ---------- */
-    { id:'entregable_formato', bloque:'D', tipo:'select', etiquetaWA:'Formato',
-      pregunta:'¿Necesitas foto, video o ambos?', opciones:['Solo fotos', 'Solo video', 'Fotos y video'],
-      showIf:function(r){ return !r.retrato_formato; } },
-    { id:'entregable_fotos_cant', bloque:'D', tipo:'select', etiquetaWA:'Fotos editadas',
-      pregunta:'¿Cuántas fotos editadas necesitas?',
-      opciones:['5 a 10', '11 a 25', '26 a 50', 'Más de 50', 'No sé, que lo proponga Jara'],
-      showIf:hayFotos },
-    { id:'entregable_video_duracion', bloque:'D', tipo:'select', etiquetaWA:'Duración del video',
-      pregunta:'¿De qué duración es el video final?',
-      opciones:['Menos de 30 seg', '30 a 60 seg', '1 a 3 min', '3 a 10 min', 'Más de 10 min'],
-      showIf:hayVideo },
-    { id:'entregable_video_piezas', bloque:'D', tipo:'select', etiquetaWA:'Piezas de video',
-      pregunta:'¿Cuántas piezas de video?', opciones:['1', '2 a 3', '4 a 6', 'Más de 6'],
-      showIf:hayVideo },
-    { id:'entregable_relaciones', bloque:'D', tipo:'multi', etiquetaWA:'Formato de pantalla',
-      pregunta:'¿En qué formato lo necesitas?',
-      opciones:['Vertical 9:16 (reels/TikTok)', 'Horizontal 16:9 (YouTube/web)', 'Cuadrado 1:1', 'No sé, que lo decida Jara'],
-      showIf:hayVideo },
-    { id:'entregable_retoque', bloque:'D', tipo:'select', etiquetaWA:'Retoque',
-      pregunta:'¿Qué nivel de retoque necesitas?',
-      opciones:['Básico (color y luz)', 'Medio (piel y detalles)', 'Alto (retoque editorial)', 'No sé'],
-      showIf:hayFotos },
-    { id:'entregable_raw', bloque:'D', tipo:'select', etiquetaWA:'Archivos RAW',
-      pregunta:'¿Necesitas los archivos originales sin editar?',
-      opciones:['Sí', 'No', 'No sé qué significa eso'] },
-    { id:'entregable_extras', bloque:'D', tipo:'multi', etiquetaWA:'Extras', opcional:true,
-      pregunta:'¿Algo adicional?',
-      opciones:['Miniaturas para YouTube', 'Versiones para historias', 'Diseño de piezas para feed', 'Nada más'] },
-
-    /* ---------- BLOQUE E · producción ---------- */
-    { id:'entorno', bloque:'E', tipo:'select', etiquetaWA:'Entorno',
-      pregunta:'¿Dónde imaginas la sesión?',
-      opciones:['Estudio', 'Exteriores', 'Mi local o casa', 'Ambos', 'No sé, que lo proponga Jara'] },
-    { id:'estudio_disponible', bloque:'E', tipo:'select', etiquetaWA:'Estudio',
-      pregunta:'¿Tienes estudio o hace falta conseguirlo?',
-      opciones:['Ya tengo estudio', 'Necesito que Jara lo consiga'],
-      showIf:entre('entorno', ['Estudio', 'Ambos']) },
-    { id:'exterior_locacion', bloque:'E', tipo:'select', etiquetaWA:'Locación',
-      pregunta:'¿Tienes la locación en mente?',
-      opciones:['Sí, ya sé dónde', 'Tengo una idea pero acepto sugerencias', 'Necesito propuesta completa'],
-      showIf:entre('entorno', ['Exteriores', 'Ambos']) },
-    { id:'exterior_cual', bloque:'E', tipo:'text', etiquetaWA:'Locación',
-      pregunta:'¿Cuál es?', ph:'Dónde sería',
-      showIf:es('exterior_locacion', 'Sí, ya sé dónde') },
-    { id:'local_condiciones', bloque:'E', tipo:'select', etiquetaWA:'Luz del lugar',
-      pregunta:'¿Cómo es la luz del lugar?',
-      opciones:['Muy iluminado', 'Luz media', 'Oscuro, hace falta iluminación', 'No sé'],
-      showIf:es('entorno', 'Mi local o casa') },
-    { id:'personas_camara', bloque:'E', tipo:'select', etiquetaWA:'Personas frente a cámara',
-      pregunta:'¿Cuántas personas aparecerán frente a cámara?',
-      opciones:['Ninguna, solo producto o espacio', '1', '2 a 4', '5 a 10', 'Más de 10'] },
-    { id:'maquillaje', bloque:'E', tipo:'select', etiquetaWA:'Maquillaje',
-      pregunta:'¿Necesitas maquillaje y peinado?',
-      opciones:['Sí, que lo incluya Jara', 'Ya tengo maquillador', 'No hace falta', 'No sé'],
-      showIf:hayPersonas },
-    { id:'styling', bloque:'E', tipo:'select', etiquetaWA:'Vestuario y arte',
-      pregunta:'¿Necesitas asesoría de vestuario o dirección de arte?',
-      opciones:['Sí', 'No, ya tengo todo resuelto', 'No sé'],
-      showIf:hayPersonas },
-    { id:'utileria', bloque:'E', tipo:'select', etiquetaWA:'Utilería',
-      pregunta:'¿Hace falta utilería, escenografía o ambientación?',
-      opciones:['Sí, lo necesito', 'Ya tengo lo mío', 'No hace falta', 'No sé'] },
-    { id:'dron', bloque:'E', tipo:'select', etiquetaWA:'Dron',
-      pregunta:'¿Necesitas tomas aéreas con dron?', opciones:['Sí', 'No', 'No sé si aplica'] },
-    { id:'permisos', bloque:'E', tipo:'select', etiquetaWA:'Permisos',
-      pregunta:'¿El lugar requiere permiso para grabar?',
-      opciones:['Sí y ya lo tengo', 'Sí pero falta gestionarlo', 'No requiere', 'No sé'],
-      showIf:entre('entorno', ['Exteriores', 'Ambos']) },
-
-    /* ---------- BLOQUE F · estilo ---------- */
-    { id:'estilo_visual', bloque:'F', tipo:'multi', etiquetaWA:'Estilo',
-      pregunta:'¿Qué estilo te gusta más?',
-      opciones:['Natural y luminoso', 'Editorial de moda', 'Cinematográfico y oscuro', 'Minimalista y limpio', 'Colorido y pop', 'Vintage o analógico', 'No sé, confío en la propuesta de Jara'] },
-    { id:'referencias_tiene', bloque:'F', tipo:'select', etiquetaWA:'Referencias',
-      pregunta:'¿Tienes referencias visuales?',
-      opciones:['Sí, tengo enlaces', 'Tengo ideas pero no imágenes', 'No, quiero que Jara proponga'] },
-    { id:'referencias_link', bloque:'F', tipo:'textarea', etiquetaWA:'Referencias',
-      pregunta:'Pega los enlaces (Pinterest, Instagram, Drive…)', ph:'Enlaces',
-      showIf:es('referencias_tiene', 'Sí, tengo enlaces') },
-    { id:'referencias_texto', bloque:'F', tipo:'textarea', etiquetaWA:'Referencias',
-      pregunta:'Descríbeme lo que tienes en la cabeza.', ph:'Cómo lo imaginas',
-      showIf:es('referencias_tiene', 'Tengo ideas pero no imágenes') },
-    { id:'colores_obligatorios', bloque:'F', tipo:'select', etiquetaWA:'Colores de marca',
-      pregunta:'¿Hay colores o elementos de marca que deban aparecer sí o sí?', opciones:['Sí', 'No'] },
-    { id:'colores_detalle', bloque:'F', tipo:'textarea', etiquetaWA:'Colores obligatorios',
-      pregunta:'¿Cuáles?', ph:'Colores o elementos',
-      showIf:es('colores_obligatorios', 'Sí') },
-    { id:'restricciones', bloque:'F', tipo:'textarea', etiquetaWA:'No debe aparecer', opcional:true,
-      pregunta:'¿Hay algo que definitivamente NO quieres que aparezca o se vea?', ph:'Opcional' },
-
-    /* ---------- BLOQUE G · logística ---------- */
-    { id:'fecha_estimada', bloque:'G', tipo:'fecha', etiquetaWA:'Fecha',
+    /* ---------- BLOQUE D · donde y cuando (3 pantallas para todos) ---------- */
+    { id:'fecha_estimada', bloque:'D', tipo:'fecha', etiquetaWA:'Fecha',
       pregunta:'¿Qué fecha tienes en mente?' },
-    { id:'fecha_flexibilidad', bloque:'G', tipo:'select', etiquetaWA:'Flexibilidad',
-      pregunta:'¿Qué tan fija es esa fecha?',
-      opciones:['Es fija, no se mueve', 'Tengo margen de unos días', 'Soy flexible', 'Lo antes posible'] },
-    { id:'hora_preferida', bloque:'G', tipo:'select', etiquetaWA:'Horario',
-      pregunta:'¿Qué horario prefieres?',
-      opciones:['Mañana', 'Mediodía', 'Tarde', 'Atardecer (golden hour)', 'Noche', 'Me da igual'] },
-    { id:'duracion_sesion', bloque:'G', tipo:'select', etiquetaWA:'Duración',
-      pregunta:'¿Cuánto tiempo calculas que dure la sesión?',
-      opciones:['1 a 2 horas', 'Medio día', 'Día completo', 'Varios días', 'No sé, que lo estime Jara'] },
-    { id:'ubicacion_pais', bloque:'G', tipo:'pais', etiquetaWA:'País',
-      pregunta:'¿En qué país sería la sesión?' },
-    { id:'ubicacion_ciudad', bloque:'G', tipo:'ciudad', etiquetaWA:'Ciudad',
-      pregunta:'¿En qué ciudad?' },
-    { id:'ubicacion_lugar', bloque:'G', tipo:'text', etiquetaWA:'Lugar', opcional:true,
-      pregunta:'¿Tienes un lugar concreto en mente?', ph:'Opcional' },
-    { id:'traslado', bloque:'G', tipo:'select', etiquetaWA:'Traslado',
-      pregunta:'¿La sesión requiere que Jara se traslade fuera de su ciudad?', opciones:['Sí', 'No'] },
-    { id:'traslado_gastos', bloque:'G', tipo:'select', etiquetaWA:'Traslado y hospedaje',
-      pregunta:'¿Cómo manejamos traslado y hospedaje?',
-      opciones:['Lo cubro yo', 'Inclúyelo en la cotización', 'Conversémoslo'],
-      showIf:es('traslado', 'Sí') },
-    { id:'deadline_entrega', bloque:'G', tipo:'select', etiquetaWA:'Entrega',
+    { id:'ubicacion', bloque:'D', grupo:'lugar', tipo:'ubicacion', etiquetaWA:'Lugar',
+      preguntaPantalla:'¿Dónde sería la sesión?',
+      pregunta:'¿Dónde sería la sesión?' },
+    { id:'entorno', bloque:'D', grupo:'lugar', tipo:'opcion', etiquetaWA:'Entorno',
+      pregunta:'¿En qué entorno?',
+      opciones:['Estudio', 'Exteriores', 'En mi local o casa', 'No sé, que lo proponga Jara'] },
+    { id:'deadline_entrega', bloque:'D', tipo:'select', etiquetaWA:'Entrega',
       pregunta:'¿Para cuándo necesitas el material listo?',
-      opciones:['Mismo día', 'En 48 horas', 'En una semana', 'En dos semanas', 'Sin apuro'] },
-
-    /* ---------- BLOQUE H · presupuesto y decisión ---------- */
-    { id:'presupuesto_rango', bloque:'H', tipo:'select', etiquetaWA:'Presupuesto',
-      pregunta:'¿Cuál es tu presupuesto estimado para este proyecto? (USD)',
-      ayuda:'Ser honesto aquí hace que la propuesta te llegue ajustada a lo que puedes invertir, sin vueltas.',
-      opciones:['Menos de $100', '$100 a $300', '$300 a $600', '$600 a $1.200', 'Más de $1.200', 'Prefiero que me coticen primero'] },
-    { id:'etapa_decision', bloque:'H', tipo:'select', etiquetaWA:'Etapa',
-      pregunta:'¿En qué etapa estás?',
-      opciones:['Estoy comparando opciones', 'Ya decidí, solo falta cuadrar fecha', 'Estoy explorando para más adelante'] },
-    { id:'quien_decide', bloque:'H', tipo:'select', etiquetaWA:'Aprueba',
-      pregunta:'¿Quién aprueba la contratación?',
-      opciones:['Yo mismo', 'Mi socio o jefe', 'El área de marketing', 'Un comité'],
-      showIf:es('perfil_tipo', 'Empresa o negocio') },
-    { id:'pago_modalidad', bloque:'H', tipo:'select', etiquetaWA:'Pago', opcional:true,
-      pregunta:'¿Cómo te queda mejor pagar?',
-      opciones:['Transferencia', 'Efectivo', 'Pago móvil', 'Zelle o internacional', 'Lo conversamos'] },
-
-    /* ---------- BLOQUE I · cierre ---------- */
-    { id:'comentario_libre', bloque:'I', tipo:'textarea', etiquetaWA:'Comentario', opcional:true,
-      pregunta:'¿Algo más que Jara deba saber antes de armarte la propuesta?', ph:'Opcional' },
-    { id:'como_llego', bloque:'I', tipo:'select', etiquetaWA:'Llegó por',
-      pregunta:'Última cosa: ¿cómo llegaste hasta aquí?',
-      opciones:['Instagram', 'TikTok', 'Me lo recomendaron', 'Google', 'Ya conocía a Jara', 'Otro'] },
-    { id:'horario_contacto', bloque:'I', tipo:'select', etiquetaWA:'Horario de contacto',
-      pregunta:'¿En qué horario te escribo?', opciones:['Mañana', 'Tarde', 'Noche', 'Cualquier hora'] }
+      opciones:['Mismo día', 'En 48 horas', 'En una semana', 'En dos semanas', 'Sin apuro'] }
   ];
 
-  var TITULOS = { A:'Contacto', B:'Perfil', C:'Proyecto', D:'Entregables', E:'Producción',
-                  F:'Estilo', G:'Logística', H:'Presupuesto y decisión', I:'Notas' };
+  var TITULOS = { A:'Contacto', B:'Quién es', C:'Qué necesita', D:'Cuándo y dónde' };
 
   /* =========================================================
-     MOTOR: que preguntas aplican y en que orden
+     MOTOR: que preguntas aplican, en que orden y cuantas pantallas son
      ========================================================= */
+  function dinamico(v){ return typeof v === 'function' ? v(respuestas) : v; }
+  function textoPregunta(q){ return dinamico(q.preguntaPantalla || q.pregunta); }
+  function etiquetaCampo(q){ return dinamico(q.pregunta); }
+  function opcionesDe(q){ return dinamico(q.opciones) || []; }
+
   function aplica(q){ return !q.showIf || !!q.showIf(respuestas); }
   function aplicables(){
     var r = [];
     for (var i = 0; i < PREGUNTAS.length; i++) if (aplica(PREGUNTAS[i])) r.push(PREGUNTAS[i]);
     return r;
   }
+  /* un grupo ocupa una sola pantalla: manda su primer miembro aplicable */
+  function miembros(g){
+    return aplicables().filter(function(q){ return q.grupo === g; });
+  }
+  function esPantalla(q){
+    if (!q.grupo) return true;
+    var m = miembros(q.grupo);
+    return m.length > 0 && m[0].id === q.id;
+  }
+  function pantallas(){ return aplicables().filter(esPantalla); }
+  function pantallaDe(q){
+    if (!q || !q.grupo) return q;
+    var m = miembros(q.grupo);
+    return m.length ? m[0] : null;
+  }
+  /* la clave del historial es el grupo (estable aunque cambie el miembro que manda) */
+  function claveDe(q){ return q.grupo || q.id; }
+  function pantallaPorClave(k){
+    var ls = pantallas();
+    for (var i = 0; i < ls.length; i++) if (claveDe(ls[i]) === k) return ls[i];
+    return null;
+  }
   function porId(id){
     for (var i = 0; i < PREGUNTAS.length; i++) if (PREGUNTAS[i].id === id) return PREGUNTAS[i];
     return null;
   }
-  function respondida(q){
+  function hayValor(q){
     var v = respuestas[q.id];
-    if (q.id === 'contacto') return !!respuestas.nombre;
     if (v === undefined) return false;
-    /* "Omitir" guarda cadena vacia: cuenta como respondida para no repetir la pregunta */
+    /* "Omitir" guarda cadena vacia: cuenta como respondida para no repetirla */
     if (v instanceof Array) return v.length > 0 || !!q.opcional;
     return true;
+  }
+  function respondida(q){
+    if (q.grupo) return miembros(q.grupo).every(hayValor);
+    return hayValor(q);
+  }
+  /* una respuesta deja de valer si su opcion ya no existe */
+  function vigente(q){
+    var v = respuestas[q.id];
+    if (v === undefined || v === '') return true;
+    if (q.tipo !== 'select' && q.tipo !== 'opcion') return true;
+    return opcionesDe(q).indexOf(v) !== -1;
   }
   /* si cambia una respuesta, las hijas que ya no aplican se descartan */
   function limpiarHuerfanas(){
@@ -2077,28 +1828,45 @@
       cambio = false;
       for (var i = 0; i < PREGUNTAS.length; i++){
         var q = PREGUNTAS[i];
-        if (respuestas[q.id] !== undefined && !aplica(q)){
-          delete respuestas[q.id];
-          var n = historial.indexOf(q.id);
-          if (n !== -1) historial.splice(n, 1);
-          cambio = true;
-        }
+        if (respuestas[q.id] === undefined) continue;
+        if (aplica(q) && vigente(q)) continue;
+        delete respuestas[q.id];
+        cambio = true;
       }
     }
+    /* el historial se queda solo con pantallas que siguen existiendo y respondidas */
+    historial = historial.filter(function(k){
+      var p = pantallaPorClave(k);
+      return !!p && respondida(p);
+    });
   }
   function siguientePregunta(){
-    var lista_ = aplicables();
-    for (var i = 0; i < lista_.length; i++) if (!respondida(lista_[i])) return lista_[i];
+    var ls = pantallas();
+    for (var i = 0; i < ls.length; i++) if (!respondida(ls[i])) return ls[i];
     return null;
   }
-  /* la barra se calcula solo con las preguntas de la ruta actual */
-  function progreso(){
-    var lista_ = aplicables(), hechas = 0;
-    for (var i = 0; i < lista_.length; i++) if (respondida(lista_[i])) hechas++;
-    return Math.max(0, Math.min(100, Math.round(hechas / Math.max(1, lista_.length) * 100)));
+  /* la barra y el contador se calculan sobre la ruta real del usuario, y el
+     numero es el puesto de la pantalla en curso (tambien al volver a editar) */
+  function avance(){
+    var ls = pantallas(), puesto = ls.length;
+    if (actual){
+      for (var i = 0; i < ls.length; i++) if (claveDe(ls[i]) === claveDe(actual)){ puesto = i + 1; break; }
+    }
+    return { puesto:puesto, total:ls.length };
   }
   function pintarProgreso(){
-    barra.style.width = (enResumen ? 100 : progreso()) + '%';
+    var p = avance();
+    var pct = enResumen ? 100 : Math.round((p.puesto - 1) / Math.max(1, p.total) * 100);
+    barra.style.width = Math.max(0, Math.min(100, pct)) + '%';
+    if (enResumen){
+      cuenta.textContent = 'Listo · ' + p.total + ' de ' + p.total;
+      cuenta.hidden = false;
+    } else if (actual){
+      cuenta.textContent = 'Pregunta ' + p.puesto + ' de ' + p.total;
+      cuenta.hidden = false;
+    } else {
+      cuenta.hidden = true;
+    }
     botonAtras.hidden = historial.length === 0 && !enResumen;
   }
 
@@ -2167,15 +1935,39 @@
     return f;
   }
   function campo(tipo, ph, valor){
-    var i = el(tipo === 'textarea' ? 'input' : 'input');
-    i.type = tipo === 'email' ? 'email' : (tipo === 'tel' ? 'tel' : 'text');
-    if (tipo === 'tel') i.inputMode = 'numeric';
-    if (tipo === 'email'){ i.inputMode = 'email'; i.setAttribute('autocapitalize', 'off'); }
+    var i = el(tipo === 'textarea' ? 'textarea' : 'input');
+    if (tipo === 'textarea') i.rows = 5;
+    else {
+      i.type = tipo === 'email' ? 'email' : (tipo === 'tel' ? 'tel' : 'text');
+      if (tipo === 'tel') i.inputMode = 'numeric';
+      if (tipo === 'email'){ i.inputMode = 'email'; i.setAttribute('autocapitalize', 'off'); }
+    }
     i.placeholder = ph || '';
     i.autocomplete = 'off';
     i.value = valor || '';
     i.addEventListener('input', function(){ i.classList.remove('is-bad'); });
     return i;
+  }
+  /* campo de opcion: boton que abre la lista de siempre, como pais y ciudad */
+  function campoOpcion(q, valor){
+    var b = el('button', 'wa-f-btn', valor || 'Selecciona');
+    b.type = 'button';
+    b._valor = valor || '';
+    if (!b._valor) b.classList.add('is-empty');
+    b.addEventListener('click', function(){
+      abrirSheet({
+        title: etiquetaCampo(q),
+        selected: b._valor,
+        search: opcionesDe(q).length > 8,
+        items: opcionesDe(q).map(function(x){ return { value:x, label:x }; }),
+        onPick: function(v){
+          b._valor = v;
+          b.textContent = v;
+          b.classList.remove('is-empty', 'is-bad');
+        }
+      });
+    });
+    return b;
   }
   function pie(c, texto, alContinuar){
     var err = el('p', 'wa-f-err');
@@ -2194,7 +1986,7 @@
   }
   function cerrarTarjeta(c){
     c.classList.add('is-done');
-    Array.prototype.forEach.call(c.querySelectorAll('input,button'), function(x){ x.disabled = true; });
+    Array.prototype.forEach.call(c.querySelectorAll('input,textarea,button'), function(x){ x.disabled = true; });
     var err = c.querySelector('.wa-f-err');
     if (err) err.hidden = true;
   }
@@ -2211,30 +2003,30 @@
     return b;
   }
 
-  /* enlace discreto para enviar lo que se lleve (desde el bloque E) */
-  function enlaceSalida(){
-    if ('EFGHI'.indexOf(actual.bloque) === -1) return;
-    var a = el('button', 'wa-salir', 'Ya quiero enviar lo que llevo');
-    a.type = 'button';
-    a.addEventListener('click', mostrarResumen);
-    lista.appendChild(a);
-  }
-
-  /* ---------- muestra una pregunta ---------- */
+  /* ---------- muestra una pantalla ---------- */
   function preguntar(q, conAnimacion){
     actual = q;
     enResumen = false;
     fin.hidden = true;
     pintarProgreso();
-    if (conAnimacion === false){ burbuja(q.pregunta, false, q.ayuda); controles(q); }
-    else bot(q.pregunta, q.ayuda, function(){ controles(q); });
+    if (conAnimacion === false){ burbuja(textoPregunta(q), false, dinamico(q.ayuda)); controles(q); }
+    else bot(textoPregunta(q), dinamico(q.ayuda), function(){ controles(q); });
   }
 
   function guardar(q, valor, etiqueta){
     respuestas[q.id] = valor;
-    if (historial.indexOf(q.id) === -1) historial.push(q.id);
+    if (historial.indexOf(claveDe(q)) === -1) historial.push(claveDe(q));
     limpiarHuerfanas();
-    burbuja(etiqueta != null ? etiqueta : (valor instanceof Array ? valor.join(', ') : valor), true);
+    burbuja(etiqueta != null ? etiqueta : valor, true);
+    pintarProgreso();
+    setTimeout(avanzar, 200);
+  }
+  /* los grupos guardan cada campo por su cuenta y cierran la pantalla entera */
+  function guardarGrupo(q){
+    if (historial.indexOf(claveDe(q)) === -1) historial.push(claveDe(q));
+    var resumen = resumenRespuesta(q);
+    limpiarHuerfanas();
+    burbuja(resumen, true);
     pintarProgreso();
     setTimeout(avanzar, 200);
   }
@@ -2247,48 +2039,29 @@
   function controles(q){
     var previo = respuestas[q.id];
 
-    if (q.tipo === 'contacto'){ controlContacto(q); enlaceSalida(); pintarProgreso(); return; }
+    if (q.grupo === 'contacto'){ controlContacto(q); pintarProgreso(); return; }
+    if (q.grupo === 'lugar'){ controlLugar(q); pintarProgreso(); return; }
+    if (q.grupo){ controlGrupo(q); pintarProgreso(); return; }
 
     if (q.tipo === 'select'){
       var c1 = tarjeta();
       var g = chips(fila(c1, null));
-      q.opciones.forEach(function(op){
+      opcionesDe(q).forEach(function(op){
         chip(g, op, function(){ cerrarTarjeta(c1); guardar(q, op); });
       });
-      if (q.permiteNoSe) chip(g, NO_SE, function(){ cerrarTarjeta(c1); guardar(q, NO_SE); }, true);
       if (q.opcional) chip(g, 'Omitir', function(){ cerrarTarjeta(c1); guardar(q, '', 'Omitir'); }, true);
-      enlaceSalida(); pintarProgreso(); return;
-    }
-
-    if (q.tipo === 'multi'){
-      var c2 = tarjeta();
-      var g2 = chips(fila(c2, null));
-      var elegidas = (previo instanceof Array) ? previo.slice() : [];
-      q.opciones.forEach(function(op){
-        var b = chip(g2, op, function(){
-          var n = elegidas.indexOf(op);
-          if (n === -1) elegidas.push(op); else elegidas.splice(n, 1);
-          b.classList.toggle('is-on');
-        });
-        if (elegidas.indexOf(op) !== -1) b.classList.add('is-on');
-      });
-      if (q.permiteNoSe) chip(g2, NO_SE, function(){ cerrarTarjeta(c2); guardar(q, [NO_SE]); }, true);
-      pie(c2, 'Continuar', function(){
-        if (!elegidas.length && !q.opcional) return fallo(c2, 'Elige al menos una opción.', g2);
-        cerrarTarjeta(c2);
-        guardar(q, elegidas.slice());
-      });
-      enlaceSalida(); pintarProgreso(); return;
+      pintarProgreso(); return;
     }
 
     if (q.tipo === 'text' || q.tipo === 'textarea' || q.tipo === 'tel' || q.tipo === 'email'){
       var c3 = tarjeta();
+      if (q.grande) c3.classList.add('wa-form-grande');
       var i3 = campo(q.tipo, q.ph, previo);
+      if (q.grande) i3.rows = 6;
       fila(c3, null).appendChild(i3);
-      if (q.permiteNoSe || q.opcional){
+      if (q.opcional){
         var g3 = chips(fila(c3, null));
-        if (q.permiteNoSe) chip(g3, NO_SE, function(){ cerrarTarjeta(c3); guardar(q, NO_SE); }, true);
-        if (q.opcional) chip(g3, 'Omitir', function(){ cerrarTarjeta(c3); guardar(q, '', 'Omitir'); }, true);
+        chip(g3, 'Omitir', function(){ cerrarTarjeta(c3); guardar(q, '', 'Omitir'); }, true);
       }
       pie(c3, 'Continuar', function(){
         var v = i3.value.trim();
@@ -2300,8 +2073,8 @@
         cerrarTarjeta(c3);
         guardar(q, v);
       });
-      if (!tactil) i3.focus();
-      enlaceSalida(); pintarProgreso(); return;
+      if (!tactil && !q.grande) i3.focus();
+      pintarProgreso(); return;
     }
 
     if (q.tipo === 'fecha'){
@@ -2314,54 +2087,74 @@
         };
         $('fechaTrigger').click();
       });
-      enlaceSalida(); pintarProgreso(); return;
+      pintarProgreso(); return;
     }
+  }
 
-    if (q.tipo === 'pais'){
-      var c5 = tarjeta();
-      var g5 = chips(fila(c5, null));
-      chip(g5, 'Venezuela', function(){ cerrarTarjeta(c5); guardar(q, 'Venezuela'); });
-      chip(g5, 'Otro país', function(){
-        abrirSheet({ title:'País', search:true, selected:respuestas.ubicacion_pais || '',
-          items: PAISES.map(function(p){ return { value:p[0], label:p[0] }; }),
-          onPick: function(v){ cerrarTarjeta(c5); guardar(q, v); } });
+  /* ---------- pantalla con varios campos: marca+redes, fotos+videos ---------- */
+  function controlGrupo(q){
+    var c = tarjeta();
+    var campos = miembros(q.grupo);
+    var nodos = [];
+    /* si el grupo se quedo con un solo campo, su enunciado ya esta en la burbuja */
+    var solo = campos.length === 1 && !q.preguntaPantalla;
+    var todosOpcionales = campos.every(function(m){ return !!m.opcional; });
+    campos.forEach(function(m){
+      var f = fila(c, solo ? null : etiquetaCampo(m));
+      var n = (m.tipo === 'opcion') ? campoOpcion(m, respuestas[m.id]) : campo(m.tipo, m.ph, respuestas[m.id]);
+      f.appendChild(n);
+      /* la ayuda del campo que manda ya sale en la burbuja; la de los demas, aqui */
+      if (m.ayuda && m.id !== q.id) f.appendChild(el('span', 'wa-ayuda', dinamico(m.ayuda)));
+      nodos.push({ q:m, nodo:n });
+    });
+    if (todosOpcionales){
+      chip(chips(fila(c, null)), 'Omitir', function(){
+        campos.forEach(function(m){ respuestas[m.id] = ''; });
+        cerrarTarjeta(c);
+        guardarGrupo(q);
       }, true);
-      enlaceSalida(); pintarProgreso(); return;
     }
-
-    if (q.tipo === 'ciudad'){
-      var c6 = tarjeta();
-      var ciudades = CIUDADES[respuestas.ubicacion_pais] || [];
-      var i6 = campo('text', 'Escribe tu ciudad', previo);
-      var f6 = fila(c6, null);
-      if (ciudades.length){
-        var g6 = chips(fila(c6, null));
-        chip(g6, 'Elegir ciudad', function(){
-          abrirSheet({ title:'Ciudad', search: ciudades.length > 8, selected: previo || '',
-            items: ciudades.map(function(x){ return { value:x, label:x }; }),
-            onPick: function(v){ cerrarTarjeta(c6); guardar(q, v); } });
-        });
+    pie(c, 'Continuar', function(){
+      var valores = {};
+      for (var i = 0; i < nodos.length; i++){
+        var m = nodos[i].q, n = nodos[i].nodo;
+        var v = (m.tipo === 'opcion') ? n._valor : n.value.trim();
+        if (!v && !m.opcional){
+          return fallo(c, m.tipo === 'opcion' ? 'Elige una opción.' : 'Completa este dato.', n);
+        }
+        if (m.tipo === 'email' && v && !EMAIL.test(v)) return fallo(c, 'Revisa tu correo, parece tener un error.', n);
+        valores[m.id] = v;
       }
-      f6.appendChild(i6);
-      pie(c6, 'Continuar', function(){
-        var v = i6.value.trim();
-        if (!v) return fallo(c6, 'Escribe o elige tu ciudad.', i6);
-        cerrarTarjeta(c6);
-        guardar(q, v);
-      });
-      enlaceSalida(); pintarProgreso(); return;
-    }
+      if (q.validarGrupo){
+        var mal = q.validarGrupo(valores);
+        if (mal){
+          var culpable = null;
+          nodos.forEach(function(x){ if (x.q.id === mal.id) culpable = x.nodo; });
+          return fallo(c, mal.texto, culpable);
+        }
+      }
+      nodos.forEach(function(x){ respuestas[x.q.id] = valores[x.q.id]; });
+      cerrarTarjeta(c);
+      guardarGrupo(q);
+    });
+    if (!tactil && nodos.length && nodos[0].q.tipo !== 'opcion') nodos[0].nodo.focus();
   }
 
   /* ---------- bloque A: los tres datos juntos, como estaban ---------- */
   function controlContacto(q){
     var c = tarjeta();
+    var campos = miembros('contacto');
+    var etiqueta = function(id){
+      for (var i = 0; i < campos.length; i++) if (campos[i].id === id) return etiquetaCampo(campos[i]);
+      return '';
+    };
+
     var nombre = campo('text', 'Tu nombre', respuestas.nombre);
     nombre.setAttribute('autocapitalize', 'words');
     nombre.autocomplete = 'name'; nombre.name = 'nombre';
-    fila(c, 'Nombre').appendChild(nombre);
+    fila(c, etiqueta('nombre')).appendChild(nombre);
 
-    var ft = fila(c, 'Teléfono'), r = el('div', 'wa-f-row');
+    var ft = fila(c, etiqueta('telefono')), r = el('div', 'wa-f-row');
     var pb = el('button', 'wa-f-pick', prefIso + ' ' + $('prefijoPais').value);
     pb.type = 'button';
     pb.addEventListener('click', function(){ elegirPrefijo(function(t){ pb.textContent = t; }); });
@@ -2371,7 +2164,7 @@
 
     var correo = campo('email', 'tu@correo.com', respuestas.correo);
     correo.autocomplete = 'email'; correo.name = 'correo';
-    fila(c, 'Correo').appendChild(correo);
+    fila(c, etiqueta('correo')).appendChild(correo);
 
     pie(c, 'Continuar', function(){
       var n = nombre.value.trim(), t = tel.value.trim(), m = correo.value.trim(), d = t.replace(/\D/g, '');
@@ -2386,9 +2179,70 @@
       respuestas.telefono = $('prefijoPais').value + ' ' + t;
       respuestas.correo = m;
       cerrarTarjeta(c);
-      guardar(q, n, n + '\n' + respuestas.telefono + '\n' + m);
+      guardarGrupo(q);
     });
     if (!tactil) nombre.focus();
+  }
+
+  /* ---------- bloque D: pais, ciudad, lugar y entorno en una sola pantalla ---------- */
+  function controlLugar(q){
+    var c = tarjeta();
+    var qEntorno = porId('entorno');
+
+    var bPais = el('button', 'wa-f-btn', respuestas.ubicacion_pais || 'Venezuela');
+    bPais.type = 'button';
+    fila(c, 'País').appendChild(bPais);
+
+    var fc = fila(c, 'Ciudad');
+    /* Caracas viene puesta: es la ciudad de la mayoria de los clientes */
+    var ciudadPrevia = respuestas.ubicacion_ciudad;
+    if (ciudadPrevia === undefined && bPais.textContent === 'Venezuela') ciudadPrevia = 'Caracas';
+    var iCiudad = campo('text', 'Escribe tu ciudad', ciudadPrevia);
+    var gc = el('div', 'wa-f-chips');
+    fc.appendChild(iCiudad);
+    fc.appendChild(gc);
+
+    function pintarCiudades(){
+      gc.innerHTML = '';
+      var cs = CIUDADES[bPais.textContent] || [];
+      if (!cs.length) return;
+      chip(gc, 'Elegir de la lista', function(){
+        abrirSheet({ title:'Ciudad', search: cs.length > 8, selected: iCiudad.value,
+          items: cs.map(function(x){ return { value:x, label:x }; }),
+          onPick: function(v){ iCiudad.value = v; iCiudad.classList.remove('is-bad'); } });
+      }, true);
+    }
+    bPais.addEventListener('click', function(){
+      abrirSheet({ title:'País', search:true, selected:bPais.textContent,
+        items: PAISES.map(function(p){ return { value:p[0], label:p[0] }; }),
+        onPick: function(v){
+          bPais.textContent = v;
+          iCiudad.value = (v === 'Venezuela') ? 'Caracas' : '';
+          pintarCiudades();
+        } });
+    });
+    pintarCiudades();
+
+    var iLugar = campo('text', 'Zona o nombre del lugar', respuestas.ubicacion_lugar);
+    fila(c, 'Zona o lugar (opcional)').appendChild(iLugar);
+
+    var bEntorno = campoOpcion(qEntorno, respuestas.entorno);
+    fila(c, etiquetaCampo(qEntorno)).appendChild(bEntorno);
+
+    pie(c, 'Continuar', function(){
+      var ciudad = iCiudad.value.trim();
+      if (!ciudad) return fallo(c, 'Escribe o elige tu ciudad.', iCiudad);
+      if (!bEntorno._valor) return fallo(c, 'Elige el entorno de la sesión.', bEntorno);
+      respuestas.ubicacion_pais   = bPais.textContent;
+      respuestas.ubicacion_ciudad = ciudad;
+      respuestas.ubicacion_lugar  = iLugar.value.trim();
+      var texto = ciudad + ', ' + respuestas.ubicacion_pais;
+      if (respuestas.ubicacion_lugar) texto += ' — ' + respuestas.ubicacion_lugar;
+      respuestas.ubicacion = texto;
+      respuestas.entorno = bEntorno._valor;
+      cerrarTarjeta(c);
+      guardarGrupo(q);
+    });
   }
 
   function elegirPrefijo(alElegir){
@@ -2417,34 +2271,41 @@
   /* =========================================================
      VOLVER ATRAS Y EDITAR
      ========================================================= */
-  /* se repinta la conversacion entera hasta la pregunta pedida */
+  function resumenRespuesta(q){
+    if (q.grupo){
+      var vs = miembros(q.grupo).map(function(m){ return respuestas[m.id]; })
+                               .filter(function(v){ return !!v; });
+      return vs.length ? vs.join('\n') : 'Omitir';
+    }
+    return respuestas[q.id] || 'Omitir';
+  }
+  /* se repinta la conversacion entera hasta la pantalla pedida */
   function repintar(hasta){
     lista.innerHTML = '';
     tipeo = null;
     for (var i = 0; i < historial.length; i++){
-      var q = porId(historial[i]);
-      if (!q || q.id === hasta) break;
-      burbuja(q.pregunta, false, q.ayuda);
-      var v = respuestas[q.id];
-      if (q.id === 'contacto') burbuja(respuestas.nombre + '\n' + respuestas.telefono + '\n' + respuestas.correo, true);
-      else burbuja(v instanceof Array ? v.join(', ') : (v || 'Omitir'), true);
+      var q = pantallaPorClave(historial[i]);
+      if (!q || claveDe(q) === hasta) break;
+      burbuja(textoPregunta(q), false, dinamico(q.ayuda));
+      burbuja(resumenRespuesta(q), true);
     }
   }
   function editar(id){
-    var q = porId(id);
-    if (!q) return;
-    var n = historial.indexOf(id);
+    var p = pantallaPorClave(id);
+    if (!p){
+      var q = porId(id);
+      p = q ? pantallaDe(q) : null;
+    }
+    if (!p) return;
+    var k = claveDe(p);
+    var n = historial.indexOf(k);
     if (n !== -1) historial.splice(n);
     enResumen = false;
     fin.hidden = true;
-    repintar(id);
-    preguntar(q, false);
+    repintar(k);
+    preguntar(p, false);
   }
   botonAtras.addEventListener('click', function(){
-    if (enResumen){
-      if (historial.length) editar(historial[historial.length - 1]);
-      return;
-    }
     if (!historial.length) return;
     editar(historial[historial.length - 1]);
   });
@@ -2452,28 +2313,17 @@
   /* =========================================================
      RESUMEN Y ENVIO
      ========================================================= */
-  function valorTexto(q){
-    var v = respuestas[q.id];
-    if (v instanceof Array) return v.join(', ');
-    return v;
-  }
   function mostrarResumen(){
     enResumen = true;
     actual = null;
     pintarProgreso();
     bot('¡Listo, ' + (respuestas.nombre || '').split(' ')[0] + '! Este es el resumen. Toca "editar" si quieres cambiar algo.', null, function(){
       var c = el('div', 'wa-msg wa-in wa-res' + (sigue('wa-in') ? ' wa-cont' : ''));
-      var bloques = 'ABCDEFGHI'.split('');
-      bloques.forEach(function(b){
+      'ABCD'.split('').forEach(function(b){
         var filas = [];
-        if (b === 'A' && respuestas.nombre){
-          filas.push(['Nombre', respuestas.nombre, 'contacto']);
-          filas.push(['Teléfono', respuestas.telefono, 'contacto']);
-          filas.push(['Correo', respuestas.correo, 'contacto']);
-        }
         aplicables().forEach(function(q){
-          if (q.bloque !== b || q.tipo === 'contacto') return;
-          var v = valorTexto(q);
+          if (q.bloque !== b) return;
+          var v = respuestas[q.id];
           if (v === undefined || v === '') return;
           filas.push([q.etiquetaWA || q.id, v, q.id]);
         });
@@ -2497,33 +2347,80 @@
     });
   }
 
-  /* mensaje de WhatsApp: solo lo respondido, agrupado por bloque */
+  /* ---------- mensaje de WhatsApp ----------
+     compacto, solo con lo respondido y sin una sola linea de precio. */
+  var CORTO = {
+    'Contenido comercial o publicitario':'Contenido comercial',
+    'Evento, curso o lanzamiento':'Evento o lanzamiento',
+    'Retrato personal o video de presentación':'Retrato o video de presentación',
+    'Contenido para reels o TikToks':'Reels o TikToks',
+    'En mi local o casa':'su local o casa',
+    'No sé, que lo proponga Jara':'que lo proponga Jara'
+  };
+  function corto(v){ return CORTO[v] || v; }
+  function minus(v){ return v ? v.charAt(0).toLowerCase() + v.slice(1) : v; }
+  function unir(partes, sep){
+    return partes.filter(function(x){ return !!x; }).join(sep);
+  }
+
   function mensaje(){
-    var lineas = ['*NUEVA SOLICITUD DE COTIZACIÓN*'];
-    'ABCDEFGHI'.split('').forEach(function(b){
-      var trozo = [];
-      if (b === 'A' && respuestas.nombre){
-        trozo.push('Nombre: ' + respuestas.nombre);
-        trozo.push('Teléfono: ' + respuestas.telefono);
-        trozo.push('Correo: ' + respuestas.correo);
-      }
-      aplicables().forEach(function(q){
-        if (q.bloque !== b || q.tipo === 'contacto') return;
-        var v = valorTexto(q);
-        if (v === undefined || v === '') return;
-        trozo.push((q.etiquetaWA || q.id) + ': ' + v);
-      });
-      if (!trozo.length) return;
-      lineas.push('');
-      lineas.push('*' + TITULOS[b] + '*');
-      lineas = lineas.concat(trozo);
-    });
-    return lineas.join('\n');
+    var r = respuestas, out = ['*NUEVA SOLICITUD — vía web*'];
+    function bloque(titulo, filas){
+      var f = filas.filter(function(x){ return !!x; });
+      if (!f.length) return;
+      out.push('');
+      out.push('*' + titulo + '*');
+      out = out.concat(f);
+    }
+
+    bloque('Contacto', [unir([r.nombre, r.telefono], ' · '), r.correo]);
+
+    var quien = [];
+    if (r.perfil_tipo === NATURAL){
+      quien.push(unir([NATURAL, minus(r.natural_ocasion)], ' · '));
+    } else if (r.perfil_tipo && r.perfil_tipo !== MODELO){
+      var l = r.perfil_tipo + (r.marca_nombre ? ': ' + r.marca_nombre : '');
+      if (r.empresa_rubro) l += ' (' + r.empresa_rubro + ')';
+      quien.push(l);
+    }
+    if (r.redes){
+      quien.push((r.perfil_tipo === EMPRESA ? 'Instagram/TikTok de la empresa' : 'Instagram/TikTok') + ': ' + r.redes);
+    }
+    bloque('Quién es', quien);
+
+    /* el "formato" se deduce de las dos cantidades, no es una pregunta */
+    var fotos  = (r.cantidad_fotos  && r.cantidad_fotos  !== SIN_FOTOS)  ? r.cantidad_fotos  : '';
+    var videos = (r.cantidad_videos && r.cantidad_videos !== SIN_VIDEOS) ? r.cantidad_videos : '';
+    var formato = (fotos && videos) ? 'Fotos y video' : (fotos ? 'Solo fotos' : (videos ? 'Solo video' : ''));
+    bloque('Qué necesita', [
+      unir([corto(r.produccion_tipo), formato], ' · '),
+      unir([fotos ? 'Fotografías: ' + corto(fotos) : '', videos ? 'Videos: ' + corto(videos) : ''], ' · '),
+      r.evento_horas ? 'Cobertura: ' + minus(r.evento_horas) : ''
+    ]);
+
+    /* lo primero que Jara debe leer: en su propio parrafo y entre comillas */
+    if (r.brief_libre){
+      out.push('');
+      out.push('"' + r.brief_libre + '"');
+    }
+
+    bloque('Cuándo y dónde', [
+      r.fecha_estimada,
+      r.ubicacion,
+      r.entorno ? 'Entorno: ' + minus(corto(r.entorno)) : '',
+      r.deadline_entrega ? 'Entrega: ' + minus(r.deadline_entrega) : ''
+    ]);
+
+    return out.join('\n');
   }
   window.__jaraMensaje = mensaje;   /* para comprobar el mensaje en pruebas */
 
   $('waFinish').addEventListener('click', function(){
-    window.location.href = 'https://wa.me/' + WHATSAPP_NUMBER + '?text=' + encodeURIComponent(mensaje());
+    var url = 'https://wa.me/' + WHATSAPP_NUMBER + '?text=' + encodeURIComponent(mensaje());
+    /* cierre: un mensaje breve y nada mas que pedir */
+    fin.hidden = true;
+    burbuja('¡Gracias, ' + (respuestas.nombre || '').split(' ')[0] + '! Te abrí el chat de WhatsApp con todo listo: solo dale enviar y Jara te responde por ahí.', false);
+    window.location.href = url;
   });
   $('waRestart').addEventListener('click', function(){
     respuestas = {}; historial = []; enResumen = false; actual = null;
@@ -2553,8 +2450,9 @@
   chat.addEventListener('focusout', reajustar);
 
   function arrancar(){
+    pintarProgreso();
     bot('¡Hola! Soy el Agente de Jara.', null, function(){
-      bot('Te haré unas preguntas rápidas para preparar tu cotización.', null, function(){
+      bot('Voy a hacerte unas 15 preguntas rápidas para armarte una propuesta a la medida. Así Jara no tiene que preguntarte nada más por WhatsApp: solo confirmar y cotizar.', null, function(){
         preguntar(PREGUNTAS[0]);
       });
     });
