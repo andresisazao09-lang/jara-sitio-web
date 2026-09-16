@@ -39,9 +39,11 @@
 const ORIGEN_PERMITIDO = 'https://andresisazao09-lang.github.io';
 
 /* Modelo economico y rapido de Gemini: de sobra para una frase de una
-   linea. Si mas adelante Google saca un modelo mejor o mas barato, solo
-   hay que cambiar este texto. */
-const MODELO = 'gemini-2.5-flash-lite';
+   linea. Si mas adelante Google retira este tambien (avisa con un error
+   404 "no longer available", como paso con gemini-2.5-flash-lite el
+   17-09-2026), solo hay que cambiar este texto por el que Google recomiende
+   en ese mismo mensaje de error. */
+const MODELO = 'gemini-3.5-flash-lite';
 
 function encabezadosCORS(origen){
   return {
