@@ -148,11 +148,12 @@ app móvil de GitHub, y la web publicada se actualiza sola 1–2 minutos despué
   respuestas, pero el chat **usa sus selectores** (calendario `#fechaTrigger`, listas de país y
   ciudad con `abrirSheet`, prefijo `#prefijoPais`). No lo borres.
 
-### 4.1 Agente con IA (opcional, añadido 16-09-2026)
+### 4.1 Agente con IA (en producción desde el 17-09-2026)
 
-El dueño quiere que el chat "se sienta vivo": que tras cada respuesta, el Agente de Jara
-demuestre que la leyó y la entendió antes de pasar a la siguiente pregunta — sin que la IA
-invente ni reordene preguntas, eso lo sigue decidiendo por completo el árbol `PREGUNTAS[]`.
+El dueño quiere que el chat "se sienta vivo": que tras CADA respuesta, sin excepción, el Agente
+de Jara demuestre que la leyó y la entendió antes de pasar a la siguiente pregunta — sin que la
+IA invente ni reordene preguntas, eso lo sigue decidiendo por completo el árbol `PREGUNTAS[]`.
+**Ya está desplegado y funcionando en el sitio real**, no es opcional/apagado por defecto.
 
 **Por qué no es tan simple como llamar a Gemini desde `index.html`:** el sitio es HTML estático
 en GitHub Pages, sin servidor propio. Cualquiera puede ver el código fuente, así que una llave
@@ -161,39 +162,38 @@ un pequeño servidor intermediario (gratis) que guarda la llave en privado: el n
 habla a ese servidor, nunca a Google directamente.
 
 **Piezas del sistema:**
-- **`agente-ia/worker-agente-jara.js`** — el código del servidor intermediario, para pegar en un
-  Cloudflare Worker (Cloudflare tiene panel web, no hace falta Node ni ninguna terminal — ver
-  [[jara-site-constraints]], esta máquina no tiene Node instalado). Recibe
-  `{nombre, contexto, preguntaAnteriorTexto, respuestaCliente}`, le pide a Gemini
-  (`gemini-2.5-flash-lite`, barato y rápido) una frase corta y cálida, y devuelve
-  `{reconocimiento: "..."}`. Si algo falla (llave inválida, cuota agotada, error de red) responde
-  `{reconocimiento: ""}` — nunca un error — para que el sitio jamás se rompa por esto.
+- **`agente-ia/worker-agente-jara.js`** — el código del servidor intermediario, desplegado como
+  Cloudflare Worker en `https://agente-jara.andresisazao09.workers.dev` (cuenta del dueño).
+  Recibe `{nombre, contexto, preguntaAnteriorTexto, respuestaCliente}`, le pide a Gemini
+  (**`gemini-3.5-flash-lite`** — `gemini-2.5-flash-lite` fue retirado por Google para cuentas
+  nuevas el mismo 17-09-2026, el propio error de la API recomendó este reemplazo) una frase
+  corta y cálida, y devuelve `{reconocimiento: "..."}`. Si algo falla (llave inválida, cuota
+  agotada, error de red, modelo retirado otra vez) responde `{reconocimiento: ""}` — nunca un
+  error — para que el sitio jamás se rompa por esto. La llave vive como *Secret* en
+  Settings → Variables and Secrets del Worker, nunca en el repositorio.
 - **`index.html`, constante `AI_ENDPOINT`** (junto a `WHATSAPP_NUMBER`, script de la cabecera) —
-  la URL del Worker ya desplegado. **Mientras esté vacía (`""`), el chat funciona exactamente
-  igual que sin IA**: cero llamadas de red, cero costo, cero riesgo. Esa es la palanca para
-  apagar todo el sistema sin tocar nada más: basta con vaciar esta constante.
-- **`index.html`, funciones `reconocer()` / `contextoParaIA()`** (dentro del motor del chat,
-  junto a `avanzar()`) — arman la solicitud y aplican un límite de 2.5s: si el Worker no
-  responde a tiempo, o falla, o `AI_ENDPOINT` está vacío, sencillamente no hay frase y se pasa a
-  la siguiente pregunta como si la IA no existiera. La frase de la IA se muestra como un mensaje
-  más del bot (misma animación "escribiendo…" de siempre) **antes** de la burbuja de la
-  siguiente pregunta. No se pide reconocimiento justo después del bloque de contacto.
+  ya apunta a la URL de arriba. Si algún día hay que apagar el sistema sin tocar nada más,
+  basta con vaciarla (`""`) y el chat vuelve a funcionar exactamente igual que sin IA.
+- **`index.html`, funciones `reconocer()` / `fraseGenerica()` / `preguntar()` / `avanzar()`**
+  (motor del chat) — el saludo cálido y la pregunta se muestran **como un solo mensaje del bot**
+  (una sola animación de "escribiendo…"), nunca como dos burbujas separadas. El límite es 2.5s:
+  - Justo después del bloque de contacto: no se llama a la IA (no le mandamos teléfono ni
+    correo); se usa un saludo con su nombre ("¡Mucho gusto, María!"), instantáneo, sin red.
+  - En cualquier otra pregunta: se llama al Worker. Si responde a tiempo, se usa su frase. Si
+    `AI_ENDPOINT` está vacío, la llamada falla o tarda más de 2.5s, se usa una frase genérica al
+    azar de `FRASES_GENERICAS` ("¡Perfecto!", "Anotado.", etc.) — **nunca queda una pregunta
+    pelada, sin saludo**, y el formulario nunca se traba esperando a la IA.
 - **Privacidad:** `contextoParaIA()` solo manda un puñado de campos ya no sensibles (perfil,
   marca, rubro, ocasión, tipo de producción) y el primer nombre — nunca teléfono ni correo.
 
-**Para desplegar el Worker (lo hace el dueño, son cuentas suyas — Claude no puede crearlas):**
-1. Conseguir una llave gratis de Gemini en <https://aistudio.google.com/apikey> (cuenta de
-   Google, un clic en "Create API key").
-2. Crear una cuenta gratis en <https://dash.cloudflare.com> si no tiene una.
-3. Ahí: **Workers & Pages → Create → Workers** (dale un nombre, ej. `agente-jara`) → se abre un
-   editor de código → borrar el ejemplo y pegar el contenido completo de
-   `agente-ia/worker-agente-jara.js` → **Deploy**.
-4. **Settings → Variables and Secrets → Add** → tipo **Secret**, nombre `GEMINI_API_KEY`, valor
-   la llave del paso 1 → guardar (esto vuelve a desplegar el Worker con la llave ya dentro, sin
-   que quede visible en el panel).
-5. Copiar la URL que Cloudflare le asigna al Worker (algo como
-   `https://agente-jara.<usuario>.workers.dev`) y pegarla como valor de `AI_ENDPOINT` en
-   `index.html`. Listo — no hace falta tocar nada más.
+**Redeploy del Worker (cuentas del dueño — Claude no puede tocarlas ni ver la llave):**
+1. Llave gratis de Gemini en <https://aistudio.google.com/apikey>.
+2. Panel en <https://dash.cloudflare.com> → **Compute → Workers & Pages** (ojo: NO es "AI →
+   Workers AI", eso es otro producto) → entrar al Worker `agente-jara` → **Edit code** (desde la
+   página de Overview, no desde "Deployments" — esa vista queda de solo lectura).
+3. Pegar el contenido de `agente-ia/worker-agente-jara.js` → **Deploy**.
+4. La llave ya está puesta en Settings → Variables and Secrets → `GEMINI_API_KEY` (tipo Secret);
+   no hace falta volver a ponerla salvo que se pierda o se rote.
 
 **Si el sitio cambia de dominio o de URL de GitHub Pages**, hay que actualizar también
 `ORIGEN_PERMITIDO` dentro de `worker-agente-jara.js` (y volver a pegar/desplegar), o el Worker
@@ -204,6 +204,30 @@ un navegador, pero no evita que alguien lo llame directo (con `curl`, por ejempl
 URL. El límite real de gasto lo pone la cuenta de Google: mientras se use el nivel gratis de
 Gemini no hay cobro, pero si algún día se pasa a un plan de pago vale la pena poner una alerta de
 presupuesto baja en Google Cloud como red de seguridad.
+
+**Nota de depuración (17-09-2026):** el panel de navegador que usa Claude para probar el sitio no
+logra conectarse a subdominios `*.workers.dev` recién creados (falla incluso sin CORS de por
+medio), mientras que `curl` desde la terminal y los navegadores reales de los clientes sí
+funcionan bien. Si en el futuro una prueba en ese panel muestra "Failed to fetch" hacia el
+Worker, no es necesariamente un bug real — hay que confirmar con `curl` y/o pidiéndole al dueño
+que pruebe en su propio navegador antes de asumir que algo se rompió. Ver [[jara-site-constraints]].
+
+**Pantalla final (17-09-2026):** ya no se muestra la lista de campos con botones "editar" antes
+de enviar — el dueño pidió quitarla porque le daba al cliente la oportunidad de quedarse
+revisando/dudando justo antes de enviar, lo que le hacía perder clientes al fotógrafo. Ahora el
+resumen muestra **directo** el mensaje en párrafo (función `mensaje()`) y los dos botones
+(Enviar / Empezar de nuevo). El botón "‹" de volver también se oculta en esa pantalla — solo
+sirve durante las preguntas, no al final.
+
+**Perfil "Empresa o Agencia" separado en dos (17-09-2026):** estaba fusionado en una sola opción,
+pero eso hacía que la pregunta de rubro (`empresa_rubro`, que solo tiene sentido para una
+empresa con un rubro propio) apareciera también para quien fuera una agencia — descolocado,
+porque una agencia representa clientes de rubros distintos. Se separaron en dos opciones reales,
+`Agencia` y `Empresa` (mismo número de pantallas, cero costo extra), y `empresa_rubro` ahora solo
+aplica a `Empresa`. **Regla para el futuro:** antes de fusionar dos opciones en una sola pregunta
+de `perfil_tipo` (o cualquier otra), verificar que ninguna pregunta posterior dependa de una
+lectura específica de esa opción — si alguna pregunta solo le calza bien a una de las dos
+lecturas, no fusionar.
 
 ## 5. Limitaciones del entorno (esto te ahorra tiempo)
 

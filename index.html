@@ -803,26 +803,10 @@
     color:#54656f;font-size:11.5px;letter-spacing:.05em;text-align:center;
   }
   .wa-res{width:92%;max-width:92%;white-space:normal;}
-  .wa-res h4{
-    margin:12px 0 4px;font-size:11px;letter-spacing:.09em;text-transform:uppercase;
-    color:#075E54;font-weight:700;
-  }
-  .wa-res h4:first-child{margin-top:0;}
-  .wa-res-fila{
-    display:flex;gap:10px;align-items:baseline;justify-content:space-between;
-    padding:5px 0;border-bottom:1px solid rgba(17,27,33,0.07);
-  }
-  .wa-res-dato{flex:1;min-width:0;font-size:14px;line-height:1.35;}
-  .wa-res-dato b{font-weight:600;}
-  .wa-res-editar{
-    flex-shrink:0;border:0;background:none;color:#075E54;font-size:12.5px;
-    cursor:pointer;text-decoration:underline;padding:2px 0;
-  }
-  /* vista previa del mensaje que se enviara por WhatsApp: parrafo, no lista */
-  .wa-res-msg{margin-top:14px;padding-top:12px;border-top:1px solid rgba(17,27,33,0.09);}
+  /* el mensaje final en parrafo: es el contenido principal de esta pantalla
+     (no una vista previa secundaria), asi que se lee como texto normal */
   .wa-res-parrafo{
-    margin:6px 0 0;font-size:13.5px;line-height:1.55;color:#3b4a51;
-    font-style:italic;white-space:pre-line;
+    margin:0;font-size:14.5px;line-height:1.5;color:#111b21;white-space:pre-line;
   }
 </style>
 <script>
@@ -1688,7 +1672,8 @@
   var tactil = window.matchMedia && !window.matchMedia('(pointer:fine)').matches;
   var EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
-  var EMPRESA = 'Empresa o Agencia';
+  var AGENCIA = 'Agencia';
+  var EMPRESA = 'Empresa';
   var MARCA   = 'Marca personal o creador de contenido';
   var MODELO  = 'Modelo';
   var NATURAL = 'Persona natural';
@@ -1715,32 +1700,45 @@
 
     /* ---------- BLOQUE B · quien eres ----------
        Orden de perfil_tipo: de mayor a menor alcance tipico del proyecto
-       (Empresa/Agencia primero, Persona natural al final). No es un dato que
-       el cliente perciba, solo el orden en que ve las opciones. */
+       (Agencia y Empresa primero, Persona natural al final). No es un dato
+       que el cliente perciba, solo el orden en que ve las opciones.
+       "Agencia" y "Empresa" van SEPARADAS (no como una sola opción fusionada
+       "Empresa o Agencia"): fusionarlas hacia que la pregunta de rubro
+       (que solo tiene sentido para una empresa con un rubro propio, no para
+       una agencia que representa clientes de rubros distintos) sonara
+       descolocada para quien fuera agencia. Separarlas cuesta cero pantallas
+       extra —siguen siendo una sola pregunta de seleccion— y evita esa
+       friccion. Regla para el futuro: si dos opciones fusionadas necesitan
+       una pregunta de seguimiento que solo le calza bien a UNA de las dos,
+       sepáralas en vez de fusionarlas. */
     { id:'perfil_tipo', bloque:'B', tipo:'select', etiquetaWA:'Perfil',
       pregunta:'¿Cómo te presentas?',
-      opciones:[EMPRESA, MARCA, MODELO, NATURAL] },
+      opciones:[AGENCIA, EMPRESA, MARCA, MODELO, NATURAL] },
     /* marca y redes comparten pantalla; si es Modelo solo queda el campo de redes */
     { id:'marca_nombre', bloque:'B', grupo:'marca', tipo:'text', etiquetaWA:'Marca',
       preguntaPantalla:function(r){
-        return r.perfil_tipo === EMPRESA ? 'Cuéntame de tu empresa o agencia:' : 'Cuéntame de tu marca:';
+        if (r.perfil_tipo === AGENCIA) return 'Cuéntame de tu agencia:';
+        if (r.perfil_tipo === EMPRESA) return 'Cuéntame de tu empresa:';
+        return 'Cuéntame de tu marca:';
       },
       pregunta:function(r){
-        return r.perfil_tipo === EMPRESA
-          ? '¿Cómo se llama tu empresa o agencia?'
-          : '¿Cómo se llama tu marca? (o tu nombre, si trabajas bajo tu propio nombre)';
+        if (r.perfil_tipo === AGENCIA) return '¿Cómo se llama tu agencia?';
+        if (r.perfil_tipo === EMPRESA) return '¿Cómo se llama tu empresa?';
+        return '¿Cómo se llama tu marca? (o tu nombre, si trabajas bajo tu propio nombre)';
       },
       ph:'Nombre de la marca',
-      showIf:entre('perfil_tipo', [EMPRESA, MARCA]) },
+      showIf:entre('perfil_tipo', [AGENCIA, EMPRESA, MARCA]) },
     { id:'redes', bloque:'B', grupo:'marca', tipo:'text', etiquetaWA:'Redes', opcional:true,
       pregunta:function(r){
-        return r.perfil_tipo === EMPRESA
-          ? '¿Cuál es el Instagram o TikTok de tu empresa?'
-          : '¿Cuál es tu Instagram o TikTok?';
+        if (r.perfil_tipo === AGENCIA) return '¿Cuál es el Instagram o TikTok de tu agencia?';
+        if (r.perfil_tipo === EMPRESA) return '¿Cuál es el Instagram o TikTok de tu empresa?';
+        return '¿Cuál es tu Instagram o TikTok?';
       },
       ph:'@tuusuario',
       ayuda:'Ver el perfil me ahorra media conversación entendiendo tu estilo.',
       showIf:noEs('perfil_tipo', NATURAL) },
+    /* solo para Empresa: una agencia representa clientes de rubros distintos,
+       no tiene un rubro propio que preguntarle */
     { id:'empresa_rubro', bloque:'B', tipo:'select', etiquetaWA:'Rubro',
       pregunta:'¿En qué rubro estás?',
       opciones:['Moda o ropa', 'Gastronomía', 'Belleza o estética', 'Joyería o accesorios',
@@ -1792,8 +1790,6 @@
       pregunta:'¿Para cuándo necesitas el material listo?',
       opciones:['Mismo día', 'En 48 horas', 'En una semana', 'En dos semanas', 'Sin apuro'] }
   ];
-
-  var TITULOS = { A:'Contacto', B:'Quién es', C:'Qué necesita', D:'Cuándo y dónde' };
 
   /* =========================================================
      MOTOR: que preguntas aplican, en que orden y cuantas pantallas son
@@ -1899,7 +1895,8 @@
     } else {
       cuenta.hidden = true;
     }
-    botonAtras.hidden = historial.length === 0 && !enResumen;
+    /* en la pantalla final no se ofrece volver a editar (ver mostrarResumen) */
+    botonAtras.hidden = historial.length === 0 || enResumen;
   }
 
   /* =========================================================
@@ -2051,14 +2048,17 @@
     return b;
   }
 
-  /* ---------- muestra una pantalla ---------- */
-  function preguntar(q, conAnimacion){
+  /* ---------- muestra una pantalla ----------
+     "entrada" (opcional) es la frase calida que precede a la pregunta,
+     como si el bot dijera las dos cosas en un mismo mensaje. */
+  function preguntar(q, conAnimacion, entrada){
     actual = q;
     enResumen = false;
     fin.hidden = true;
     pintarProgreso();
-    if (conAnimacion === false){ burbuja(textoPregunta(q), false, dinamico(q.ayuda)); controles(q); }
-    else bot(textoPregunta(q), dinamico(q.ayuda), function(){ controles(q); });
+    var texto = (entrada ? entrada + ' ' : '') + textoPregunta(q);
+    if (conAnimacion === false){ burbuja(texto, false, dinamico(q.ayuda)); controles(q); }
+    else bot(texto, dinamico(q.ayuda), function(){ controles(q); });
   }
 
   function guardar(q, valor, etiqueta){
@@ -2082,16 +2082,17 @@
     var siguiente = siguientePregunta();
     var claveAnterior = historial[historial.length - 1];
     var anterior = claveAnterior ? pantallaPorClave(claveAnterior) : null;
-    function continuar(){
-      if (siguiente) preguntar(siguiente);
-      else mostrarResumen();
+    if (!siguiente){ mostrarResumen(); return; }
+    /* justo despues de los datos de contacto no hace falta preguntarle nada
+       a la IA (no le mandamos telefono ni correo) — un saludo con su nombre
+       ya es calido de por si y no cuesta ninguna llamada de red */
+    if (anterior && anterior.grupo === 'contacto'){
+      preguntar(siguiente, undefined, '¡Mucho gusto, ' + (respuestas.nombre || '').split(' ')[0] + '!');
+      return;
     }
+    if (!anterior){ preguntar(siguiente); return; } /* la primerisima pregunta no tiene nada que reconocer */
     reconocer(anterior, function(frase){
-      /* la frase de la IA se muestra como un mensaje mas del bot, con su
-         misma animacion de "escribiendo…"; si no hay frase (IA apagada,
-         lenta o con error) se pasa directo a la siguiente pregunta */
-      if (frase) bot(frase, null, continuar);
-      else continuar();
+      preguntar(siguiente, undefined, frase || fraseGenerica());
     });
   }
 
@@ -2101,10 +2102,19 @@
      (vía un pequeño servidor intermediario, nunca directo desde el navegador
      — la llave de la IA no puede viajar en el codigo publico del sitio) una
      frase breve que demuestre que la respuesta anterior fue leida y
-     entendida. Si AI_ENDPOINT esta vacio, o la llamada falla o tarda mas de
-     2.5s, sencillamente no hay frase y el formulario sigue exactamente igual
-     que sin IA: esto nunca debe trabar ni romper el envio del formulario.
-     ========================================================= */
+     entendida. Esa frase se pega justo antes de la siguiente pregunta, como
+     un solo mensaje del bot — asi el trato calido esta en TODAS las
+     pantallas, no solo en algunas. Si AI_ENDPOINT esta vacio, o la llamada
+     falla o tarda mas de 2.5s, se usa una frase generica de la lista de
+     abajo en su lugar: el sitio nunca deja una pregunta pelada ni se traba
+     esperando a la IA. */
+  var FRASES_GENERICAS = [
+    '¡Perfecto!', '¡Genial, gracias por contarme!', '¡Buenísimo!',
+    'Anotado.', '¡Qué bien!', 'Entendido, sigamos.'
+  ];
+  function fraseGenerica(){
+    return FRASES_GENERICAS[Math.floor(Math.random() * FRASES_GENERICAS.length)];
+  }
   /* un puñado de datos ya conocidos (sin telefono ni correo) para que la IA
      tenga contexto sin que le lleguen datos de contacto */
   function contextoParaIA(){
@@ -2117,8 +2127,7 @@
     return out;
   }
   function reconocer(anterior, listo){
-    /* tras el bloque de contacto no hace falta reconocimiento */
-    if (!AI_ENDPOINT || !anterior || anterior.grupo === 'contacto'){ listo(''); return; }
+    if (!AI_ENDPOINT){ listo(''); return; }
     var vencido;
     var controlador = (typeof AbortController !== 'undefined') ? new AbortController() : null;
     if (controlador) vencido = setTimeout(function(){ controlador.abort(); }, 2500);
@@ -2404,39 +2413,19 @@
   /* =========================================================
      RESUMEN Y ENVIO
      ========================================================= */
+  /* Al terminar, se muestra DIRECTO el mensaje en parrafo — sin una lista de
+     campos "editar" por aparte. Darle al cliente una pantalla para quedarse
+     revisando y corrigiendo cada dato invita a la duda y a abandonar justo
+     antes de enviar; mejor mostrarle de una vez el mensaje ya listo y los
+     dos botones (enviar o empezar de nuevo). Si de verdad se equivocó en
+     algo, "Empezar de nuevo" siempre está disponible. */
   function mostrarResumen(){
     enResumen = true;
     actual = null;
     pintarProgreso();
-    bot('¡Listo, ' + (respuestas.nombre || '').split(' ')[0] + '! Este es el resumen. Toca "editar" si quieres cambiar algo.', null, function(){
+    bot('¡Listo, ' + (respuestas.nombre || '').split(' ')[0] + '! Esto es lo que le voy a escribir a Jara:', null, function(){
       var c = el('div', 'wa-msg wa-in wa-res' + (sigue('wa-in') ? ' wa-cont' : ''));
-      'ABCD'.split('').forEach(function(b){
-        var filas = [];
-        aplicables().forEach(function(q){
-          if (q.bloque !== b) return;
-          var v = respuestas[q.id];
-          if (v === undefined || v === '') return;
-          filas.push([q.etiquetaWA || q.id, v, q.id]);
-        });
-        if (!filas.length) return;
-        c.appendChild(el('h4', null, TITULOS[b]));
-        filas.forEach(function(f){
-          var fila_ = el('div', 'wa-res-fila');
-          var dato = el('div', 'wa-res-dato');
-          dato.appendChild(el('b', null, f[0] + ': '));
-          dato.appendChild(document.createTextNode(f[1]));
-          var bot_ = el('button', 'wa-res-editar', 'editar');
-          bot_.type = 'button';
-          bot_.addEventListener('click', function(){ editar(f[2]); });
-          fila_.appendChild(dato); fila_.appendChild(bot_);
-          c.appendChild(fila_);
-        });
-      });
-      /* vista previa del mensaje real que se enviara por WhatsApp */
-      var msg = el('div', 'wa-res-msg');
-      msg.appendChild(el('h4', null, 'Así se lo escribiré a Jara'));
-      msg.appendChild(el('p', 'wa-res-parrafo', mensaje()));
-      c.appendChild(msg);
+      c.appendChild(el('p', 'wa-res-parrafo', mensaje()));
       lista.appendChild(c);
       fin.hidden = false;
       pintarProgreso();
@@ -2472,8 +2461,13 @@
       quien.push('Soy un cliente particular, y la ocasión es ' + (OCASION_FRASE[r.natural_ocasion] || 'una ocasión especial') + '.');
     } else if (r.perfil_tipo === MODELO){
       quien.push('Trabajo como modelo' + (r.redes ? ', mi Instagram o TikTok es ' + r.redes : '') + '.');
+    } else if (r.perfil_tipo === AGENCIA){
+      var ag = 'Te escribo en representación de una agencia';
+      if (r.marca_nombre) ag += ' llamada ' + r.marca_nombre;
+      quien.push(ag + '.');
+      if (r.redes) quien.push('El Instagram o TikTok de la agencia es ' + r.redes + '.');
     } else if (r.perfil_tipo === EMPRESA){
-      var e = 'Te escribo en representación de una empresa o agencia';
+      var e = 'Te escribo en representación de una empresa';
       if (r.marca_nombre) e += ' llamada ' + r.marca_nombre;
       if (r.empresa_rubro) e += ', en el rubro de ' + minus(r.empresa_rubro);
       quien.push(e + '.');
