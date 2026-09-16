@@ -148,6 +148,63 @@ app móvil de GitHub, y la web publicada se actualiza sola 1–2 minutos despué
   respuestas, pero el chat **usa sus selectores** (calendario `#fechaTrigger`, listas de país y
   ciudad con `abrirSheet`, prefijo `#prefijoPais`). No lo borres.
 
+### 4.1 Agente con IA (opcional, añadido 16-09-2026)
+
+El dueño quiere que el chat "se sienta vivo": que tras cada respuesta, el Agente de Jara
+demuestre que la leyó y la entendió antes de pasar a la siguiente pregunta — sin que la IA
+invente ni reordene preguntas, eso lo sigue decidiendo por completo el árbol `PREGUNTAS[]`.
+
+**Por qué no es tan simple como llamar a Gemini desde `index.html`:** el sitio es HTML estático
+en GitHub Pages, sin servidor propio. Cualquiera puede ver el código fuente, así que una llave
+de API puesta ahí quedaría pública y cualquiera podría gastarla a nombre de Jara. La solución es
+un pequeño servidor intermediario (gratis) que guarda la llave en privado: el navegador le
+habla a ese servidor, nunca a Google directamente.
+
+**Piezas del sistema:**
+- **`agente-ia/worker-agente-jara.js`** — el código del servidor intermediario, para pegar en un
+  Cloudflare Worker (Cloudflare tiene panel web, no hace falta Node ni ninguna terminal — ver
+  [[jara-site-constraints]], esta máquina no tiene Node instalado). Recibe
+  `{nombre, contexto, preguntaAnteriorTexto, respuestaCliente}`, le pide a Gemini
+  (`gemini-2.5-flash-lite`, barato y rápido) una frase corta y cálida, y devuelve
+  `{reconocimiento: "..."}`. Si algo falla (llave inválida, cuota agotada, error de red) responde
+  `{reconocimiento: ""}` — nunca un error — para que el sitio jamás se rompa por esto.
+- **`index.html`, constante `AI_ENDPOINT`** (junto a `WHATSAPP_NUMBER`, script de la cabecera) —
+  la URL del Worker ya desplegado. **Mientras esté vacía (`""`), el chat funciona exactamente
+  igual que sin IA**: cero llamadas de red, cero costo, cero riesgo. Esa es la palanca para
+  apagar todo el sistema sin tocar nada más: basta con vaciar esta constante.
+- **`index.html`, funciones `reconocer()` / `contextoParaIA()`** (dentro del motor del chat,
+  junto a `avanzar()`) — arman la solicitud y aplican un límite de 2.5s: si el Worker no
+  responde a tiempo, o falla, o `AI_ENDPOINT` está vacío, sencillamente no hay frase y se pasa a
+  la siguiente pregunta como si la IA no existiera. La frase de la IA se muestra como un mensaje
+  más del bot (misma animación "escribiendo…" de siempre) **antes** de la burbuja de la
+  siguiente pregunta. No se pide reconocimiento justo después del bloque de contacto.
+- **Privacidad:** `contextoParaIA()` solo manda un puñado de campos ya no sensibles (perfil,
+  marca, rubro, ocasión, tipo de producción) y el primer nombre — nunca teléfono ni correo.
+
+**Para desplegar el Worker (lo hace el dueño, son cuentas suyas — Claude no puede crearlas):**
+1. Conseguir una llave gratis de Gemini en <https://aistudio.google.com/apikey> (cuenta de
+   Google, un clic en "Create API key").
+2. Crear una cuenta gratis en <https://dash.cloudflare.com> si no tiene una.
+3. Ahí: **Workers & Pages → Create → Workers** (dale un nombre, ej. `agente-jara`) → se abre un
+   editor de código → borrar el ejemplo y pegar el contenido completo de
+   `agente-ia/worker-agente-jara.js` → **Deploy**.
+4. **Settings → Variables and Secrets → Add** → tipo **Secret**, nombre `GEMINI_API_KEY`, valor
+   la llave del paso 1 → guardar (esto vuelve a desplegar el Worker con la llave ya dentro, sin
+   que quede visible en el panel).
+5. Copiar la URL que Cloudflare le asigna al Worker (algo como
+   `https://agente-jara.<usuario>.workers.dev`) y pegarla como valor de `AI_ENDPOINT` en
+   `index.html`. Listo — no hace falta tocar nada más.
+
+**Si el sitio cambia de dominio o de URL de GitHub Pages**, hay que actualizar también
+`ORIGEN_PERMITIDO` dentro de `worker-agente-jara.js` (y volver a pegar/desplegar), o el Worker
+rechazará las llamadas del navegador por CORS.
+
+**Límite conocido:** restringir por origen (CORS) evita que otras páginas usen el Worker desde
+un navegador, pero no evita que alguien lo llame directo (con `curl`, por ejemplo) si averigua la
+URL. El límite real de gasto lo pone la cuenta de Google: mientras se use el nivel gratis de
+Gemini no hay cobro, pero si algún día se pasa a un plan de pago vale la pena poner una alerta de
+presupuesto baja en Google Cloud como red de seguridad.
+
 ## 5. Limitaciones del entorno (esto te ahorra tiempo)
 
 - Windows 11. Hay **PowerShell** y **Git Bash**. **No hay Python ni Node/npm.**

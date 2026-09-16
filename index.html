@@ -1134,6 +1134,11 @@
   // TODO: reemplaza por el número de WhatsApp real, formato internacional sin "+" (ej: 584121234567)
   const WHATSAPP_NUMBER = "584129071347";
 
+  // TODO: pega aqui la URL de tu Worker de Cloudflare cuando este desplegado (ver CONTEXTO-IA.md,
+  // seccion "Agente con IA"). Mientras esto quede vacio, el chat funciona exactamente igual que
+  // antes: sin reconocimientos de IA, sin llamadas de red y sin costo.
+  const AI_ENDPOINT = "";
+
   /* la cabecera es fija: su altura real marca donde empieza el formulario */
   (function(){
     var bar = document.querySelector('.top-bar');
@@ -2074,9 +2079,66 @@
     setTimeout(avanzar, 200);
   }
   function avanzar(){
-    var q = siguientePregunta();
-    if (q) preguntar(q);
-    else mostrarResumen();
+    var siguiente = siguientePregunta();
+    var claveAnterior = historial[historial.length - 1];
+    var anterior = claveAnterior ? pantallaPorClave(claveAnterior) : null;
+    function continuar(){
+      if (siguiente) preguntar(siguiente);
+      else mostrarResumen();
+    }
+    reconocer(anterior, function(frase){
+      /* la frase de la IA se muestra como un mensaje mas del bot, con su
+         misma animacion de "escribiendo…"; si no hay frase (IA apagada,
+         lenta o con error) se pasa directo a la siguiente pregunta */
+      if (frase) bot(frase, null, continuar);
+      else continuar();
+    });
+  }
+
+  /* =========================================================
+     RECONOCIMIENTO CON IA (opcional)
+     Antes de mostrar la siguiente pregunta, se le pide a un modelo de IA
+     (vía un pequeño servidor intermediario, nunca directo desde el navegador
+     — la llave de la IA no puede viajar en el codigo publico del sitio) una
+     frase breve que demuestre que la respuesta anterior fue leida y
+     entendida. Si AI_ENDPOINT esta vacio, o la llamada falla o tarda mas de
+     2.5s, sencillamente no hay frase y el formulario sigue exactamente igual
+     que sin IA: esto nunca debe trabar ni romper el envio del formulario.
+     ========================================================= */
+  /* un puñado de datos ya conocidos (sin telefono ni correo) para que la IA
+     tenga contexto sin que le lleguen datos de contacto */
+  function contextoParaIA(){
+    var claves = ['perfil_tipo', 'marca_nombre', 'empresa_rubro', 'natural_ocasion', 'produccion_tipo'];
+    var out = [];
+    claves.forEach(function(id){
+      var q = porId(id);
+      if (q && respuestas[id]) out.push({ etiqueta: q.etiquetaWA || id, valor: respuestas[id] });
+    });
+    return out;
+  }
+  function reconocer(anterior, listo){
+    /* tras el bloque de contacto no hace falta reconocimiento */
+    if (!AI_ENDPOINT || !anterior || anterior.grupo === 'contacto'){ listo(''); return; }
+    var vencido;
+    var controlador = (typeof AbortController !== 'undefined') ? new AbortController() : null;
+    if (controlador) vencido = setTimeout(function(){ controlador.abort(); }, 2500);
+    fetch(AI_ENDPOINT, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      signal: controlador ? controlador.signal : undefined,
+      body: JSON.stringify({
+        nombre: (respuestas.nombre || '').split(' ')[0],
+        contexto: contextoParaIA(),
+        preguntaAnteriorTexto: textoPregunta(anterior),
+        respuestaCliente: resumenRespuesta(anterior)
+      })
+    }).then(function(r){ return r.ok ? r.json() : null; })
+      .then(function(datos){
+        clearTimeout(vencido);
+        var frase = (datos && typeof datos.reconocimiento === 'string') ? datos.reconocimiento.trim() : '';
+        listo(frase.slice(0, 160));
+      })
+      .catch(function(){ clearTimeout(vencido); listo(''); });
   }
 
   function controles(q){
