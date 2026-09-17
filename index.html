@@ -1788,6 +1788,15 @@
                 'Retrato personal o video de presentación', 'Contenido para reels o TikToks', 'Otro'];
       },
       showIf:noEs('perfil_tipo', NATURAL) },
+    /* "contenido comercial o publicitario" es muy amplio: una persona real
+       pregunta enseguida para qué es. Las demas opciones ya dicen su
+       finalidad solas (un evento, un book, reels...), por eso esta pregunta
+       solo sale para esa opción. */
+    { id:'comercial_finalidad', bloque:'C', tipo:'select', etiquetaWA:'Finalidad',
+      pregunta:'¿Para qué necesitas ese contenido?',
+      opciones:['Publicidad en redes sociales', 'Catálogo o ficha de producto',
+                'Campaña de marca o lanzamiento', 'Página web o tienda en línea', 'Otro'],
+      showIf:es('produccion_tipo', 'Contenido comercial o publicitario') },
     /* fotos y videos en una sola pantalla; el "formato" se deduce de las dos.
        Orden de cada selector: de mas cantidad a menos, "Ninguna/o" casi al
        final y "No sé" siempre de ultimo. */
@@ -1803,6 +1812,12 @@
     { id:'cantidad_videos', bloque:'C', grupo:'cantidad', tipo:'opcion', etiquetaWA:'Videos',
       pregunta:'¿Cuántos videos?',
       opciones:['Más de 6', '4 a 6', '2 a 3', '1', SIN_VIDEOS, 'No sé, que lo proponga Jara'] },
+    /* tras decir cuanto material quiere, lo natural es preguntarle para que
+       lo va a usar (redes vs. impresion necesitan entrega distinta) */
+    { id:'material_formato', bloque:'C', tipo:'select', etiquetaWA:'Formato',
+      pregunta:'¿En qué formato necesitas el material?',
+      opciones:['Para redes sociales', 'Para impresión', 'Para redes sociales e impresión',
+                'No sé, que lo proponga Jara'] },
     /* las horas de cobertura aplican a un evento… venga por donde venga: por
        produccion_tipo (agencia/empresa/marca/modelo) o por la ocasión de una
        persona natural (una boda tambien es un evento que hay que cubrir) */
@@ -2490,6 +2505,20 @@
     'Contenido para reels o TikToks':'contenido para reels o TikToks',
     'Book o portafolio de modelo':'un book o portafolio de modelo'
   };
+  /* sin entrada para "Otro": si el cliente la elige, el brief_libre ya
+     cuenta el detalle y no hace falta una frase generica torpe */
+  var COMERCIAL_FINALIDAD_FRASE = {
+    'Publicidad en redes sociales':'publicidad en redes sociales',
+    'Catálogo o ficha de producto':'un catálogo o ficha de producto',
+    'Campaña de marca o lanzamiento':'una campaña de marca o lanzamiento',
+    'Página web o tienda en línea':'la página web o tienda en línea'
+  };
+  var FORMATO_FRASE = {
+    'Para redes sociales':'para usarlos en redes sociales',
+    'Para impresión':'para imprimirlos',
+    'Para redes sociales e impresión':'para redes sociales y para imprimir',
+    'No sé, que lo proponga Jara':'en el formato que tú propongas'
+  };
   /* las cantidades se escriben como las diria una persona ("más de 50
      fotografías", "1 video"), no pegando el valor crudo del selector */
   var FOTOS_FRASE = {
@@ -2508,9 +2537,14 @@
     'Automotriz':'automotriz', 'Viajes o turismo':'de viajes o turismo',
     'Modelaje o talento':'de modelaje o talento', 'Eventos':'de eventos'
   };
+  /* el plazo se cuenta siempre desde la sesión, nunca desde "hoy": "en una
+     semana" es ambiguo (¿desde cuándo?), por eso cada frase ancla al día
+     en que se grabó */
   var ENTREGA_FRASE = {
-    'Mismo día':'el mismo día', 'En 48 horas':'en 48 horas', 'En una semana':'en una semana',
-    'En dos semanas':'en dos semanas', 'Sin apuro':'sin apuro, cuando puedas'
+    'Mismo día':'el mismo día de la sesión', 'En 48 horas':'48 horas después de la sesión',
+    'En una semana':'una semana después de haber sido grabado',
+    'En dos semanas':'dos semanas después de haber sido grabado',
+    'Sin apuro':'sin apuro, cuando puedas'
   };
 
   function mensaje(){
@@ -2550,6 +2584,10 @@
     var necesita = [];
     if (r.produccion_tipo === 'Otro'){
       necesita.push('Tengo un proyecto que no encaja en las categorías usuales.');
+    } else if (r.produccion_tipo === 'Contenido comercial o publicitario'){
+      necesita.push('Estoy buscando ' + PRODUCCION_FRASE[r.produccion_tipo] + '.');
+      if (COMERCIAL_FINALIDAD_FRASE[r.comercial_finalidad])
+        necesita.push('Es para ' + COMERCIAL_FINALIDAD_FRASE[r.comercial_finalidad] + '.');
     } else if (r.produccion_tipo){
       necesita.push('Se trata de ' + (PRODUCCION_FRASE[r.produccion_tipo] || minus(r.produccion_tipo)) + '.');
     }
@@ -2559,6 +2597,7 @@
     if (fotos) cuantos.push(FOTOS_FRASE[fotos] || fotos + ' fotografías');
     if (videos) cuantos.push(VIDEOS_FRASE[videos] || videos + ' videos');
     if (cuantos.length) necesita.push('Necesito ' + cuantos.join(' y ') + '.');
+    if (r.material_formato) necesita.push('Los necesito ' + FORMATO_FRASE[r.material_formato] + '.');
     if (r.evento_horas) necesita.push('La cobertura del evento sería de ' + minus(r.evento_horas) + '.');
     if (r.brief_libre) necesita.push('Esto es lo que tengo en mente: "' + r.brief_libre + '".');
 

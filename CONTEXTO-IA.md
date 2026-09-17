@@ -96,6 +96,13 @@ app móvil de GitHub, y la web publicada se actualiza sola 1–2 minutos despué
     fotográfica, Otro. `cantidad_fotos`/`cantidad_videos`/`evento_horas` → de la cantidad más
     alta a la más baja, con "Ninguna/o" casi al final y "No sé, que lo proponga Jara" siempre
     de último. Si se agrega una pregunta nueva con opciones, ordenarla con el mismo criterio.
+  - **Dos preguntas de seguimiento agregadas el 17-09-2026 (bloque C):** `comercial_finalidad`
+    ("¿Para qué necesitas ese contenido?", solo si `produccion_tipo` es "Contenido comercial o
+    publicitario" — las demás opciones ya dicen su finalidad solas) y `material_formato`
+    ("¿En qué formato necesitas el material?": redes sociales / impresión / ambos, siempre sale,
+    justo después de las cantidades). Se agregaron porque el mensaje final sonaba incompleto sin
+    saber para qué es el contenido comercial y en qué formato se entrega. Sus frases van en
+    `COMERCIAL_FINALIDAD_FRASE` y `FORMATO_FRASE`.
   - Bloques: A contacto (los 3 datos juntos) · B quién es · C qué necesita · D cuándo y dónde.
     **No hay bloque de alcance, de presupuesto, de preferencia de contacto ni de entorno de la
     sesión, y no deben volver:** en este mercado preguntar por precio hace abandonar el
@@ -112,8 +119,9 @@ app móvil de GitHub, y la web publicada se actualiza sola 1–2 minutos despué
     tiene una condición doble: sale por `produccion_tipo === 'Evento, curso o lanzamiento'` **o**
     porque la ocasión está en `OCASIONES_EVENTO` (boda, 15 años, graduación) — una boda también
     es un evento que hay que cubrir por horas.
-  - Rutas: **8 a 11 pantallas**. Agencia/Empresa/Marca 10 (11 con evento), Modelo 9, persona
-    natural 8 (9 si su ocasión es un evento). Si una pregunta nueva pasa de 11, sobra.
+  - Rutas: **9 a 12 pantallas**. Agencia/Empresa/Marca 11 (12 si es comercial o si hay evento),
+    Modelo 10 (11 si es comercial), persona natural 9 (10 si su ocasión es un evento). Si una
+    pregunta nueva pasa de 12, sobra.
   - Regla de oro para podar: si Jara puede resolverlo en una frase de WhatsApp con el lead ya
     caliente, no va en el formulario.
   - `brief_libre` (textarea grande, bloque C) es el corazón: sustituye a ~15 sub-preguntas de
@@ -150,9 +158,13 @@ app móvil de GitHub, y la web publicada se actualiza sola 1–2 minutos despué
     formulario.** Hay mapas de redacción para eso: `AGENCIA_FRASE` ("agencia inmobiliaria", no
     "agencia de inmobiliaria"), `PRODUCCION_FRASE` ("se trata de **un** evento"),
     `FOTOS_FRASE`/`VIDEOS_FRASE` ("entre 26 y 50 fotografías", "1 video" en singular),
-    `OCASION_FRASE` y `ENTREGA_FRASE`. **Si agregas una opción nueva a cualquiera de esas
-    preguntas, agrégale su frase al mapa correspondiente** o saldrá el texto crudo en medio de
-    la oración.
+    `OCASION_FRASE`, `ENTREGA_FRASE`, `COMERCIAL_FINALIDAD_FRASE` y `FORMATO_FRASE`. **Si
+    agregas una opción nueva a cualquiera de esas preguntas, agrégale su frase al mapa
+    correspondiente** o saldrá el texto crudo en medio de la oración.
+  - **`ENTREGA_FRASE` ancla siempre a la sesión, nunca a "hoy" (corregido 17-09-2026):** decía
+    "en una semana", que es ambiguo (¿una semana desde cuándo?). Ahora dice "una semana después
+    de haber sido grabado", "48 horas después de la sesión", etc. No lo vuelvas a redactar como
+    un plazo relativo a la fecha de envío del mensaje.
   - La intro dice **"unas 10 preguntas rápidas para preparar tu cotización"** (frase corta,
     sin mencionar que Jara "no preguntará nada más" — sonaba brusco).
   - Tras enviar, una burbuja breve confirma que Jara responde por WhatsApp; no se pide nada más.
