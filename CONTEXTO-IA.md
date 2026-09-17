@@ -402,14 +402,15 @@ sirve durante las preguntas, no al final.
   texto del botón principal del hero en `index.html` (antes "Cotiza Tu Sesión Fotográfica") y
   se agregó también en `portafolio.html` justo debajo del título "Portafolio". Dice "Cotiza
   por" + el logo de WhatsApp (el bocadillo monocromo, `fill="currentColor"`, no el oficial a
-  color). **Blanco con letras/logo negro en la paleta Oscura (por defecto), negro con
-  letras/logo blanco en Blanco/Negro y Blanco total** — mismo criterio de color que ya usaba
-  `.btn-primary` en el resto del sitio (`background:var(--text)`), pero `.wa-cta-btn` no
-  puede usar esa variable porque `.hero` la fija en oscuro a propósito (la zona de fotos no
-  cambia con la paleta); en su lugar usa colores fijos con el selector `[data-theme]`
-  directamente. **El dueño pidió NO usar verde por ahora** — no se lo vuelvas a poner sin que
-  lo pida. Mismo CSS y mismo SVG en los dos archivos. Abre el chat igual que siempre
-  (`#scrollToForm`/`abrirChat()` en la portada, `data-abrir-chat` en el portafolio).
+  color). Primero se probó blanco/negro según la paleta, pero el dueño pidió revertir eso:
+  **ahora es SIEMPRE blanco con letras/logo negro, en las tres paletas y en las dos páginas,
+  sin excepción** (no hay regla `[data-theme] .wa-cta-btn{...}` — bórrala si alguien la vuelve
+  a agregar sin que se pida). **Misma tipografía y tamaño que `.btn-hero`** ("Ver portafolio":
+  `font-family:inherit` = Georgia, mismo padding/tamaño/letter-spacing) — el dueño pidió que
+  se vieran parejos y que el botón fuera más grande. **El dueño pidió NO usar verde por
+  ahora** — no se lo vuelvas a poner sin que lo pida. Mismo CSS y mismo SVG en los dos
+  archivos. Abre el chat igual que siempre (`#scrollToForm`/`abrirChat()` en la portada,
+  `data-abrir-chat` en el portafolio).
 - La parte de abajo de la portada (antes "EMPECEMOS") está pendiente de rehacer.
 - El número de WhatsApp de la encuesta está en `index.html`, variable
   `WHATSAPP_NUMBER = "584129071347"`. Falta que yo lo confirme.
