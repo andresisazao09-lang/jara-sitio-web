@@ -73,17 +73,25 @@ app móvil de GitHub, y la web publicada se actualiza sola 1–2 minutos despué
   Se navega con flechas, teclado y deslizando el dedo.
 
 - **Cotización = chat "Agente de Jara"** en `index.html`: ventana estilo WhatsApp (`#waChat`)
-  con un **motor de preguntas ramificado (16-09-2026, ajustes post-v4)**. Todo el cuestionario
-  vive en el array `PREGUNTAS`: **16 entradas** repartidas en **9 a 10 pantallas**, cada objeto
+  con un **motor de preguntas ramificado (17-09-2026)**. Todo el cuestionario vive en el array
+  `PREGUNTAS`: **18 entradas** repartidas en **8 a 11 pantallas** según el perfil, cada objeto
   es `{id, bloque, grupo, tipo, pregunta, ayuda, opciones, showIf, etiquetaWA}`.
   **Para añadir o cambiar una pregunta se edita ese array, nunca el HTML.**
+  - **REGLA DE ORO DEL ÁRBOL (la más importante, se aprendió rompiéndola):** después de cada
+    respuesta, pregúntate *qué preguntaría una persona de verdad justo después de oír eso*.
+    Si la respuesta es categórica ("Agencia", "Empresa", "Marca personal"), lo natural es
+    **primero saber de qué tipo es y después pedirle el nombre** — nunca al revés. Esto falló
+    dos veces: primero con "Empresa o Agencia" fusionadas (la pregunta de rubro no le calzaba a
+    una agencia), y después porque tras elegir "Agencia" se le pedía el nombre sin haber
+    preguntado qué tipo de agencia era. Antes de dar por buena una rama, recórrela en voz alta
+    como si fueras el cliente.
   - Las preguntas de opción única (`tipo:'select'`) se pintan como una **lista vertical de
     botones del mismo ancho** (clases `wa-opt-list`/`wa-opt`), todos alineados a la izquierda,
     en vez de los chips envueltos de antes (dejaban filas irregulares). Avanzan solas al tocar
     una opción, el resto lleva botón "Continuar".
   - **Orden de las opciones: de mayor a menor alcance/tamaño de proyecto**, siempre — es un
     criterio interno, el cliente nunca lo ve como tal, solo ve una lista prolija y consistente.
-    Ejemplos ya aplicados: `perfil_tipo` → Empresa o Agencia, Marca personal o creador, Modelo,
+    Ejemplos ya aplicados: `perfil_tipo` → Agencia, Empresa, Marca personal o creador, Modelo,
     Persona natural. `natural_ocasion` → Boda, 15 años, Graduación, Embarazo, Sesión
     fotográfica, Otro. `cantidad_fotos`/`cantidad_videos`/`evento_horas` → de la cantidad más
     alta a la más baja, con "Ninguna/o" casi al final y "No sé, que lo proponga Jara" siempre
@@ -93,8 +101,19 @@ app móvil de GitHub, y la web publicada se actualiza sola 1–2 minutos despué
     sesión, y no deben volver:** en este mercado preguntar por precio hace abandonar el
     formulario; `modalidad`/`apoyo_equipo` y "¿en qué entorno?" se probaron y se quitaron por
     alargar de más sin aportar algo que Jara no resuelva en un mensaje de WhatsApp.
-  - Ninguna ruta pasa de **10 pantallas** (empresa+evento 10, empresa 9, persona natural /
-    marca personal / modelo 9, +1 si eligen evento). Si una pregunta nueva rompe ese techo, sobra.
+  - **Cada rama de `perfil_tipo` tiene su pregunta de categoría, y va ANTES del nombre:**
+    `agencia_tipo` (marketing/publicidad, inmobiliaria, automotriz, viajes, modelaje, eventos,
+    otra) · `empresa_rubro` · `marca_dedica` (a qué se dedica) · `natural_ocasion`. Modelo es la
+    única sin pregunta de categoría, a propósito: lo que Jara necesita saber de un modelo es qué
+    produccción busca, y eso lo pregunta el bloque C justo después (con la opción **"Book o
+    portafolio de modelo"**, que solo aparece para ese perfil).
+  - **A una persona natural no se le pregunta `produccion_tipo`**: su ocasión ya dice qué es, y
+    ofrecerle "contenido comercial o publicitario" suena fuera de lugar. Por eso `evento_horas`
+    tiene una condición doble: sale por `produccion_tipo === 'Evento, curso o lanzamiento'` **o**
+    porque la ocasión está en `OCASIONES_EVENTO` (boda, 15 años, graduación) — una boda también
+    es un evento que hay que cubrir por horas.
+  - Rutas: **8 a 11 pantallas**. Agencia/Empresa/Marca 10 (11 con evento), Modelo 9, persona
+    natural 8 (9 si su ocasión es un evento). Si una pregunta nueva pasa de 11, sobra.
   - Regla de oro para podar: si Jara puede resolverlo en una frase de WhatsApp con el lead ya
     caliente, no va en el formulario.
   - `brief_libre` (textarea grande, bloque C) es el corazón: sustituye a ~15 sub-preguntas de
@@ -108,26 +127,32 @@ app móvil de GitHub, y la web publicada se actualiza sola 1–2 minutos despué
     de texto libre con "Caracas" precargado** (no hay botón "Elegir de la lista"): si el
     cliente quiere otra, borra y escribe la suya; al enfocar el campo se selecciona todo el
     texto para que sea un solo gesto reemplazarlo. Si cambia de país, la ciudad se vacía.
-  - `pregunta` y `preguntaPantalla` pueden ser funciones de las respuestas: así el enunciado de
-    marca y el de redes cambian según `perfil_tipo` (empresa vs. persona).
+  - `pregunta`, `preguntaPantalla` y `opciones` pueden ser funciones de las respuestas: así el
+    enunciado de marca/redes cambia según `perfil_tipo` (agencia / empresa / marca) y las
+    opciones de `produccion_tipo` cambian para el perfil Modelo.
   - **No existe una pregunta de `formato`** (fotos/video/ambos): se deduce de `cantidad_fotos` y
     `cantidad_videos` solo para el mensaje de WhatsApp. No se puede avanzar si ambos quedan en
     "Ninguna"/"Ninguno".
   - `showIf` decide la ruta; si cambias una respuesta anterior, las preguntas hijas que ya no
     aplican —y las respuestas cuya opción desapareció— se borran solas. Barra de progreso y
     contador "Pregunta X de Y" sobre las pantallas de **tu** ruta.
-  - Botón "‹" para volver y "editar" en cada línea del resumen. **Sin escape temprano:** el
-    enlace "Ya quiero enviar lo que llevo" se quitó a propósito, no lo vuelvas a poner.
+  - Botón "‹" para volver, disponible solo **durante** las preguntas (en la pantalla final se
+    oculta, ver más abajo). **Sin escape temprano:** el enlace "Ya quiero enviar lo que llevo"
+    se quitó a propósito, no lo vuelvas a poner.
   - Las respuestas viven solo en memoria (objeto `respuestas`), no se guardan en el navegador.
   - **El mensaje que se envía por WhatsApp es un párrafo natural, no una lista de campos**
     (función `mensaje()`): se arma como si el cliente se lo escribiera a Jara con sus propias
     palabras — "Hola, mi nombre es X. Te escribo en representación de..., Se trata de...,
     Esto es lo que tengo en mente: "...". Para cerrar, la sesión sería el... en...". Solo entran
-    frases de lo que sí se respondió, nunca una línea de precio. La pantalla de resumen
-    **muestra este mismo párrafo** bajo el encabezado "Así se lo escribiré a Jara" (bloque
-    `.wa-res-msg`/`.wa-res-parrafo`), además de la lista de campos con "editar" de siempre —
-    el cliente ve exactamente lo que se va a enviar antes de tocar "Enviar por WhatsApp". Si el
-    perfil es `Modelo`, el párrafo solo menciona su Instagram/TikTok, no una "marca".
+    frases de lo que sí se respondió, nunca una línea de precio. Si el perfil es `Modelo`, el
+    párrafo solo menciona su Instagram/TikTok, no una "marca".
+  - **El párrafo se escribe como hablaría una persona, no pegando valores crudos del
+    formulario.** Hay mapas de redacción para eso: `AGENCIA_FRASE` ("agencia inmobiliaria", no
+    "agencia de inmobiliaria"), `PRODUCCION_FRASE` ("se trata de **un** evento"),
+    `FOTOS_FRASE`/`VIDEOS_FRASE` ("entre 26 y 50 fotografías", "1 video" en singular),
+    `OCASION_FRASE` y `ENTREGA_FRASE`. **Si agregas una opción nueva a cualquiera de esas
+    preguntas, agrégale su frase al mapa correspondiente** o saldrá el texto crudo en medio de
+    la oración.
   - La intro dice **"unas 10 preguntas rápidas para preparar tu cotización"** (frase corta,
     sin mencionar que Jara "no preguntará nada más" — sonaba brusco).
   - Tras enviar, una burbuja breve confirma que Jara responde por WhatsApp; no se pide nada más.
@@ -219,15 +244,24 @@ resumen muestra **directo** el mensaje en párrafo (función `mensaje()`) y los 
 (Enviar / Empezar de nuevo). El botón "‹" de volver también se oculta en esa pantalla — solo
 sirve durante las preguntas, no al final.
 
-**Perfil "Empresa o Agencia" separado en dos (17-09-2026):** estaba fusionado en una sola opción,
-pero eso hacía que la pregunta de rubro (`empresa_rubro`, que solo tiene sentido para una
-empresa con un rubro propio) apareciera también para quien fuera una agencia — descolocado,
-porque una agencia representa clientes de rubros distintos. Se separaron en dos opciones reales,
-`Agencia` y `Empresa` (mismo número de pantallas, cero costo extra), y `empresa_rubro` ahora solo
-aplica a `Empresa`. **Regla para el futuro:** antes de fusionar dos opciones en una sola pregunta
-de `perfil_tipo` (o cualquier otra), verificar que ninguna pregunta posterior dependa de una
-lectura específica de esa opción — si alguna pregunta solo le calza bien a una de las dos
-lecturas, no fusionar.
+**Las dos correcciones del árbol del 17-09-2026 (léelas antes de tocar `PREGUNTAS`):**
+
+1. **"Empresa o Agencia" estaba fusionado en una sola opción.** Eso hacía que la pregunta de
+   rubro (`empresa_rubro`, que solo tiene sentido para una empresa con un rubro propio)
+   apareciera también para una agencia, que representa clientes de rubros distintos. Se
+   separaron en `Agencia` y `Empresa`, y `empresa_rubro` ahora solo aplica a `Empresa`.
+   *Regla:* antes de fusionar dos opciones, verificar que ninguna pregunta posterior dependa de
+   una lectura específica de esa opción.
+2. **Faltaba la pregunta obvia de seguimiento.** Tras responder "Agencia", el formulario pedía
+   directamente el nombre y las redes — una conversación real primero pregunta *qué tipo* de
+   agencia. Se agregó `agencia_tipo`, y por el mismo motivo `marca_dedica` para marca personal
+   o creador; además se reordenó el bloque B para que la pregunta de categoría de cada rama vaya
+   **antes** del nombre. En la misma revisión salieron: que a una persona natural no tenía
+   sentido preguntarle `produccion_tipo` (su ocasión ya lo dice), que a un modelo no le existía
+   la opción "Book o portafolio", y que las horas de cobertura no salían para una boda.
+   *Regla (la de oro, arriba):* recorrer cada rama en voz alta como cliente antes de darla por
+   buena. Quitar una pregunta que estorba no basta si lo que falta es **agregar** la que un
+   humano haría.
 
 ## 5. Limitaciones del entorno (esto te ahorra tiempo)
 
